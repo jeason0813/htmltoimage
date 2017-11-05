@@ -1,0 +1,90 @@
+﻿<html><body style='font-size:11px; color:#000000; background:#ffffff; '><pre>
+<span style='color:#800000; font-weight:bold; '>private</span> <span style='color:#800000; font-weight:bold; '>void</span> convertToPdfButton_Click<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>object</span> sender<span style='color:#808030; '>,</span> EventArgs e<span style='color:#808030; '>)</span>
+<span style='color:#800080; '>{</span>
+    <span style='color:#696969; '>// Create a PDF document</span>
+    Document pdfDocument <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> Document<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Set license key received after purchase to use the converter in licensed mode</span>
+    <span style='color:#696969; '>// Leave it not set to use the converter in demo mode</span>
+    pdfDocument<span style='color:#808030; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>4W9+bn19bn5ue2B+bn1/YH98YHd3d3c=</span><span style='color:#800000; '>"</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Add a page to PDF document</span>
+    PdfPage pdfPage <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>AddPage<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    Cursor <span style='color:#808030; '>=</span> Cursors<span style='color:#808030; '>.</span>WaitCursor<span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Convert HTML to PDF using the settings above</span>
+    <span style='color:#800000; font-weight:bold; '>string</span> outPdfFile <span style='color:#808030; '>=</span> @<span style='color:#800000; '>"</span><span style='color:#0000e6; '>DemoAppFiles\Output\PDF_Creator\Go_To_Page_Open_Action.pdf</span><span style='color:#800000; '>"</span><span style='color:#800080; '>;</span>
+    <span style='color:#800000; font-weight:bold; '>try</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// Create a HTML to PDF element to add to document</span>
+        HtmlToPdfElement htmlToPdfElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> HtmlToPdfElement<span style='color:#808030; '>(</span>urlTextBox<span style='color:#808030; '>.</span>Text<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Optionally set a delay before conversion to allow asynchonous scripts to finish</span>
+        htmlToPdfElement<span style='color:#808030; '>.</span>ConversionDelay <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add the HTML to PDF element to document</span>
+        pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>htmlToPdfElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#800000; font-weight:bold; '>int</span> goToPageNumber <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>int</span><span style='color:#808030; '>.</span>Parse<span style='color:#808030; '>(</span>pageNumberTextBox<span style='color:#808030; '>.</span>Text<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>goToPageNumber <span style='color:#808030; '>></span> pdfDocument<span style='color:#808030; '>.</span>Pages<span style='color:#808030; '>.</span>Count<span style='color:#808030; '>)</span>
+        <span style='color:#800080; '>{</span>
+            MessageBox<span style='color:#808030; '>.</span>Show<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>The page number is too big</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+            <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#800080; '>;</span>
+        <span style='color:#800080; '>}</span>
+
+        <span style='color:#696969; '>// Get destination PDF page</span>
+        PdfPage goToPage <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>Pages<span style='color:#808030; '>[</span>goToPageNumber <span style='color:#808030; '>-</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>]</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Get the destination point in PDF page</span>
+        <span style='color:#800000; font-weight:bold; '>float</span> goToX <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>float</span><span style='color:#808030; '>.</span>Parse<span style='color:#808030; '>(</span>xLocationTextBox<span style='color:#808030; '>.</span>Text<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        <span style='color:#800000; font-weight:bold; '>float</span> goToY <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>float</span><span style='color:#808030; '>.</span>Parse<span style='color:#808030; '>(</span>yLocationTextBox<span style='color:#808030; '>.</span>Text<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        PointF goToLocation <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> PointF<span style='color:#808030; '>(</span>goToX<span style='color:#808030; '>,</span> goToY<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Get the destination view mode</span>
+        DestinationViewMode viewMode <span style='color:#808030; '>=</span> SelectedViewMode<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Create the destination in PDF document</span>
+        ExplicitDestination goToDestination <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> ExplicitDestination<span style='color:#808030; '>(</span>goToPage<span style='color:#808030; '>,</span> goToLocation<span style='color:#808030; '>,</span> viewMode<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Set the zoom level when the destination is displayed</span>
+        <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>viewMode <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> DestinationViewMode<span style='color:#808030; '>.</span>XYZ<span style='color:#808030; '>)</span>
+            goToDestination<span style='color:#808030; '>.</span>ZoomPercentage <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>int</span><span style='color:#808030; '>.</span>Parse<span style='color:#808030; '>(</span>zoomLevelTextBox<span style='color:#808030; '>.</span>Text<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Set the document Go To open action</span>
+        pdfDocument<span style='color:#808030; '>.</span>OpenAction<span style='color:#808030; '>.</span>Action <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> PdfActionGoTo<span style='color:#808030; '>(</span>goToDestination<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Save the PDF document in a memory buffer</span>
+        <span style='color:#800000; font-weight:bold; '>byte</span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span> outPdfBuffer <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>Save<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Write the memory buffer in a PDF file</span>
+        System<span style='color:#808030; '>.</span>IO<span style='color:#808030; '>.</span>File<span style='color:#808030; '>.</span>WriteAllBytes<span style='color:#808030; '>(</span>outPdfFile<span style='color:#808030; '>,</span> outPdfBuffer<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+    <span style='color:#800000; font-weight:bold; '>catch</span> <span style='color:#808030; '>(</span>Exception ex<span style='color:#808030; '>)</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// The PDF creation failed</span>
+        MessageBox<span style='color:#808030; '>.</span>Show<span style='color:#808030; '>(</span>String<span style='color:#808030; '>.</span>Format<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Create PDF Document Error. {0}</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> ex<span style='color:#808030; '>.</span>Message<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+    <span style='color:#800000; font-weight:bold; '>finally</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// Close the PDF document</span>
+        pdfDocument<span style='color:#808030; '>.</span>Close<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        Cursor <span style='color:#808030; '>=</span> Cursors<span style='color:#808030; '>.</span>Arrow<span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+
+    <span style='color:#696969; '>// Open the created PDF document in default PDF viewer</span>
+    <span style='color:#800000; font-weight:bold; '>try</span>
+    <span style='color:#800080; '>{</span>
+        System<span style='color:#808030; '>.</span>Diagnostics<span style='color:#808030; '>.</span>Process<span style='color:#808030; '>.</span>Start<span style='color:#808030; '>(</span>outPdfFile<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+    <span style='color:#800000; font-weight:bold; '>catch</span> <span style='color:#808030; '>(</span>Exception ex<span style='color:#808030; '>)</span>
+    <span style='color:#800080; '>{</span>
+        MessageBox<span style='color:#808030; '>.</span>Show<span style='color:#808030; '>(</span>String<span style='color:#808030; '>.</span>Format<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Cannot open created PDF file '{0}'. {1}</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> outPdfFile<span style='color:#808030; '>,</span> ex<span style='color:#808030; '>.</span>Message<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+<span style='color:#800080; '>}</span>
+</pre>
+</body>
+</html>

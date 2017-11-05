@@ -1,0 +1,108 @@
+﻿<span style='color:#000000; background:#ffffff; '><pre>
+<span style='color:#800000; font-weight:bold; '>protected</span> <span style='color:#800000; font-weight:bold; '>void</span> convertToPdfButton_Click<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>object</span> sender<span style='color:#808030; '>,</span> EventArgs e<span style='color:#808030; '>)</span>
+<span style='color:#800080; '>{</span>
+    <span style='color:#696969; '>// Create a HTML to PDF converter object with default settings</span>
+    HtmlToPdfConverter htmlToPdfConverter <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> HtmlToPdfConverter<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Set license key received after purchase to use the converter in licensed mode</span>
+    <span style='color:#696969; '>// Leave it not set to use the converter in demo mode</span>
+    htmlToPdfConverter<span style='color:#808030; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>4W9+bn19bn5ue2B+bn1/YH98YHd3d3c=</span><span style='color:#800000; '>"</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Set an adddional delay in seconds to wait for JavaScript or AJAX calls after page load completed</span>
+    <span style='color:#696969; '>// Set this property to 0 if you don't need to wait for such asynchcronous operations to finish</span>
+    htmlToPdfConverter<span style='color:#808030; '>.</span>ConversionDelay <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2</span><span style='color:#800080; '>;</span>
+
+    Document pdfDocument <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>null</span><span style='color:#800080; '>;</span>
+    <span style='color:#800000; font-weight:bold; '>try</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// Convert HTML page or string with mapping attributes to a PDF document object </span>
+        <span style='color:#696969; '>// The document can be further modified to highlight the selected elements</span>
+        <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>convertHtmlRadioButton<span style='color:#808030; '>.</span>Checked<span style='color:#808030; '>)</span>
+        <span style='color:#800080; '>{</span>
+            <span style='color:#800000; font-weight:bold; '>string</span> htmlWithMappingAttributes <span style='color:#808030; '>=</span> htmlStringTextBox<span style='color:#808030; '>.</span>Text<span style='color:#800080; '>;</span>
+            <span style='color:#800000; font-weight:bold; '>string</span> baseUrl <span style='color:#808030; '>=</span> baseUrlTextBox<span style='color:#808030; '>.</span>Text<span style='color:#800080; '>;</span>
+
+            <span style='color:#696969; '>// Convert a HTML string with mapping attributes to a PDF document object</span>
+            pdfDocument <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#808030; '>.</span>ConvertHtmlToPdfDocumentObject<span style='color:#808030; '>(</span>htmlWithMappingAttributes<span style='color:#808030; '>,</span> baseUrl<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        <span style='color:#800080; '>}</span>
+        <span style='color:#800000; font-weight:bold; '>else</span>
+        <span style='color:#800080; '>{</span>
+            <span style='color:#800000; font-weight:bold; '>string</span> url <span style='color:#808030; '>=</span> urlTextBox<span style='color:#808030; '>.</span>Text<span style='color:#800080; '>;</span>
+
+            <span style='color:#696969; '>// Convert a HTML page with mapping attributes to a PDF document object</span>
+            pdfDocument <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#808030; '>.</span>ConvertUrlToPdfDocumentObject<span style='color:#808030; '>(</span>url<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        <span style='color:#800080; '>}</span>
+
+        <span style='color:#696969; '>// Display detailed information about the selected elements</span>
+        StringBuilder htmlElementInfoBuilder <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> StringBuilder<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        <span style='color:#800000; font-weight:bold; '>foreach</span> <span style='color:#808030; '>(</span>HtmlElementMapping htmlElementInfo <span style='color:#800000; font-weight:bold; '>in</span> htmlToPdfConverter<span style='color:#808030; '>.</span>HtmlElementsMappingOptions<span style='color:#808030; '>.</span>HtmlElementsMappingResult<span style='color:#808030; '>)</span>
+        <span style='color:#800080; '>{</span>
+            <span style='color:#696969; '>// Get other information about HTML element</span>
+            <span style='color:#800000; font-weight:bold; '>string</span> htmlElementTagName <span style='color:#808030; '>=</span> htmlElementInfo<span style='color:#808030; '>.</span>HtmlElementTagName<span style='color:#800080; '>;</span>
+            <span style='color:#800000; font-weight:bold; '>string</span> htmlElementID <span style='color:#808030; '>=</span> htmlElementInfo<span style='color:#808030; '>.</span>HtmlElementId<span style='color:#800080; '>;</span>
+            <span style='color:#800000; font-weight:bold; '>string</span> htmlElementMappingID <span style='color:#808030; '>=</span> htmlElementInfo<span style='color:#808030; '>.</span>MappingId<span style='color:#800080; '>;</span>
+            <span style='color:#800000; font-weight:bold; '>string</span> htmlElementCssClasssName <span style='color:#808030; '>=</span> htmlElementInfo<span style='color:#808030; '>.</span>HtmlElementCssClassName<span style='color:#800080; '>;</span>
+            <span style='color:#800000; font-weight:bold; '>string</span> htmlElementHtmlCode <span style='color:#808030; '>=</span> htmlElementInfo<span style='color:#808030; '>.</span>HtmlElementOuterHtml<span style='color:#800080; '>;</span>
+            <span style='color:#800000; font-weight:bold; '>string</span> htmlElementInnerHtml <span style='color:#808030; '>=</span> htmlElementInfo<span style='color:#808030; '>.</span>HtmlElementInnerHtml<span style='color:#800080; '>;</span>
+            <span style='color:#800000; font-weight:bold; '>string</span> htmlElementText <span style='color:#808030; '>=</span> htmlElementInfo<span style='color:#808030; '>.</span>HtmlElementText<span style='color:#800080; '>;</span>
+            System<span style='color:#808030; '>.</span>Collections<span style='color:#808030; '>.</span>Specialized<span style='color:#808030; '>.</span>NameValueCollection htmlElementAttributes <span style='color:#808030; '>=</span> htmlElementInfo<span style='color:#808030; '>.</span>HtmlElementAttributes<span style='color:#800080; '>;</span>
+            HtmlElementPdfRectangle<span style='color:#808030; '>[</span><span style='color:#808030; '>]</span> htmlElementRectanglesInPdf <span style='color:#808030; '>=</span> htmlElementInfo<span style='color:#808030; '>.</span>PdfRectangles<span style='color:#800080; '>;</span>
+
+            htmlElementInfoBuilder<span style='color:#808030; '>.</span>AppendFormat<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>&lt;br/>---------------------------------------- HTML Element Info ----------------------------------------&lt;br/>&lt;br/></span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+            htmlElementInfoBuilder<span style='color:#808030; '>.</span>AppendFormat<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>&lt;b>Tag Name:&lt;/b> {0}&lt;br/></span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> htmlElementTagName<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+            htmlElementInfoBuilder<span style='color:#808030; '>.</span>AppendFormat<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>&lt;b>Element ID:&lt;/b> {0}&lt;br/></span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> htmlElementID<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+            htmlElementInfoBuilder<span style='color:#808030; '>.</span>AppendFormat<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>&lt;b>Mapping ID:&lt;/b> {0}&lt;br/></span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> htmlElementMappingID<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+            htmlElementInfoBuilder<span style='color:#808030; '>.</span>AppendFormat<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>&lt;b>Text:&lt;/b> {0}&lt;br/></span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> htmlElementText<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+            htmlElementInfoBuilder<span style='color:#808030; '>.</span>AppendFormat<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>&lt;b>Attributes:&lt;/b>&lt;br/></span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+            <span style='color:#800000; font-weight:bold; '>for</span> <span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>int</span> i <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span><span style='color:#800080; '>;</span> i <span style='color:#808030; '>&lt;</span> htmlElementAttributes<span style='color:#808030; '>.</span>Count<span style='color:#800080; '>;</span> i<span style='color:#808030; '>+</span><span style='color:#808030; '>+</span><span style='color:#808030; '>)</span>
+                htmlElementInfoBuilder<span style='color:#808030; '>.</span>AppendFormat<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>&amp;nbsp;&amp;nbsp;&amp;nbsp;{0} = \"{1}\"&lt;br/></span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> htmlElementAttributes<span style='color:#808030; '>.</span>GetKey<span style='color:#808030; '>(</span>i<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> htmlElementAttributes<span style='color:#808030; '>.</span>Get<span style='color:#808030; '>(</span>i<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+
+            htmlElementInfoBuilder<span style='color:#808030; '>.</span>AppendFormat<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>&lt;b>Location in PDF:&lt;/b>&lt;br/></span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+            <span style='color:#800000; font-weight:bold; '>for</span> <span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>int</span> i <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span><span style='color:#800080; '>;</span> i <span style='color:#808030; '>&lt;</span> htmlElementRectanglesInPdf<span style='color:#808030; '>.</span>Length<span style='color:#800080; '>;</span> i<span style='color:#808030; '>+</span><span style='color:#808030; '>+</span><span style='color:#808030; '>)</span>
+            <span style='color:#800080; '>{</span>
+                PdfPage pdfPage <span style='color:#808030; '>=</span> htmlElementRectanglesInPdf<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>PdfPage<span style='color:#800080; '>;</span>
+                <span style='color:#800000; font-weight:bold; '>int</span> pdfPageIndex <span style='color:#808030; '>=</span> htmlElementRectanglesInPdf<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>PageIndex<span style='color:#800080; '>;</span>
+                RectangleF rectangleInPdfPage <span style='color:#808030; '>=</span> htmlElementRectanglesInPdf<span style='color:#808030; '>[</span>i<span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Rectangle<span style='color:#800080; '>;</span>
+
+                htmlElementInfoBuilder<span style='color:#808030; '>.</span>AppendFormat<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>&amp;nbsp;&amp;nbsp;&amp;nbsp;PDF Page Index: {0}&lt;br></span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> pdfPageIndex<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+                htmlElementInfoBuilder<span style='color:#808030; '>.</span>AppendFormat<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>&amp;nbsp;&amp;nbsp;&amp;nbsp;Rectangle: X = {0:N2} pt , Y = {1:N2} pt , W = {2:N2} pt , H = {3:N2} pt&lt;br/></span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span>
+                        rectangleInPdfPage<span style='color:#808030; '>.</span>X<span style='color:#808030; '>,</span> rectangleInPdfPage<span style='color:#808030; '>.</span>Y<span style='color:#808030; '>,</span> rectangleInPdfPage<span style='color:#808030; '>.</span>Width<span style='color:#808030; '>,</span> rectangleInPdfPage<span style='color:#808030; '>.</span>Height<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+            <span style='color:#800080; '>}</span>
+
+            htmlElementInfoBuilder<span style='color:#808030; '>.</span>AppendFormat<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>&lt;br/></span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        <span style='color:#800080; '>}</span>
+
+        PdfPage lastPdfPage <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#808030; '>.</span>ConversionSummary<span style='color:#808030; '>.</span>LastPdfPage<span style='color:#800080; '>;</span>
+        RectangleF lastPageRectangle <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#808030; '>.</span>ConversionSummary<span style='color:#808030; '>.</span>LastPageRectangle<span style='color:#800080; '>;</span>
+
+        HtmlToPdfElement htmlElementInfoHtml <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> HtmlToPdfElement<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> lastPageRectangle<span style='color:#808030; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>,</span> htmlElementInfoBuilder<span style='color:#808030; '>.</span>ToString<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>null</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        lastPdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>htmlElementInfoHtml<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Save the PDF document in a memory buffer</span>
+        <span style='color:#800000; font-weight:bold; '>byte</span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span> outPdfBuffer <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>Save<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Send the PDF as response to browser</span>
+
+        <span style='color:#696969; '>// Set response content type</span>
+        Response<span style='color:#808030; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Content-Type</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>application/pdf</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Instruct the browser to open the PDF file as an attachment or inline</span>
+        Response<span style='color:#808030; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Content-Disposition</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> String<span style='color:#808030; '>.</span>Format<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>attachment; filename=Select_in_HTML_Elements_to_Retrieve.pdf; size={0}</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> outPdfBuffer<span style='color:#808030; '>.</span>Length<span style='color:#808030; '>.</span>ToString<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Write the PDF document buffer to HTTP response</span>
+        Response<span style='color:#808030; '>.</span>BinaryWrite<span style='color:#808030; '>(</span>outPdfBuffer<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// End the HTTP response and stop the current page processing</span>
+        Response<span style='color:#808030; '>.</span>End<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+    <span style='color:#800000; font-weight:bold; '>finally</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// Close the PDF document</span>
+        <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>pdfDocument <span style='color:#808030; '>!</span><span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>null</span><span style='color:#808030; '>)</span>
+            pdfDocument<span style='color:#808030; '>.</span>Close<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+<span style='color:#800080; '>}</span>
+</pre>
+</span>

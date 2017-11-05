@@ -1,0 +1,97 @@
+﻿<html><body style='font-size:11px; color:#000000; background:#ffffff; '><pre>
+<span style='color:#800000; font-weight:bold; '>private</span> <span style='color:#800000; font-weight:bold; '>void</span> createPdfButton_Click<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>object</span> sender<span style='color:#808030; '>,</span> EventArgs e<span style='color:#808030; '>)</span>
+<span style='color:#800080; '>{</span>
+    <span style='color:#696969; '>// Create a PDF document</span>
+    Document pdfDocument <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> Document<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Set license key received after purchase to use the converter in licensed mode</span>
+    <span style='color:#696969; '>// Leave it not set to use the converter in demo mode</span>
+    pdfDocument<span style='color:#808030; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>4W9+bn19bn5ue2B+bn1/YH98YHd3d3c=</span><span style='color:#800000; '>"</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Add a PDF page to PDF document</span>
+    PdfPage pdfPage <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>AddPage<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    Cursor <span style='color:#808030; '>=</span> Cursors<span style='color:#808030; '>.</span>WaitCursor<span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Convert HTML to PDF using the settings above</span>
+    <span style='color:#800000; font-weight:bold; '>string</span> outPdfFile <span style='color:#808030; '>=</span> @<span style='color:#800000; '>"</span><span style='color:#0000e6; '>DemoAppFiles\Output\PDF_Creator\Page_Numbers_in_HTML.pdf</span><span style='color:#800000; '>"</span><span style='color:#800080; '>;</span>
+    <span style='color:#800000; font-weight:bold; '>try</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// Create the document footer template</span>
+        pdfDocument<span style='color:#808030; '>.</span>AddFooterTemplate<span style='color:#808030; '>(</span><span style='color:#008c00; '>50</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// ----- Add HTML with Page Numbering to Footer -----</span>
+
+        <span style='color:#696969; '>// Create a variable HTML element with page numbering</span>
+        <span style='color:#800000; font-weight:bold; '>string</span> htmlStringWithPageNumbers <span style='color:#808030; '>=</span> htmlWithPageNumbersTextBox<span style='color:#808030; '>.</span>Text<span style='color:#800080; '>;</span>
+        <span style='color:#800000; font-weight:bold; '>string</span> baseUrl <span style='color:#808030; '>=</span> baseUrlTextBox<span style='color:#808030; '>.</span>Text<span style='color:#800080; '>;</span>
+        HtmlToPdfVariableElement footerHtmlWithPageNumbers <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> HtmlToPdfVariableElement<span style='color:#808030; '>(</span>htmlStringWithPageNumbers<span style='color:#808030; '>,</span> baseUrl<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Set the HTML element to fit the container height</span>
+        footerHtmlWithPageNumbers<span style='color:#808030; '>.</span>FitHeight <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>true</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add variable HTML element with page numbering to footer</span>
+        pdfDocument<span style='color:#808030; '>.</span>Footer<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>footerHtmlWithPageNumbers<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Optionally draw a line at the top of the footer</span>
+        <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>drawFooterLineCheckBox<span style='color:#808030; '>.</span>Checked<span style='color:#808030; '>)</span>
+        <span style='color:#800080; '>{</span>
+            <span style='color:#800000; font-weight:bold; '>float</span> footerWidth <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>Footer<span style='color:#808030; '>.</span>Width<span style='color:#800080; '>;</span>
+
+            <span style='color:#696969; '>// Create a line element for the top of the footer</span>
+            LineElement footerLine <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> LineElement<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> footerWidth<span style='color:#808030; '>,</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+            <span style='color:#696969; '>// Set line color</span>
+            footerLine<span style='color:#808030; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#808030; '>.</span>Gray<span style='color:#800080; '>;</span>
+
+            <span style='color:#696969; '>// Add line element to the bottom of the footer</span>
+            pdfDocument<span style='color:#808030; '>.</span>Footer<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>footerLine<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        <span style='color:#800080; '>}</span>
+
+        <span style='color:#696969; '>// Create a HTML to PDF element to add to document</span>
+        HtmlToPdfElement htmlToPdfElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> HtmlToPdfElement<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> urlTextBox<span style='color:#808030; '>.</span>Text<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Optionally set a delay before conversion to allow asynchonous scripts to finish</span>
+        htmlToPdfElement<span style='color:#808030; '>.</span>ConversionDelay <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2</span><span style='color:#800080; '>;</span>
+                
+        <span style='color:#696969; '>// Optionally add a space between footer and the page body</span>
+        <span style='color:#696969; '>// Leave this option not set for no spacing</span>
+        htmlToPdfElement<span style='color:#808030; '>.</span>BottomSpacing <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>float</span><span style='color:#808030; '>.</span>Parse<span style='color:#808030; '>(</span>footerSpacingTextBox<span style='color:#808030; '>.</span>Text<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add the HTML to PDF element to document</span>
+        <span style='color:#696969; '>// This will raise the PrepareRenderPdfPageEvent event where the header and footer visibilit per page can be changed</span>
+        pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>htmlToPdfElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Save the PDF document in a memory buffer</span>
+        <span style='color:#800000; font-weight:bold; '>byte</span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span> outPdfBuffer <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>Save<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Write the memory buffer in a PDF file</span>
+        System<span style='color:#808030; '>.</span>IO<span style='color:#808030; '>.</span>File<span style='color:#808030; '>.</span>WriteAllBytes<span style='color:#808030; '>(</span>outPdfFile<span style='color:#808030; '>,</span> outPdfBuffer<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+    <span style='color:#800000; font-weight:bold; '>catch</span> <span style='color:#808030; '>(</span>Exception ex<span style='color:#808030; '>)</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// The PDF creation failed</span>
+        MessageBox<span style='color:#808030; '>.</span>Show<span style='color:#808030; '>(</span>String<span style='color:#808030; '>.</span>Format<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Create PDF Document Error. {0}</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> ex<span style='color:#808030; '>.</span>Message<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+    <span style='color:#800000; font-weight:bold; '>finally</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// Close the PDF document</span>
+        pdfDocument<span style='color:#808030; '>.</span>Close<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        Cursor <span style='color:#808030; '>=</span> Cursors<span style='color:#808030; '>.</span>Arrow<span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+
+    <span style='color:#696969; '>// Open the created PDF document in default PDF viewer</span>
+    <span style='color:#800000; font-weight:bold; '>try</span>
+    <span style='color:#800080; '>{</span>
+        System<span style='color:#808030; '>.</span>Diagnostics<span style='color:#808030; '>.</span>Process<span style='color:#808030; '>.</span>Start<span style='color:#808030; '>(</span>outPdfFile<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+    <span style='color:#800000; font-weight:bold; '>catch</span> <span style='color:#808030; '>(</span>Exception ex<span style='color:#808030; '>)</span>
+    <span style='color:#800080; '>{</span>
+        MessageBox<span style='color:#808030; '>.</span>Show<span style='color:#808030; '>(</span>String<span style='color:#808030; '>.</span>Format<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Cannot open created PDF file '{0}'. {1}</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> outPdfFile<span style='color:#808030; '>,</span> ex<span style='color:#808030; '>.</span>Message<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+<span style='color:#800080; '>}</span>
+</pre>
+</body>
+</html>

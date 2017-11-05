@@ -1,0 +1,89 @@
+﻿<span style='font-size:11px; color:#000000; background:#ffffff; '><pre>
+<span style='color:#800000; font-weight:bold; '>protected</span> <span style='color:#800000; font-weight:bold; '>void</span> createPdfButton_Click<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>object</span> sender<span style='color:#808030; '>,</span> EventArgs e<span style='color:#808030; '>)</span>
+<span style='color:#800080; '>{</span>
+    <span style='color:#696969; '>// Get the PDF Standard</span>
+    <span style='color:#696969; '>// By default the Full PDF standard is used</span>
+    PdfStandardSubset pdfStandard <span style='color:#808030; '>=</span> PdfStandardSubset<span style='color:#808030; '>.</span>Full<span style='color:#800080; '>;</span>
+    <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>pdfARadioButton<span style='color:#808030; '>.</span>Checked<span style='color:#808030; '>)</span>
+        pdfStandard <span style='color:#808030; '>=</span> PdfStandardSubset<span style='color:#808030; '>.</span>Pdf_A_1b<span style='color:#800080; '>;</span>
+    <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>pdfXRadioButton<span style='color:#808030; '>.</span>Checked<span style='color:#808030; '>)</span>
+        pdfStandard <span style='color:#808030; '>=</span> PdfStandardSubset<span style='color:#808030; '>.</span>Pdf_X_1a<span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Get the Color Space</span>
+    <span style='color:#696969; '>// By default the RGB color space is used</span>
+    ColorSpace pdfColorSpace <span style='color:#808030; '>=</span> ColorSpace<span style='color:#808030; '>.</span>RGB<span style='color:#800080; '>;</span>
+    <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>grayScaleRadioButton<span style='color:#808030; '>.</span>Checked<span style='color:#808030; '>)</span>
+        pdfColorSpace <span style='color:#808030; '>=</span> ColorSpace<span style='color:#808030; '>.</span>Gray<span style='color:#800080; '>;</span>
+    <span style='color:#800000; font-weight:bold; '>else</span> <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>cmykRadioButton<span style='color:#808030; '>.</span>Checked<span style='color:#808030; '>)</span>
+        pdfColorSpace <span style='color:#808030; '>=</span> ColorSpace<span style='color:#808030; '>.</span>CMYK<span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Create the PDF document</span>
+    Document pdfDocument <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>null</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>pdfStandard <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> PdfStandardSubset<span style='color:#808030; '>.</span>Full &amp;&amp; pdfColorSpace <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> ColorSpace<span style='color:#808030; '>.</span>RGB<span style='color:#808030; '>)</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// Create a PDF document with default standard and color space</span>
+        pdfDocument <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> Document<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+    <span style='color:#800000; font-weight:bold; '>else</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// Create a PDF document with the selected standard and color space</span>
+        pdfDocument <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> Document<span style='color:#808030; '>(</span>pdfStandard<span style='color:#808030; '>,</span> pdfColorSpace<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+
+    <span style='color:#696969; '>// Set license key received after purchase to use the converter in licensed mode</span>
+    <span style='color:#696969; '>// Leave it not set to use the converter in demo mode</span>
+    pdfDocument<span style='color:#808030; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>4W9+bn19bn5ue2B+bn1/YH98YHd3d3c=</span><span style='color:#800000; '>"</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Get the selected PDF page size</span>
+    PdfPageSize pdfPageSize <span style='color:#808030; '>=</span> SelectedPdfPageSize<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Get the selected PDF page orientation</span>
+    PdfPageOrientation pdfPageOrientation <span style='color:#808030; '>=</span> SelectedPdfPageOrientation<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Get the PDF page margins</span>
+    Margins pdfPageMargins <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> Margins<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>float</span><span style='color:#808030; '>.</span>Parse<span style='color:#808030; '>(</span>leftMarginTextBox<span style='color:#808030; '>.</span>Text<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>float</span><span style='color:#808030; '>.</span>Parse<span style='color:#808030; '>(</span>rightMarginTextBox<span style='color:#808030; '>.</span>Text<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span>
+            <span style='color:#800000; font-weight:bold; '>float</span><span style='color:#808030; '>.</span>Parse<span style='color:#808030; '>(</span>topMarginTextBox<span style='color:#808030; '>.</span>Text<span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>float</span><span style='color:#808030; '>.</span>Parse<span style='color:#808030; '>(</span>bottomMarginTextBox<span style='color:#808030; '>.</span>Text<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Create a PDF page in PDF document</span>
+    PdfPage firstPdfPage <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>AddPage<span style='color:#808030; '>(</span>pdfPageSize<span style='color:#808030; '>,</span> pdfPageMargins<span style='color:#808030; '>,</span> pdfPageOrientation<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#800000; font-weight:bold; '>try</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// The URL of the HTML page to convert to PDF</span>
+        <span style='color:#800000; font-weight:bold; '>string</span> urlToConvert <span style='color:#808030; '>=</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>http://www.evopdf.com</span><span style='color:#800000; '>"</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Create the HTML to PDF element</span>
+        HtmlToPdfElement htmlToPdfElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> HtmlToPdfElement<span style='color:#808030; '>(</span>urlToConvert<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Optionally set a delay before conversion to allow asynchonous scripts to finish</span>
+        htmlToPdfElement<span style='color:#808030; '>.</span>ConversionDelay <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add the HTML to PDF element to PDF document</span>
+        firstPdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>htmlToPdfElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Save the PDF document in a memory buffer</span>
+        <span style='color:#800000; font-weight:bold; '>byte</span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span> outPdfBuffer <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>Save<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Send the PDF as response to browser</span>
+
+        <span style='color:#696969; '>// Set response content type</span>
+        Response<span style='color:#808030; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Content-Type</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>application/pdf</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Instruct the browser to open the PDF file as an attachment or inline</span>
+        Response<span style='color:#808030; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Content-Disposition</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> String<span style='color:#808030; '>.</span>Format<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>attachment; filename=Create_PDF_Documents.pdf; size={0}</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> outPdfBuffer<span style='color:#808030; '>.</span>Length<span style='color:#808030; '>.</span>ToString<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Write the PDF document buffer to HTTP response</span>
+        Response<span style='color:#808030; '>.</span>BinaryWrite<span style='color:#808030; '>(</span>outPdfBuffer<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// End the HTTP response and stop the current page processing</span>
+        Response<span style='color:#808030; '>.</span>End<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+    <span style='color:#800000; font-weight:bold; '>finally</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// Close the PDF document</span>
+        pdfDocument<span style='color:#808030; '>.</span>Close<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+<span style='color:#800080; '>}</span>
+</pre>
+</span>

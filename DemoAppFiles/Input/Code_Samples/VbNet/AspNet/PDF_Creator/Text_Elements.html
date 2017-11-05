@@ -1,0 +1,320 @@
+﻿<span style='font-size:11px; color:#000000; background:#ffffff; '><pre>
+<span style='color:#800000; font-weight:bold; '>Protected</span> <span style='color:#800000; font-weight:bold; '>Sub</span> createPdfButton_Click<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>ByVal</span> sender <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Object</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>ByVal</span> e <span style='color:#800000; font-weight:bold; '>As</span> EventArgs<span style='color:#808030; '>)</span>
+    <span style='color:#696969; '>' Create a PDF document</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> pdfDocument <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> Document<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Set license key received after purchase to use the converter in licensed mode</span>
+    <span style='color:#696969; '>' Leave it not set to use the converter in demo mode</span>
+    pdfDocument<span style='color:#008c00; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"4W9+bn19bn5ue2B+bn1/YH98YHd3d3c="</span>
+
+    <span style='color:#800000; font-weight:bold; '>Try</span>
+        <span style='color:#696969; '>' The result of adding Text Elements to PDF document</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> addTextResult <span style='color:#800000; font-weight:bold; '>As</span> AddElementResult <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Nothing</span>
+
+        <span style='color:#696969; '>' The titles font used to mark various sections of the PDF document</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> titleFont <span style='color:#800000; font-weight:bold; '>As</span> PdfFont <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span>AddFont<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>New</span> Font<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Times New Roman"</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span> FontStyle<span style='color:#008c00; '>.</span>Bold<span style='color:#808030; '>,</span> GraphicsUnit<span style='color:#008c00; '>.</span>Point<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+        titleFont<span style='color:#008c00; '>.</span>IsUnderline <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>True</span>
+
+        <span style='color:#696969; '>' The position on X anf Y axes where to add the next element</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> yLocation <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Single</span> <span style='color:#808030; '>=</span> <span style='color:#008c00; '>5</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> xLocation <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Single</span> <span style='color:#808030; '>=</span> <span style='color:#008c00; '>5</span>
+
+        <span style='color:#696969; '>' Create a PDF page in PDF document</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> pdfPage <span style='color:#800000; font-weight:bold; '>As</span> PdfPage <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span>AddPage<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Text Elements Using Fonts Installed in System</span>
+
+        <span style='color:#696969; '>' Add section title</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> titleTextElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"Text Elements Using Fonts Installed in System"</span><span style='color:#808030; '>,</span> titleFont<span style='color:#808030; '>)</span>
+        titleTextElement<span style='color:#008c00; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#008c00; '>.</span>DarkGreen
+        addTextResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>titleTextElement<span style='color:#808030; '>)</span>
+        yLocation <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span>
+        xLocation <span style='color:#808030; '>+</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>5</span>
+        pdfPage <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPdfPage
+
+        <span style='color:#696969; '>' Embed in PDF document a font with Normal style installed in system</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> systemFontNormal <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> Font<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Times New Roman"</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span> GraphicsUnit<span style='color:#008c00; '>.</span>Point<span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> embeddedSystemFontNormal <span style='color:#800000; font-weight:bold; '>As</span> PdfFont <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span>AddFont<span style='color:#808030; '>(</span>systemFontNormal<span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Add a text element using a font with Normal style installed in system</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> embeddedSystemFontNormalTextElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"This text uses a font with Normal style installed in system"</span><span style='color:#808030; '>,</span> embeddedSystemFontNormal<span style='color:#808030; '>)</span>
+        addTextResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>embeddedSystemFontNormalTextElement<span style='color:#808030; '>)</span>
+        yLocation <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>3</span>
+        pdfPage <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPdfPage
+
+        <span style='color:#696969; '>' Embed in PDF document a font with Bold style installed in system</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> systemFontBold <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> Font<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Times New Roman"</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span> FontStyle<span style='color:#008c00; '>.</span>Bold<span style='color:#808030; '>,</span> GraphicsUnit<span style='color:#008c00; '>.</span>Point<span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> embeddedSystemFontBold <span style='color:#800000; font-weight:bold; '>As</span> PdfFont <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span>AddFont<span style='color:#808030; '>(</span>systemFontBold<span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Add a text element using a font with Bold style installed in system</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> embeddedSystemFontBoldTextElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"This text uses a font with Bold style installed in system"</span><span style='color:#808030; '>,</span> embeddedSystemFontBold<span style='color:#808030; '>)</span>
+        addTextResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>embeddedSystemFontBoldTextElement<span style='color:#808030; '>)</span>
+        yLocation <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>3</span>
+        pdfPage <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPdfPage
+
+        <span style='color:#696969; '>' Embed in PDF document a font with Italic style installed in system</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> systemFontItalic <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> Font<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Times New Roman"</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span> FontStyle<span style='color:#008c00; '>.</span>Italic<span style='color:#808030; '>,</span> GraphicsUnit<span style='color:#008c00; '>.</span>Point<span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> embeddedSystemFontItalic <span style='color:#800000; font-weight:bold; '>As</span> PdfFont <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span>AddFont<span style='color:#808030; '>(</span>systemFontItalic<span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Add a text element using a font with Italic style installed in system</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> embeddedSystemFontItalicTextElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"This text uses a font with Italic style installed in system"</span><span style='color:#808030; '>,</span> embeddedSystemFontItalic<span style='color:#808030; '>)</span>
+        addTextResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>embeddedSystemFontItalicTextElement<span style='color:#808030; '>)</span>
+        yLocation <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>3</span>
+        pdfPage <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPdfPage
+
+        <span style='color:#696969; '>' Text Elements Using Fonts From Local Files</span>
+
+        <span style='color:#696969; '>' Add section title</span>
+        xLocation <span style='color:#808030; '>-</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>5</span>
+        yLocation <span style='color:#808030; '>+</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span>
+        titleTextElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"Text Elements Using Fonts From Local Files"</span><span style='color:#808030; '>,</span> titleFont<span style='color:#808030; '>)</span>
+        titleTextElement<span style='color:#008c00; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#008c00; '>.</span>Navy
+        addTextResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>titleTextElement<span style='color:#808030; '>)</span>
+        yLocation <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span>
+        xLocation <span style='color:#808030; '>+</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>5</span>
+        pdfPage <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPdfPage
+
+        <span style='color:#696969; '>' Embed a True Type font from a local file in PDF document</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> localTrueTypeFont <span style='color:#800000; font-weight:bold; '>As</span> PdfFont <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span>AddFont<span style='color:#808030; '>(</span>Server<span style='color:#008c00; '>.</span>MapPath<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"~/DemoAppFiles/Input/Fonts/TrueType.ttf"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Add a text element using the local True Type font to PDF document</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> localFontTtfTextElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"This text uses a True Type Font loaded from a local file"</span><span style='color:#808030; '>,</span> localTrueTypeFont<span style='color:#808030; '>)</span>
+        addTextResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>localFontTtfTextElement<span style='color:#808030; '>)</span>
+        yLocation <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom
+        pdfPage <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPdfPage
+
+        <span style='color:#696969; '>' Embed an OpenType font with TrueType Outlines in PDF document</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> localOpenTypeTrueTypeFont <span style='color:#800000; font-weight:bold; '>As</span> PdfFont <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span>AddFont<span style='color:#808030; '>(</span>Server<span style='color:#008c00; '>.</span>MapPath<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"~/DemoAppFiles/Input/Fonts/OpenTypeTrueType.otf"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Add a text element using the local OpenType font with TrueType Outlines to PDF document</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> localOpenTypeTrueTypeFontTextElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"This text uses an Open Type Font with TrueType Outlines loaded from a local file"</span><span style='color:#808030; '>,</span> localOpenTypeTrueTypeFont<span style='color:#808030; '>)</span>
+        addTextResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>localOpenTypeTrueTypeFontTextElement<span style='color:#808030; '>)</span>
+        yLocation <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>3</span>
+        pdfPage <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPdfPage
+
+        <span style='color:#696969; '>'  Embed an OpenType font with PostScript Outlines in PDF document</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> localOpenTypePostScriptFont <span style='color:#800000; font-weight:bold; '>As</span> PdfFont <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span>AddFont<span style='color:#808030; '>(</span>Server<span style='color:#008c00; '>.</span>MapPath<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"~/DemoAppFiles/Input/Fonts/OpenTypePostScript.otf"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Add a text element using the local OpenType font with PostScript Outlines to PDF document</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> localOpenTypePostScriptFontTextElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"This text uses an Open Type Font with PostScript Outlines loaded from a local file"</span><span style='color:#808030; '>,</span> localOpenTypePostScriptFont<span style='color:#808030; '>)</span>
+        addTextResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>localOpenTypePostScriptFontTextElement<span style='color:#808030; '>)</span>
+        yLocation <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>3</span>
+        pdfPage <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPdfPage
+
+        <span style='color:#696969; '>' Text Elements Using Standard PDF Fonts</span>
+
+        <span style='color:#696969; '>' Add section title</span>
+        xLocation <span style='color:#808030; '>-</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>5</span>
+        yLocation <span style='color:#808030; '>+</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span>
+        titleTextElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"Text Elements Using Standard PDF Fonts"</span><span style='color:#808030; '>,</span> titleFont<span style='color:#808030; '>)</span>
+        titleTextElement<span style='color:#008c00; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#008c00; '>.</span>DarkGreen
+        addTextResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>titleTextElement<span style='color:#808030; '>)</span>
+        yLocation <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span>
+        xLocation <span style='color:#808030; '>+</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>5</span>
+        pdfPage <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPdfPage
+
+        <span style='color:#696969; '>' Create a standard PDF font with Normal style</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> standardPdfFontNormal <span style='color:#800000; font-weight:bold; '>As</span> PdfFont <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span>AddFont<span style='color:#808030; '>(</span>StdFontBaseFamily<span style='color:#008c00; '>.</span>Helvetica<span style='color:#808030; '>)</span>
+        standardPdfFontNormal<span style='color:#008c00; '>.</span>Size <span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span>
+
+        <span style='color:#696969; '>' Add a text element using the standard PDF font with Normal style</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> standardPdfFontNormalTextElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"This text uses a standard PDF font with Normal style"</span><span style='color:#808030; '>,</span> standardPdfFontNormal<span style='color:#808030; '>)</span>
+        addTextResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>standardPdfFontNormalTextElement<span style='color:#808030; '>)</span>
+        yLocation <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>3</span>
+        pdfPage <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPdfPage
+
+        <span style='color:#696969; '>' Create a standard PDF font with Bold style</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> standardPdfFontBold <span style='color:#800000; font-weight:bold; '>As</span> PdfFont <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span>AddFont<span style='color:#808030; '>(</span>StdFontBaseFamily<span style='color:#008c00; '>.</span>HelveticaBold<span style='color:#808030; '>)</span>
+        standardPdfFontBold<span style='color:#008c00; '>.</span>Size <span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span>
+
+        <span style='color:#696969; '>' Add a text element using the standard PDF font with Bold style</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> standardPdfFontBoldTextElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"This text uses a standard PDF font with Bold style"</span><span style='color:#808030; '>,</span> standardPdfFontBold<span style='color:#808030; '>)</span>
+        addTextResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>standardPdfFontBoldTextElement<span style='color:#808030; '>)</span>
+        yLocation <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>3</span>
+        pdfPage <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPdfPage
+
+        <span style='color:#696969; '>' Create a standard PDF font with Italic style</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> standardPdfFontItalic <span style='color:#800000; font-weight:bold; '>As</span> PdfFont <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span>AddFont<span style='color:#808030; '>(</span>StdFontBaseFamily<span style='color:#008c00; '>.</span>HelveticaOblique<span style='color:#808030; '>)</span>
+        standardPdfFontItalic<span style='color:#008c00; '>.</span>Size <span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span>
+
+        <span style='color:#696969; '>' Add a text element using the standard PDF font with Italic style</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> standardPdfFontItalicTextElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"This text uses a standard PDF font with Italic style"</span><span style='color:#808030; '>,</span> standardPdfFontItalic<span style='color:#808030; '>)</span>
+        addTextResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>standardPdfFontItalicTextElement<span style='color:#808030; '>)</span>
+        yLocation <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>3</span>
+        pdfPage <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPdfPage
+
+        <span style='color:#696969; '>' Text Elements with Vertical Text</span>
+
+        <span style='color:#696969; '>' Add section title</span>
+        xLocation <span style='color:#808030; '>-</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>5</span>
+        yLocation <span style='color:#808030; '>+</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span>
+        titleTextElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"Vertical Text"</span><span style='color:#808030; '>,</span> titleFont<span style='color:#808030; '>)</span>
+        titleTextElement<span style='color:#008c00; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#008c00; '>.</span>Navy
+        addTextResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>titleTextElement<span style='color:#808030; '>)</span>
+        yLocation <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span>
+        xLocation <span style='color:#808030; '>+</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>5</span>
+        pdfPage <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPdfPage
+
+        <span style='color:#696969; '>' Add a top to bottom vertical text</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> topBottomText <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"This is a Top to Bottom Vertical Text"</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> topBottomTextWidth <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Single</span> <span style='color:#808030; '>=</span> embeddedSystemFontNormal<span style='color:#008c00; '>.</span>GetTextWidth<span style='color:#808030; '>(</span>topBottomText<span style='color:#808030; '>)</span>
+
+        <span style='color:#800000; font-weight:bold; '>Dim</span> topBottomVerticalTextElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> topBottomText<span style='color:#808030; '>,</span> embeddedSystemFontNormal<span style='color:#808030; '>)</span>
+        topBottomVerticalTextElement<span style='color:#008c00; '>.</span>Translate<span style='color:#808030; '>(</span>xLocation <span style='color:#808030; '>+</span> <span style='color:#008c00; '>25</span><span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>)</span>
+        topBottomVerticalTextElement<span style='color:#008c00; '>.</span>Rotate<span style='color:#808030; '>(</span><span style='color:#008c00; '>90</span><span style='color:#808030; '>)</span>
+        pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>topBottomVerticalTextElement<span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Add a bottom to top vertical text</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> bottomTopText <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"This is a Bottom to Top Vertical Text"</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> bottomTopTextWidth <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Single</span> <span style='color:#808030; '>=</span> embeddedSystemFontNormal<span style='color:#008c00; '>.</span>GetTextWidth<span style='color:#808030; '>(</span>bottomTopText<span style='color:#808030; '>)</span>
+
+        <span style='color:#800000; font-weight:bold; '>Dim</span> bottomTopVerticalTextElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> bottomTopText<span style='color:#808030; '>,</span> embeddedSystemFontNormal<span style='color:#808030; '>)</span>
+        bottomTopVerticalTextElement<span style='color:#008c00; '>.</span>Translate<span style='color:#808030; '>(</span>xLocation <span style='color:#808030; '>+</span> <span style='color:#008c00; '>125</span><span style='color:#808030; '>,</span> yLocation <span style='color:#808030; '>+</span> bottomTopTextWidth<span style='color:#808030; '>)</span>
+        bottomTopVerticalTextElement<span style='color:#008c00; '>.</span>Rotate<span style='color:#808030; '>(</span><span style='color:#808030; '>-</span><span style='color:#008c00; '>90</span><span style='color:#808030; '>)</span>
+        pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>bottomTopVerticalTextElement<span style='color:#808030; '>)</span>
+
+        yLocation <span style='color:#808030; '>+</span><span style='color:#808030; '>=</span> bottomTopTextWidth <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span>
+
+        <span style='color:#696969; '>' Add a text element that flows freely in width and height</span>
+
+        <span style='color:#800000; font-weight:bold; '>Dim</span> <span style='color:#800000; font-weight:bold; '>text</span> <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>System</span><span style='color:#008c00; '>.</span>IO<span style='color:#008c00; '>.</span>File<span style='color:#008c00; '>.</span>ReadAllText<span style='color:#808030; '>(</span>Server<span style='color:#008c00; '>.</span>MapPath<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"~/DemoAppFiles/Input/Text_Files/Text_File.txt"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Add section title</span>
+        xLocation <span style='color:#808030; '>-</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>5</span>
+        yLocation <span style='color:#808030; '>+</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span>
+        titleTextElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"Text Element that flows freely in width and height"</span><span style='color:#808030; '>,</span> titleFont<span style='color:#808030; '>)</span>
+        titleTextElement<span style='color:#008c00; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#008c00; '>.</span>DarkGreen
+        addTextResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>titleTextElement<span style='color:#808030; '>)</span>
+        yLocation <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span>
+        xLocation <span style='color:#808030; '>+</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>5</span>
+        pdfPage <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPdfPage
+
+        <span style='color:#696969; '>' Add the text element</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> freeWidthAndHeightTextElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>text</span><span style='color:#808030; '>,</span> embeddedSystemFontNormal<span style='color:#808030; '>)</span>
+        addTextResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>freeWidthAndHeightTextElement<span style='color:#808030; '>)</span>
+        yLocation <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>3</span>
+        pdfPage <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPdfPage
+
+        <span style='color:#696969; '>' Add a text element with a given width that flows freely in height</span>
+
+        <span style='color:#696969; '>' Add section title</span>
+        xLocation <span style='color:#808030; '>-</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>5</span>
+        yLocation <span style='color:#808030; '>+</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span>
+        titleTextElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"Text Element with a given width that flows freely in height"</span><span style='color:#808030; '>,</span> titleFont<span style='color:#808030; '>)</span>
+        titleTextElement<span style='color:#008c00; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#008c00; '>.</span>Navy
+        addTextResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>titleTextElement<span style='color:#808030; '>)</span>
+        yLocation <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span>
+        xLocation <span style='color:#808030; '>+</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>5</span>
+        pdfPage <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPdfPage
+
+        <span style='color:#696969; '>' Add the text element</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> freeHeightTextElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#008c00; '>400</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>text</span><span style='color:#808030; '>,</span> embeddedSystemFontNormal<span style='color:#808030; '>)</span>
+        addTextResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>freeHeightTextElement<span style='color:#808030; '>)</span>
+        yLocation <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>3</span>
+        pdfPage <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPdfPage
+
+        <span style='color:#696969; '>' Add a bounding rectangle for text element</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> border <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> RectangleElement<span style='color:#808030; '>(</span>addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>X<span style='color:#808030; '>,</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Y<span style='color:#808030; '>,</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Width<span style='color:#808030; '>,</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Height<span style='color:#808030; '>)</span>
+        pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>border<span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Add a text element with a given width and height</span>
+
+        <span style='color:#696969; '>' Add section title</span>
+        xLocation <span style='color:#808030; '>-</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>5</span>
+        yLocation <span style='color:#808030; '>+</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span>
+        titleTextElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"Text Element with a given width and height"</span><span style='color:#808030; '>,</span> titleFont<span style='color:#808030; '>)</span>
+        titleTextElement<span style='color:#008c00; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#008c00; '>.</span>DarkGreen
+        addTextResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>titleTextElement<span style='color:#808030; '>)</span>
+        yLocation <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span>
+        xLocation <span style='color:#808030; '>+</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>5</span>
+        pdfPage <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPdfPage
+
+        <span style='color:#696969; '>' Add the text element</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> boundedTextElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#008c00; '>400</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>50</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>text</span><span style='color:#808030; '>,</span> embeddedSystemFontNormal<span style='color:#808030; '>)</span>
+        addTextResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>boundedTextElement<span style='color:#808030; '>)</span>
+        yLocation <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>3</span>
+        pdfPage <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPdfPage
+
+        <span style='color:#696969; '>' Add a bounding rectangle for text element</span>
+        border <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> RectangleElement<span style='color:#808030; '>(</span>addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>X<span style='color:#808030; '>,</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Y<span style='color:#808030; '>,</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Width<span style='color:#808030; '>,</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Height<span style='color:#808030; '>)</span>
+        pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>border<span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Add a text element that flows freely on next PDF page</span>
+
+        <span style='color:#696969; '>' Add section title</span>
+        xLocation <span style='color:#808030; '>-</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>5</span>
+        yLocation <span style='color:#808030; '>+</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>10</span>
+        titleTextElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"Text Element that flows freely on multiple PDF pages"</span><span style='color:#808030; '>,</span> titleFont<span style='color:#808030; '>)</span>
+        titleTextElement<span style='color:#008c00; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#008c00; '>.</span>Navy
+        addTextResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>titleTextElement<span style='color:#808030; '>)</span>
+        yLocation <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span>
+        xLocation <span style='color:#808030; '>+</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>5</span>
+        pdfPage <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPdfPage
+
+        <span style='color:#696969; '>' Add the text element</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> multiPageText <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>System</span><span style='color:#008c00; '>.</span>IO<span style='color:#008c00; '>.</span>File<span style='color:#008c00; '>.</span>ReadAllText<span style='color:#808030; '>(</span>Server<span style='color:#008c00; '>.</span>MapPath<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"~/DemoAppFiles/Input/Text_Files/Large_Text_File.txt"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> multiPageTextElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#008c00; '>575</span><span style='color:#808030; '>,</span> multiPageText<span style='color:#808030; '>,</span> embeddedSystemFontNormal<span style='color:#808030; '>)</span>
+        multiPageTextElement<span style='color:#008c00; '>.</span>BackColor <span style='color:#808030; '>=</span> Color<span style='color:#008c00; '>.</span>WhiteSmoke
+        addTextResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>multiPageTextElement<span style='color:#808030; '>)</span>
+        yLocation <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>3</span>
+        pdfPage <span style='color:#808030; '>=</span> addTextResult<span style='color:#008c00; '>.</span>EndPdfPage
+
+        <span style='color:#696969; '>' Add a line at the bottom of the multipage text element</span>
+
+        <span style='color:#800000; font-weight:bold; '>Dim</span> bottomLine <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> LineElement<span style='color:#808030; '>(</span>addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>X<span style='color:#808030; '>,</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>,</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>X <span style='color:#808030; '>+</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Width<span style='color:#808030; '>,</span> addTextResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span>
+        pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>bottomLine<span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Add a text stamp to a PDF document</span>
+
+        <span style='color:#696969; '>' Create a .NET font</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> timesNewRomanFont <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> Font<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Times New Roman"</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>24</span><span style='color:#808030; '>,</span> GraphicsUnit<span style='color:#008c00; '>.</span>Point<span style='color:#808030; '>)</span>
+        <span style='color:#696969; '>' Create a PDF font</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> stampPdfFont <span style='color:#800000; font-weight:bold; '>As</span> PdfFont <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span>AddFont<span style='color:#808030; '>(</span>timesNewRomanFont<span style='color:#808030; '>,</span> <span style='color:#0f4d75; '>True</span><span style='color:#808030; '>)</span>
+        <span style='color:#696969; '>' The stamp text</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> stampText <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>String</span><span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Format</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Text Stamp {0}"</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>Date</span><span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Now</span><span style='color:#008c00; '>.</span>ToString<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"d"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+        <span style='color:#696969; '>' Measure the text </span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> textWidth <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Single</span> <span style='color:#808030; '>=</span> stampPdfFont<span style='color:#008c00; '>.</span>GetTextWidth<span style='color:#808030; '>(</span>stampText<span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>For</span> <span style='color:#800000; font-weight:bold; '>Each</span> page <span style='color:#800000; font-weight:bold; '>As</span> PdfPage <span style='color:#800000; font-weight:bold; '>In</span> pdfDocument<span style='color:#008c00; '>.</span>Pages
+            <span style='color:#696969; '>' Get the PDF page drawable area width and height</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> pdfPageWidth <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Single</span> <span style='color:#808030; '>=</span> page<span style='color:#008c00; '>.</span>ClientRectangle<span style='color:#008c00; '>.</span>Width
+            <span style='color:#800000; font-weight:bold; '>Dim</span> pdfPageHeight <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Single</span> <span style='color:#808030; '>=</span> page<span style='color:#008c00; '>.</span>ClientRectangle<span style='color:#008c00; '>.</span>Height
+
+            <span style='color:#696969; '>' Calculate the PDF page diagonal</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> pdfPageDiagonal <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Single</span> <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>CSng</span><span style='color:#808030; '>(</span>Math<span style='color:#008c00; '>.</span>Sqrt<span style='color:#808030; '>(</span>pdfPageWidth <span style='color:#808030; '>*</span> pdfPageWidth <span style='color:#808030; '>+</span> pdfPageHeight <span style='color:#808030; '>*</span> pdfPageHeight<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+
+            <span style='color:#696969; '>' The text location on PDF page diagonal</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> xStampLocation <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Single</span> <span style='color:#808030; '>=</span> <span style='color:#808030; '>(</span>pdfPageDiagonal <span style='color:#808030; '>-</span> textWidth<span style='color:#808030; '>)</span> <span style='color:#808030; '>/</span> <span style='color:#008c00; '>2</span>
+
+            <span style='color:#696969; '>' Create the stamp as a rotated text element</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> stampTextElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xStampLocation<span style='color:#808030; '>,</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> stampText<span style='color:#808030; '>,</span> stampPdfFont<span style='color:#808030; '>)</span>
+            stampTextElement<span style='color:#008c00; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#008c00; '>.</span>Coral
+            stampTextElement<span style='color:#008c00; '>.</span>Rotate<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>CSng</span><span style='color:#808030; '>(</span>Math<span style='color:#008c00; '>.</span>Atan<span style='color:#808030; '>(</span>pdfPageHeight <span style='color:#808030; '>/</span> pdfPageWidth<span style='color:#808030; '>)</span> <span style='color:#808030; '>*</span> <span style='color:#808030; '>(</span><span style='color:#008c00; '>180</span> <span style='color:#808030; '>/</span> Math<span style='color:#008c00; '>.</span>PI<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+            stampTextElement<span style='color:#008c00; '>.</span>Opacity <span style='color:#808030; '>=</span> <span style='color:#008c00; '>75</span>
+
+            <span style='color:#696969; '>' Add the stamp to PDF page</span>
+            page<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>stampTextElement<span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>Next</span> page
+
+        <span style='color:#696969; '>' Save the PDF document in a memory buffer</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> outPdfBuffer<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Byte</span> <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span>Save<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Send the PDF as response to browser</span>
+
+        <span style='color:#696969; '>' Set response content type</span>
+        Response<span style='color:#008c00; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Content-Type"</span><span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"application/pdf"</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Instruct the browser to open the PDF file as an attachment or inline</span>
+        Response<span style='color:#008c00; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Content-Disposition"</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>String</span><span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Format</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"attachment; filename=Text_Elements.pdf; size={0}"</span><span style='color:#808030; '>,</span> outPdfBuffer<span style='color:#008c00; '>.</span>Length<span style='color:#008c00; '>.</span>ToString<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Write the PDF document buffer to HTTP response</span>
+        Response<span style='color:#008c00; '>.</span>BinaryWrite<span style='color:#808030; '>(</span>outPdfBuffer<span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' End the HTTP response and stop the current page processing</span>
+        Response<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>End</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>Finally</span>
+        <span style='color:#696969; '>' Close the PDF document</span>
+        pdfDocument<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Close</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Try</span>
+<span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Sub</span>
+</pre>
+</span>

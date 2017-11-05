@@ -1,0 +1,100 @@
+﻿<span style='font-size:11px; color:#000000; background:#ffffff; '><pre>
+<span style='color:#800000; font-weight:bold; '>Protected</span> <span style='color:#800000; font-weight:bold; '>Sub</span> convertToPdfButton_Click<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>ByVal</span> sender <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Object</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>ByVal</span> e <span style='color:#800000; font-weight:bold; '>As</span> EventArgs<span style='color:#808030; '>)</span>
+    <span style='color:#696969; '>' Create a HTML to PDF converter object with default settings</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> htmlToPdfConverter <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> HtmlToPdfConverter<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Set license key received after purchase to use the converter in licensed mode</span>
+    <span style='color:#696969; '>' Leave it not set to use the converter in demo mode</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"4W9+bn19bn5ue2B+bn1/YH98YHd3d3c="</span>
+
+    <span style='color:#696969; '>' Set an adddional delay in seconds to wait for JavaScript or AJAX calls after page load completed</span>
+    <span style='color:#696969; '>' Set this property to 0 if you don't need to wait for such asynchcronous operations to finish</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>ConversionDelay <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2</span>
+
+    <span style='color:#696969; '>' Set a handler for AfterRenderPdfPageEvent where to add the stamp in each PDF page over the main content</span>
+    <span style='color:#800000; font-weight:bold; '>AddHandler</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>AfterRenderPdfPageEvent<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>AddressOf</span> htmlToPdfConverter_AfterRenderPdfPageEvent
+
+    <span style='color:#800000; font-weight:bold; '>Try</span>
+        <span style='color:#696969; '>' The buffer to receive the generated PDF document</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> outPdfBuffer<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Byte</span> <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Nothing</span>
+
+        <span style='color:#800000; font-weight:bold; '>If</span> convertUrlRadioButton<span style='color:#008c00; '>.</span>Checked <span style='color:#800000; font-weight:bold; '>Then</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> url <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> urlTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span>
+
+            <span style='color:#696969; '>' Convert the HTML page given by an URL to a PDF document in a memory buffer</span>
+            outPdfBuffer <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>ConvertUrl<span style='color:#808030; '>(</span>url<span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>Else</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> htmlString <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> htmlStringTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> baseUrl <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> baseUrlTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span>
+
+            <span style='color:#696969; '>' Convert a HTML string with a base URL to a PDF document in a memory buffer</span>
+            outPdfBuffer <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>ConvertHtml<span style='color:#808030; '>(</span>htmlString<span style='color:#808030; '>,</span> baseUrl<span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+        <span style='color:#696969; '>' Send the PDF as response to browser</span>
+
+        <span style='color:#696969; '>' Set response content type</span>
+        Response<span style='color:#008c00; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Content-Type"</span><span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"application/pdf"</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Instruct the browser to open the PDF file as an attachment or inline</span>
+        Response<span style='color:#008c00; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Content-Disposition"</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>String</span><span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Format</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"attachment; filename=Add_Elements_Over_Main_Content.pdf; size={0}"</span><span style='color:#808030; '>,</span> outPdfBuffer<span style='color:#008c00; '>.</span>Length<span style='color:#008c00; '>.</span>ToString<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Write the PDF document buffer to HTTP response</span>
+        Response<span style='color:#008c00; '>.</span>BinaryWrite<span style='color:#808030; '>(</span>outPdfBuffer<span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' End the HTTP response and stop the current page processing</span>
+        Response<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>End</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>Finally</span>
+        <span style='color:#696969; '>' Uninstall the handler</span>
+        <span style='color:#800000; font-weight:bold; '>RemoveHandler</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>AfterRenderPdfPageEvent<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>AddressOf</span> htmlToPdfConverter_AfterRenderPdfPageEvent
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Try</span>
+<span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Sub</span>
+
+<span style='color:#800000; font-weight:bold; '>Private</span> <span style='color:#800000; font-weight:bold; '>Sub</span> htmlToPdfConverter_AfterRenderPdfPageEvent<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>ByVal</span> eventParams <span style='color:#800000; font-weight:bold; '>As</span> AfterRenderPdfPageParams<span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>If</span> <span style='color:#800000; font-weight:bold; '>Not</span> addStampCheckBox<span style='color:#008c00; '>.</span>Checked <span style='color:#800000; font-weight:bold; '>Then</span>
+        <span style='color:#800000; font-weight:bold; '>Return</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+    <span style='color:#696969; '>' Get the rendered PDF page</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> pdfPage <span style='color:#800000; font-weight:bold; '>As</span> PdfPage <span style='color:#808030; '>=</span> eventParams<span style='color:#008c00; '>.</span>Page
+
+    <span style='color:#800000; font-weight:bold; '>Dim</span> pageNumber <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Integer</span> <span style='color:#808030; '>=</span> eventParams<span style='color:#008c00; '>.</span>PageNumber
+    <span style='color:#800000; font-weight:bold; '>Dim</span> pageCount <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Integer</span> <span style='color:#808030; '>=</span> eventParams<span style='color:#008c00; '>.</span>PageCount
+    <span style='color:#800000; font-weight:bold; '>Dim</span> isOddPage <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Boolean</span> <span style='color:#808030; '>=</span> pageNumber <span style='color:#800000; font-weight:bold; '>Mod</span> <span style='color:#008c00; '>2</span> <span style='color:#808030; '>&lt;</span><span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span>
+
+    <span style='color:#696969; '>' Get the PDF document</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> pdfDocument <span style='color:#800000; font-weight:bold; '>As</span> Document <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>Document
+
+    <span style='color:#696969; '>' Get the PDF page drawable area width and height</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> pdfPageWidth <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Single</span> <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>ClientRectangle<span style='color:#008c00; '>.</span>Width
+    <span style='color:#800000; font-weight:bold; '>Dim</span> pdfPageHeight <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Single</span> <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>ClientRectangle<span style='color:#008c00; '>.</span>Height
+
+    <span style='color:#696969; '>' Create a .NET font</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> timesNewRomanFont <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> Font<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Times New Roman"</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>50</span><span style='color:#808030; '>,</span> GraphicsUnit<span style='color:#008c00; '>.</span>Point<span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Create a PDF font</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> pdfFont <span style='color:#800000; font-weight:bold; '>As</span> PdfFont <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span>AddFont<span style='color:#808030; '>(</span>timesNewRomanFont<span style='color:#808030; '>,</span> <span style='color:#0f4d75; '>True</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' The stamp text</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> <span style='color:#800000; font-weight:bold; '>text</span> <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>String</span><span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Format</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Stamp on Page {0} of {1}"</span><span style='color:#808030; '>,</span> pageNumber<span style='color:#808030; '>,</span> pageCount<span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Measure the text </span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> textWidth <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Single</span> <span style='color:#808030; '>=</span> pdfFont<span style='color:#008c00; '>.</span>GetTextWidth<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>text</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Calculate the PDF page diagonal</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> pdfPageDiagonal <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Single</span> <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>CSng</span><span style='color:#808030; '>(</span>Math<span style='color:#008c00; '>.</span>Sqrt<span style='color:#808030; '>(</span>pdfPageWidth <span style='color:#808030; '>*</span> pdfPageWidth <span style='color:#808030; '>+</span> pdfPageHeight <span style='color:#808030; '>*</span> pdfPageHeight<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' The text location on PDF page diagonal</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> xLocation <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Single</span> <span style='color:#808030; '>=</span> <span style='color:#808030; '>(</span>pdfPageDiagonal <span style='color:#808030; '>-</span> textWidth<span style='color:#808030; '>)</span> <span style='color:#808030; '>/</span> <span style='color:#008c00; '>2</span>
+
+    <span style='color:#696969; '>' Create the stamp as a rotated text element</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> stampTextElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>text</span><span style='color:#808030; '>,</span> pdfFont<span style='color:#808030; '>)</span>
+    stampTextElement<span style='color:#008c00; '>.</span>ForeColor <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>If</span><span style='color:#808030; '>(</span>isOddPage<span style='color:#808030; '>,</span> Color<span style='color:#008c00; '>.</span>Blue<span style='color:#808030; '>,</span> Color<span style='color:#008c00; '>.</span>Green<span style='color:#808030; '>)</span>
+    stampTextElement<span style='color:#008c00; '>.</span>Rotate<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>CSng</span><span style='color:#808030; '>(</span>Math<span style='color:#008c00; '>.</span>Atan<span style='color:#808030; '>(</span>pdfPageHeight <span style='color:#808030; '>/</span> pdfPageWidth<span style='color:#808030; '>)</span> <span style='color:#808030; '>*</span> <span style='color:#808030; '>(</span><span style='color:#008c00; '>180</span> <span style='color:#808030; '>/</span> Math<span style='color:#008c00; '>.</span>PI<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+    stampTextElement<span style='color:#008c00; '>.</span>Opacity <span style='color:#808030; '>=</span> <span style='color:#008c00; '>75</span>
+
+    <span style='color:#696969; '>' Add the stamp to PDF page</span>
+    pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>stampTextElement<span style='color:#808030; '>)</span>
+<span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Sub</span>
+</pre>
+</span>

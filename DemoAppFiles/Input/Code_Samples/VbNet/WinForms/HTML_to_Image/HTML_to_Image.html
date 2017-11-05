@@ -1,0 +1,87 @@
+﻿<html><body style='font-size:11px; color:#000000; background:#ffffff; '><pre>
+<span style='color:#800000; font-weight:bold; '>Private</span> <span style='color:#800000; font-weight:bold; '>Sub</span> convertToImageButton_Click<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>ByVal</span> sender <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Object</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>ByVal</span> e <span style='color:#800000; font-weight:bold; '>As</span> EventArgs<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>Handles</span> convertToImageButton<span style='color:#008c00; '>.</span>Click
+    <span style='color:#696969; '>' Create a HTML to Image converter object with default settings</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> htmlToImageConverter <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> HtmlToImageConverter<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Set license key received after purchase to use the converter in licensed mode</span>
+    <span style='color:#696969; '>' Leave it not set to use the converter in demo mode</span>
+    htmlToImageConverter<span style='color:#008c00; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"4W9+bn19bn5ue2B+bn1/YH98YHd3d3c="</span>
+
+    <span style='color:#696969; '>' Set HTML Viewer width in pixels which is the equivalent in converter of the browser window width</span>
+    htmlToImageConverter<span style='color:#008c00; '>.</span>HtmlViewerWidth <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Integer</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>htmlViewerWidthTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Set HTML viewer height in pixels to convert the top part of a HTML page </span>
+    <span style='color:#696969; '>' Leave it not set to convert the entire HTML</span>
+    <span style='color:#800000; font-weight:bold; '>If</span> htmlViewerHeightTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#008c00; '>.</span>Length <span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+        htmlToImageConverter<span style='color:#008c00; '>.</span>HtmlViewerHeight <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Integer</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>htmlViewerHeightTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+    <span style='color:#696969; '>' Set if the created image has a transparent background</span>
+    htmlToImageConverter<span style='color:#008c00; '>.</span>TransparentBackground <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>If</span><span style='color:#808030; '>(</span>SelectedImageFormat<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>Is</span> <span style='color:#800000; font-weight:bold; '>System</span><span style='color:#008c00; '>.</span>Drawing<span style='color:#008c00; '>.</span>Imaging<span style='color:#008c00; '>.</span>ImageFormat<span style='color:#008c00; '>.</span>Png<span style='color:#808030; '>,</span> transparentBackgroundCheckBox<span style='color:#008c00; '>.</span>Checked<span style='color:#808030; '>,</span> <span style='color:#0f4d75; '>False</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Set the maximum time in seconds to wait for HTML page to be loaded </span>
+    <span style='color:#696969; '>' Leave it not set for a default 60 seconds maximum wait time</span>
+    htmlToImageConverter<span style='color:#008c00; '>.</span>NavigationTimeout <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Integer</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>navigationTimeoutTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Set an adddional delay in seconds to wait for JavaScript or AJAX calls after page load completed</span>
+    <span style='color:#696969; '>' Set this property to 0 if you don't need to wait for such asynchcronous operations to finish</span>
+    <span style='color:#800000; font-weight:bold; '>If</span> conversionDelayTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#008c00; '>.</span>Length <span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+        htmlToImageConverter<span style='color:#008c00; '>.</span>ConversionDelay <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Integer</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>conversionDelayTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+    Cursor <span style='color:#808030; '>=</span> Cursors<span style='color:#008c00; '>.</span>WaitCursor
+
+    <span style='color:#696969; '>' Convert HTML to Image using the settings above</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> outImageFile <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"DemoAppFiles\Output\HTML_to_Image\HTML_to_Image."</span> <span style='color:#808030; '>&amp;</span> imageFormatComboBox<span style='color:#008c00; '>.</span>SelectedItem<span style='color:#008c00; '>.</span>ToString<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>.</span>ToLower<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> imageTiles<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>As</span> Image <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Nothing</span>
+    <span style='color:#800000; font-weight:bold; '>Try</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> convertUrlRadioButton<span style='color:#008c00; '>.</span>Checked <span style='color:#800000; font-weight:bold; '>Then</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> url <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> urlTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span>
+
+            <span style='color:#696969; '>' Convert the HTML page given by an URL to a set of Image objects</span>
+            imageTiles <span style='color:#808030; '>=</span> htmlToImageConverter<span style='color:#008c00; '>.</span>ConvertUrlToImageTiles<span style='color:#808030; '>(</span>url<span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>Else</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> htmlString <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> htmlStringTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> baseUrl <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> baseUrlTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span>
+
+            <span style='color:#696969; '>' Convert a HTML string with a base URL to a set of Image objects</span>
+            imageTiles <span style='color:#808030; '>=</span> htmlToImageConverter<span style='color:#008c00; '>.</span>ConvertHtmlToImageTiles<span style='color:#808030; '>(</span>htmlString<span style='color:#808030; '>,</span> baseUrl<span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+        <span style='color:#696969; '>' Save the first image tile to a memory buffer</span>
+
+        <span style='color:#800000; font-weight:bold; '>Dim</span> outImage <span style='color:#800000; font-weight:bold; '>As</span> Image <span style='color:#808030; '>=</span> imageTiles<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Create a memory stream where to save the image</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> imageOutputStream <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> <span style='color:#800000; font-weight:bold; '>System</span><span style='color:#008c00; '>.</span>IO<span style='color:#008c00; '>.</span>MemoryStream<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Save the image to memory stream</span>
+        outImage<span style='color:#008c00; '>.</span>Save<span style='color:#808030; '>(</span>imageOutputStream<span style='color:#808030; '>,</span> SelectedImageFormat<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Write the memory stream to a memory buffer</span>
+        imageOutputStream<span style='color:#008c00; '>.</span>Position <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> outImageBuffer<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Byte</span> <span style='color:#808030; '>=</span> imageOutputStream<span style='color:#008c00; '>.</span>ToArray<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Close the output memory stream</span>
+        imageOutputStream<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Close</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Write the memory buffer in an image file</span>
+        <span style='color:#800000; font-weight:bold; '>System</span><span style='color:#008c00; '>.</span>IO<span style='color:#008c00; '>.</span>File<span style='color:#008c00; '>.</span>WriteAllBytes<span style='color:#808030; '>(</span>outImageFile<span style='color:#808030; '>,</span> outImageBuffer<span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>Catch</span> ex <span style='color:#800000; font-weight:bold; '>As</span> Exception
+        <span style='color:#696969; '>' The HTML to Image conversion failed</span>
+        MessageBox<span style='color:#008c00; '>.</span>Show<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>String</span><span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Format</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"HTML to Image Error. {0}"</span><span style='color:#808030; '>,</span> ex<span style='color:#008c00; '>.</span>Message<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>Return</span>
+    <span style='color:#800000; font-weight:bold; '>Finally</span>
+        Cursor <span style='color:#808030; '>=</span> Cursors<span style='color:#008c00; '>.</span>Arrow
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Try</span>
+
+    <span style='color:#696969; '>' Open the created image in the default viewer for image format</span>
+    <span style='color:#800000; font-weight:bold; '>Try</span>
+        Process<span style='color:#008c00; '>.</span>Start<span style='color:#808030; '>(</span>outImageFile<span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>Catch</span> ex <span style='color:#800000; font-weight:bold; '>As</span> Exception
+        MessageBox<span style='color:#008c00; '>.</span>Show<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>String</span><span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Format</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Cannot open created image file '{0}'. {1}"</span><span style='color:#808030; '>,</span> outImageFile<span style='color:#808030; '>,</span> ex<span style='color:#008c00; '>.</span>Message<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Try</span>
+<span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Sub</span>
+</pre>
+</body>
+</html>

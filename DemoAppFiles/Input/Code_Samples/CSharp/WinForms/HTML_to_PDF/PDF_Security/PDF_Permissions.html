@@ -1,0 +1,73 @@
+﻿<html><body style='font-size:11px; color:#000000; background:#ffffff; '><pre>
+<span style='color:#800000; font-weight:bold; '>private</span> <span style='color:#800000; font-weight:bold; '>void</span> convertToPdfButton_Click<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>object</span> sender<span style='color:#808030; '>,</span> EventArgs e<span style='color:#808030; '>)</span>
+<span style='color:#800080; '>{</span>
+    <span style='color:#696969; '>// Create a HTML to PDF converter object with default settings</span>
+    HtmlToPdfConverter htmlToPdfConverter <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> HtmlToPdfConverter<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Set license key received after purchase to use the converter in licensed mode</span>
+    <span style='color:#696969; '>// Leave it not set to use the converter in demo mode</span>
+    htmlToPdfConverter<span style='color:#808030; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>4W9+bn19bn5ue2B+bn1/YH98YHd3d3c=</span><span style='color:#800000; '>"</span><span style='color:#800080; '>;</span>
+            
+    <span style='color:#696969; '>// Set an adddional delay in seconds to wait for JavaScript or AJAX calls after page load completed</span>
+    <span style='color:#696969; '>// Set this property to 0 if you don't need to wait for such asynchcronous operations to finish</span>
+    htmlToPdfConverter<span style='color:#808030; '>.</span>ConversionDelay <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Set user and owner passwords</span>
+    <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>userPasswordTextBox<span style='color:#808030; '>.</span>Text<span style='color:#808030; '>.</span>Length <span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span>
+        htmlToPdfConverter<span style='color:#808030; '>.</span>PdfSecurityOptions<span style='color:#808030; '>.</span>UserPassword <span style='color:#808030; '>=</span> userPasswordTextBox<span style='color:#808030; '>.</span>Text<span style='color:#800080; '>;</span>
+
+    <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>ownerPasswordTextBox<span style='color:#808030; '>.</span>Text<span style='color:#808030; '>.</span>Length <span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span>
+        htmlToPdfConverter<span style='color:#808030; '>.</span>PdfSecurityOptions<span style='color:#808030; '>.</span>OwnerPassword <span style='color:#808030; '>=</span> ownerPasswordTextBox<span style='color:#808030; '>.</span>Text<span style='color:#800080; '>;</span>
+
+    <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>htmlToPdfConverter<span style='color:#808030; '>.</span>PdfSecurityOptions<span style='color:#808030; '>.</span>UserPassword <span style='color:#808030; '>!</span><span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>null</span> &amp;&amp; htmlToPdfConverter<span style='color:#808030; '>.</span>PdfSecurityOptions<span style='color:#808030; '>.</span>UserPassword<span style='color:#808030; '>.</span>Length <span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span> &amp;&amp;
+        <span style='color:#808030; '>(</span>htmlToPdfConverter<span style='color:#808030; '>.</span>PdfSecurityOptions<span style='color:#808030; '>.</span>OwnerPassword <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>null</span> || htmlToPdfConverter<span style='color:#808030; '>.</span>PdfSecurityOptions<span style='color:#808030; '>.</span>OwnerPassword<span style='color:#808030; '>.</span>Length <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span> ||
+        htmlToPdfConverter<span style='color:#808030; '>.</span>PdfSecurityOptions<span style='color:#808030; '>.</span>UserPassword <span style='color:#808030; '>=</span><span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#808030; '>.</span>PdfSecurityOptions<span style='color:#808030; '>.</span>OwnerPassword<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// A user password is set but the owner password is not set or is identical to user password</span>
+        <span style='color:#696969; '>// Set a different owner password</span>
+        htmlToPdfConverter<span style='color:#808030; '>.</span>PdfSecurityOptions<span style='color:#808030; '>.</span>OwnerPassword <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#808030; '>.</span>PdfSecurityOptions<span style='color:#808030; '>.</span>UserPassword <span style='color:#808030; '>+</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>_owner</span><span style='color:#800000; '>"</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+
+    <span style='color:#696969; '>// Set PDF document permissions</span>
+    htmlToPdfConverter<span style='color:#808030; '>.</span>PdfSecurityOptions<span style='color:#808030; '>.</span>CanPrint <span style='color:#808030; '>=</span> printEnabledCheckBox<span style='color:#808030; '>.</span>Checked<span style='color:#800080; '>;</span>
+    htmlToPdfConverter<span style='color:#808030; '>.</span>PdfSecurityOptions<span style='color:#808030; '>.</span>CanCopyContent <span style='color:#808030; '>=</span> copyContentEnabledCheckBox<span style='color:#808030; '>.</span>Checked<span style='color:#800080; '>;</span>
+    htmlToPdfConverter<span style='color:#808030; '>.</span>PdfSecurityOptions<span style='color:#808030; '>.</span>CanEditContent <span style='color:#808030; '>=</span> editContentEnabledCheckBox<span style='color:#808030; '>.</span>Checked<span style='color:#800080; '>;</span>
+    htmlToPdfConverter<span style='color:#808030; '>.</span>PdfSecurityOptions<span style='color:#808030; '>.</span>CanEditAnnotations <span style='color:#808030; '>=</span> editAnnotationsEnabledCheckBox<span style='color:#808030; '>.</span>Checked<span style='color:#800080; '>;</span>
+    htmlToPdfConverter<span style='color:#808030; '>.</span>PdfSecurityOptions<span style='color:#808030; '>.</span>CanFillFormFields <span style='color:#808030; '>=</span> fillFormFieldsEnabledCheckBox<span style='color:#808030; '>.</span>Checked<span style='color:#800080; '>;</span>
+
+    Cursor <span style='color:#808030; '>=</span> Cursors<span style='color:#808030; '>.</span>WaitCursor<span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Convert HTML to PDF using the settings above</span>
+    <span style='color:#800000; font-weight:bold; '>string</span> outPdfFile <span style='color:#808030; '>=</span> @<span style='color:#800000; '>"</span><span style='color:#0000e6; '>DemoAppFiles\Output\HTML_to_PDF\Set_Permissions_Password.pdf</span><span style='color:#800000; '>"</span><span style='color:#800080; '>;</span>
+    <span style='color:#800000; font-weight:bold; '>try</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// Convert the HTML page to a PDF document in a memory buffer</span>
+        <span style='color:#800000; font-weight:bold; '>byte</span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span> outPdfBuffer <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#808030; '>.</span>ConvertUrl<span style='color:#808030; '>(</span>urlTextBox<span style='color:#808030; '>.</span>Text<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Write the memory buffer in a PDF file</span>
+        System<span style='color:#808030; '>.</span>IO<span style='color:#808030; '>.</span>File<span style='color:#808030; '>.</span>WriteAllBytes<span style='color:#808030; '>(</span>outPdfFile<span style='color:#808030; '>,</span> outPdfBuffer<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+    <span style='color:#800000; font-weight:bold; '>catch</span> <span style='color:#808030; '>(</span>Exception ex<span style='color:#808030; '>)</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// The HTML to PDF conversion failed</span>
+        MessageBox<span style='color:#808030; '>.</span>Show<span style='color:#808030; '>(</span>String<span style='color:#808030; '>.</span>Format<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>HTML to PDF Error. {0}</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> ex<span style='color:#808030; '>.</span>Message<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+    <span style='color:#800000; font-weight:bold; '>finally</span>
+    <span style='color:#800080; '>{</span>
+        Cursor <span style='color:#808030; '>=</span> Cursors<span style='color:#808030; '>.</span>Arrow<span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+
+    <span style='color:#696969; '>// Open the created PDF document in default PDF viewer</span>
+    <span style='color:#800000; font-weight:bold; '>try</span>
+    <span style='color:#800080; '>{</span>
+        System<span style='color:#808030; '>.</span>Diagnostics<span style='color:#808030; '>.</span>Process<span style='color:#808030; '>.</span>Start<span style='color:#808030; '>(</span>outPdfFile<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+    <span style='color:#800000; font-weight:bold; '>catch</span> <span style='color:#808030; '>(</span>Exception ex<span style='color:#808030; '>)</span>
+    <span style='color:#800080; '>{</span>
+        MessageBox<span style='color:#808030; '>.</span>Show<span style='color:#808030; '>(</span>String<span style='color:#808030; '>.</span>Format<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Cannot open created PDF file '{0}'. {1}</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> outPdfFile<span style='color:#808030; '>,</span> ex<span style='color:#808030; '>.</span>Message<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+<span style='color:#800080; '>}</span>
+</pre>
+</body>
+</html>

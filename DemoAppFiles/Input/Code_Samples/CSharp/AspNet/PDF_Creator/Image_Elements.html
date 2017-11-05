@@ -1,0 +1,238 @@
+﻿<span style='font-size:11px; color:#000000; background:#ffffff; '><pre>
+<span style='color:#800000; font-weight:bold; '>protected</span> <span style='color:#800000; font-weight:bold; '>void</span> createPdfButton_Click<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>object</span> sender<span style='color:#808030; '>,</span> EventArgs e<span style='color:#808030; '>)</span>
+<span style='color:#800080; '>{</span>
+    <span style='color:#696969; '>// Create a PDF document</span>
+    Document pdfDocument <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> Document<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Set license key received after purchase to use the converter in licensed mode</span>
+    <span style='color:#696969; '>// Leave it not set to use the converter in demo mode</span>
+    pdfDocument<span style='color:#808030; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>4W9+bn19bn5ue2B+bn1/YH98YHd3d3c=</span><span style='color:#800000; '>"</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#800000; font-weight:bold; '>try</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// The result of adding elements to PDF document</span>
+        AddElementResult addElementResult <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>null</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// The titles font used to mark various sections of the PDF document</span>
+        PdfFont titleFont <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>AddFont<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>new</span> Font<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Times New Roman</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>12</span><span style='color:#808030; '>,</span> FontStyle<span style='color:#808030; '>.</span>Bold<span style='color:#808030; '>,</span> GraphicsUnit<span style='color:#808030; '>.</span>Point<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        PdfFont subtitleFont <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>AddFont<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>new</span> Font<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Times New Roman</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>8</span><span style='color:#808030; '>,</span> FontStyle<span style='color:#808030; '>.</span>Bold<span style='color:#808030; '>,</span> GraphicsUnit<span style='color:#808030; '>.</span>Point<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// The position on X anf Y axes where to add the next element</span>
+        <span style='color:#800000; font-weight:bold; '>float</span> yLocation <span style='color:#808030; '>=</span> <span style='color:#008c00; '>5</span><span style='color:#800080; '>;</span>
+        <span style='color:#800000; font-weight:bold; '>float</span> xLocation <span style='color:#808030; '>=</span> <span style='color:#008c00; '>5</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Create a PDF page in PDF document</span>
+        PdfPage pdfPage <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>AddPage<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add section title</span>
+        TextElement titleTextElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>Images Scaling</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> titleFont<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        titleTextElement<span style='color:#808030; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#808030; '>.</span>Black<span style='color:#800080; '>;</span>
+        addElementResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>titleTextElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        yLocation <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span>
+        pdfPage <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPdfPage<span style='color:#800080; '>;</span>
+
+        <span style='color:#800000; font-weight:bold; '>float</span> titlesYLocation <span style='color:#808030; '>=</span> yLocation<span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add an unscaled image</span>
+
+        <span style='color:#696969; '>// Add section title</span>
+        TextElement subtitleTextElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> titlesYLocation<span style='color:#808030; '>,</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>Unscaled small image with normal resolution</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> subtitleFont<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        subtitleTextElement<span style='color:#808030; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#808030; '>.</span>Navy<span style='color:#800080; '>;</span>
+        addElementResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>subtitleTextElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        pdfPage <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPdfPage<span style='color:#800080; '>;</span>
+        <span style='color:#800000; font-weight:bold; '>float</span> imagesYLocation <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#800000; font-weight:bold; '>string</span> imagePath <span style='color:#808030; '>=</span> Server<span style='color:#808030; '>.</span>MapPath<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>~/DemoAppFiles/Input/Images/picture_small.jpg</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        ImageElement unscaledImageElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> ImageElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> imagesYLocation<span style='color:#808030; '>,</span> imagePath<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        addElementResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>unscaledImageElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        RectangleF scaledDownImageRectangle <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> RectangleF<span style='color:#808030; '>(</span>addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Right <span style='color:#808030; '>+</span> <span style='color:#008c00; '>30</span><span style='color:#808030; '>,</span> addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Y<span style='color:#808030; '>,</span>
+                    addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Width<span style='color:#808030; '>,</span> addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Height<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add a large image scaled down to same size in PDF</span>
+
+        <span style='color:#696969; '>// Add section title</span>
+        subtitleTextElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> TextElement<span style='color:#808030; '>(</span>scaledDownImageRectangle<span style='color:#808030; '>.</span>X<span style='color:#808030; '>,</span> titlesYLocation<span style='color:#808030; '>,</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>Scaled down large image has higher resolution</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> subtitleFont<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        subtitleTextElement<span style='color:#808030; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#808030; '>.</span>Navy<span style='color:#800080; '>;</span>
+        pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>subtitleTextElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        imagePath <span style='color:#808030; '>=</span> Server<span style='color:#808030; '>.</span>MapPath<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>~/DemoAppFiles/Input/Images/picture_large.jpg</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        ImageElement scaledDownImageElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> ImageElement<span style='color:#808030; '>(</span>scaledDownImageRectangle<span style='color:#808030; '>.</span>X<span style='color:#808030; '>,</span> scaledDownImageRectangle<span style='color:#808030; '>.</span>Y<span style='color:#808030; '>,</span> scaledDownImageRectangle<span style='color:#808030; '>.</span>Width<span style='color:#808030; '>,</span> imagePath<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        AddElementResult scaledDownImageResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>scaledDownImageElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add a border around the scaled down image</span>
+        RectangleElement borderElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> RectangleElement<span style='color:#808030; '>(</span>scaledDownImageRectangle<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>borderElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add an unscaled small image</span>
+
+        <span style='color:#800000; font-weight:bold; '>float</span> columnX <span style='color:#808030; '>=</span> scaledDownImageResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Right <span style='color:#808030; '>+</span> <span style='color:#008c00; '>30</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add section title</span>
+        subtitleTextElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> TextElement<span style='color:#808030; '>(</span>columnX<span style='color:#808030; '>,</span> titlesYLocation<span style='color:#808030; '>,</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>Unscaled small image</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> subtitleFont<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        subtitleTextElement<span style='color:#808030; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#808030; '>.</span>Navy<span style='color:#800080; '>;</span>
+        pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>subtitleTextElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        imagePath <span style='color:#808030; '>=</span> Server<span style='color:#808030; '>.</span>MapPath<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>~/DemoAppFiles/Input/Images/picture_smaller.jpg</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        unscaledImageElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> ImageElement<span style='color:#808030; '>(</span>columnX<span style='color:#808030; '>,</span> imagesYLocation<span style='color:#808030; '>,</span> imagePath<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        AddElementResult unscaledImageResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>unscaledImageElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        RectangleF unscaledImageRectangle <span style='color:#808030; '>=</span> unscaledImageResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add an enlarged image</span>
+
+        <span style='color:#696969; '>// Add section title</span>
+        subtitleTextElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> TextElement<span style='color:#808030; '>(</span>columnX<span style='color:#808030; '>,</span> unscaledImageRectangle<span style='color:#808030; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>Enlarged small image has lower resolution</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> subtitleFont<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        subtitleTextElement<span style='color:#808030; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#808030; '>.</span>Navy<span style='color:#800080; '>;</span>
+        AddElementResult enlargedImageTitle <span style='color:#808030; '>=</span> pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>subtitleTextElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#800000; font-weight:bold; '>float</span> enlargedImageWidth <span style='color:#808030; '>=</span> unscaledImageRectangle<span style='color:#808030; '>.</span>Width <span style='color:#808030; '>+</span> <span style='color:#008c00; '>35</span><span style='color:#800080; '>;</span>
+
+        imagePath <span style='color:#808030; '>=</span> Server<span style='color:#808030; '>.</span>MapPath<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>~/DemoAppFiles/Input/Images/picture_smaller.jpg</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        ImageElement enlargedImageElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> ImageElement<span style='color:#808030; '>(</span>columnX<span style='color:#808030; '>,</span> enlargedImageTitle<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span> enlargedImageWidth<span style='color:#808030; '>,</span> imagePath<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        <span style='color:#696969; '>// Allow the image to be enlarged</span>
+        enlargedImageElement<span style='color:#808030; '>.</span>EnlargeEnabled <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>true</span><span style='color:#800080; '>;</span>
+        AddElementResult enalargedImageResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>enlargedImageElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        yLocation <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Scale an image preserving the aspect ratio</span>
+
+        titlesYLocation <span style='color:#808030; '>=</span> yLocation<span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add section title</span>
+        subtitleTextElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> titlesYLocation<span style='color:#808030; '>,</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>Scaled down image preserving aspect ratio</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> subtitleFont<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        subtitleTextElement<span style='color:#808030; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#808030; '>.</span>Navy<span style='color:#800080; '>;</span>
+        addElementResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>subtitleTextElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        pdfPage <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPdfPage<span style='color:#800080; '>;</span>
+        yLocation <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span>
+
+        RectangleF boundingRectangle <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> RectangleF<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> scaledDownImageRectangle<span style='color:#808030; '>.</span>Width<span style='color:#808030; '>,</span> scaledDownImageRectangle<span style='color:#808030; '>.</span>Width<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        imagesYLocation <span style='color:#808030; '>=</span> boundingRectangle<span style='color:#808030; '>.</span>Y<span style='color:#800080; '>;</span>
+
+        imagePath <span style='color:#808030; '>=</span> Server<span style='color:#808030; '>.</span>MapPath<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>~/DemoAppFiles/Input/Images/landscape.jpg</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        ImageElement keepAspectImageElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> ImageElement<span style='color:#808030; '>(</span>boundingRectangle<span style='color:#808030; '>.</span>X<span style='color:#808030; '>,</span> imagesYLocation<span style='color:#808030; '>,</span> boundingRectangle<span style='color:#808030; '>.</span>Width<span style='color:#808030; '>,</span> boundingRectangle<span style='color:#808030; '>.</span>Width<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>true</span><span style='color:#808030; '>,</span> imagePath<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        addElementResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>keepAspectImageElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        borderElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> RectangleElement<span style='color:#808030; '>(</span>boundingRectangle<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        borderElement<span style='color:#808030; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#808030; '>.</span>Black<span style='color:#800080; '>;</span>
+        pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>borderElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Scale an image without preserving aspect ratio</span>
+        <span style='color:#696969; '>// This can produce a distorted image</span>
+
+        boundingRectangle <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> RectangleF<span style='color:#808030; '>(</span>addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Right <span style='color:#808030; '>+</span> <span style='color:#008c00; '>30</span><span style='color:#808030; '>,</span> addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Y<span style='color:#808030; '>,</span> scaledDownImageRectangle<span style='color:#808030; '>.</span>Width<span style='color:#808030; '>,</span> scaledDownImageRectangle<span style='color:#808030; '>.</span>Width<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add section title</span>
+        subtitleTextElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> TextElement<span style='color:#808030; '>(</span>boundingRectangle<span style='color:#808030; '>.</span>X<span style='color:#808030; '>,</span> titlesYLocation<span style='color:#808030; '>,</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>Scaled down image without preserving aspect ratio</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> subtitleFont<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        subtitleTextElement<span style='color:#808030; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#808030; '>.</span>Navy<span style='color:#800080; '>;</span>
+        pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>subtitleTextElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        imagePath <span style='color:#808030; '>=</span> Server<span style='color:#808030; '>.</span>MapPath<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>~/DemoAppFiles/Input/Images/landscape.jpg</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        ImageElement notKeepAspectImageElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> ImageElement<span style='color:#808030; '>(</span>boundingRectangle<span style='color:#808030; '>.</span>X<span style='color:#808030; '>,</span> imagesYLocation<span style='color:#808030; '>,</span> boundingRectangle<span style='color:#808030; '>.</span>Width<span style='color:#808030; '>,</span> boundingRectangle<span style='color:#808030; '>.</span>Width<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>false</span><span style='color:#808030; '>,</span> imagePath<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        addElementResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>notKeepAspectImageElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        borderElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> RectangleElement<span style='color:#808030; '>(</span>boundingRectangle<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        borderElement<span style='color:#808030; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#808030; '>.</span>Black<span style='color:#800080; '>;</span>
+        pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>borderElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        pdfPage <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPdfPage<span style='color:#800080; '>;</span>
+        yLocation <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>20</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add transparent images</span>
+
+        <span style='color:#696969; '>// Add section title</span>
+        titleTextElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>Transparent Images</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> titleFont<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        titleTextElement<span style='color:#808030; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#808030; '>.</span>Black<span style='color:#800080; '>;</span>
+        addElementResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>titleTextElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        yLocation <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span>
+        pdfPage <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPdfPage<span style='color:#800080; '>;</span>
+
+        imagePath <span style='color:#808030; '>=</span> Server<span style='color:#808030; '>.</span>MapPath<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>~/DemoAppFiles/Input/Images/transparent.png</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        ImageElement trasparentImageElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> ImageElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#008c00; '>150</span><span style='color:#808030; '>,</span> imagePath<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        addElementResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>trasparentImageElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        imagePath <span style='color:#808030; '>=</span> Server<span style='color:#808030; '>.</span>MapPath<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>~/DemoAppFiles/Input/Images/rose.png</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        trasparentImageElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> ImageElement<span style='color:#808030; '>(</span>addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Right <span style='color:#808030; '>+</span> <span style='color:#008c00; '>60</span><span style='color:#808030; '>,</span> yLocation <span style='color:#808030; '>+</span> <span style='color:#008c00; '>20</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>150</span><span style='color:#808030; '>,</span> imagePath<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>trasparentImageElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        pdfPage <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPdfPage<span style='color:#800080; '>;</span>
+        yLocation <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>20</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Rotate images</span>
+
+        <span style='color:#696969; '>// Add section title</span>
+        titleTextElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>Rotated Images</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> titleFont<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        titleTextElement<span style='color:#808030; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#808030; '>.</span>Black<span style='color:#800080; '>;</span>
+        addElementResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>titleTextElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        yLocation <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span>
+        pdfPage <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPdfPage<span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add a not rotated image</span>
+        imagePath <span style='color:#808030; '>=</span> Server<span style='color:#808030; '>.</span>MapPath<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>~/DemoAppFiles/Input/Images/compass.png</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        ImageElement noRotationImageElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> ImageElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#008c00; '>125</span><span style='color:#808030; '>,</span> imagePath<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        addElementResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>noRotationImageElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#800000; font-weight:bold; '>float</span> imageXLocation <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>X<span style='color:#800080; '>;</span>
+        <span style='color:#800000; font-weight:bold; '>float</span> imageYLocation <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Y<span style='color:#800080; '>;</span>
+        <span style='color:#800000; font-weight:bold; '>float</span> imageWidth <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Width<span style='color:#800080; '>;</span>
+        <span style='color:#800000; font-weight:bold; '>float</span> imageHeight <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Height<span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// The rotated coordinates system location</span>
+        <span style='color:#800000; font-weight:bold; '>float</span> rotatedImageXLocation <span style='color:#808030; '>=</span> imageXLocation <span style='color:#808030; '>+</span> imageWidth <span style='color:#808030; '>+</span> <span style='color:#008c00; '>20</span> <span style='color:#808030; '>+</span> imageHeight<span style='color:#800080; '>;</span>
+        <span style='color:#800000; font-weight:bold; '>float</span> rotatedImageYLocation <span style='color:#808030; '>=</span> imageYLocation<span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add the image rotated 90 degrees</span>
+        ImageElement rotate90ImageElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> ImageElement<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>125</span><span style='color:#808030; '>,</span> imagePath<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        rotate90ImageElement<span style='color:#808030; '>.</span>Translate<span style='color:#808030; '>(</span>rotatedImageXLocation<span style='color:#808030; '>,</span> rotatedImageYLocation<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        rotate90ImageElement<span style='color:#808030; '>.</span>Rotate<span style='color:#808030; '>(</span><span style='color:#008c00; '>90</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>rotate90ImageElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        rotatedImageXLocation <span style='color:#808030; '>+</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>20</span> <span style='color:#808030; '>+</span> imageWidth<span style='color:#800080; '>;</span>
+        rotatedImageYLocation <span style='color:#808030; '>=</span> imageYLocation <span style='color:#808030; '>+</span> imageHeight<span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add the image rotated 180 degrees</span>
+        ImageElement rotate180ImageElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> ImageElement<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>125</span><span style='color:#808030; '>,</span> imagePath<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        rotate180ImageElement<span style='color:#808030; '>.</span>Translate<span style='color:#808030; '>(</span>rotatedImageXLocation<span style='color:#808030; '>,</span> rotatedImageYLocation<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        rotate180ImageElement<span style='color:#808030; '>.</span>Rotate<span style='color:#808030; '>(</span><span style='color:#008c00; '>180</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>rotate180ImageElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        rotatedImageXLocation <span style='color:#808030; '>+</span><span style='color:#808030; '>=</span> <span style='color:#008c00; '>20</span><span style='color:#800080; '>;</span>
+        rotatedImageYLocation <span style='color:#808030; '>=</span> imageYLocation <span style='color:#808030; '>+</span> imageWidth<span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add the image rotated 270 degrees</span>
+        ImageElement rotate270ImageElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> ImageElement<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>125</span><span style='color:#808030; '>,</span> imagePath<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        rotate270ImageElement<span style='color:#808030; '>.</span>Translate<span style='color:#808030; '>(</span>rotatedImageXLocation<span style='color:#808030; '>,</span> rotatedImageYLocation<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        rotate270ImageElement<span style='color:#808030; '>.</span>Rotate<span style='color:#808030; '>(</span><span style='color:#008c00; '>270</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>rotate270ImageElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        pdfPage <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPdfPage<span style='color:#800080; '>;</span>
+        yLocation <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>20</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Save the PDF document in a memory buffer</span>
+        <span style='color:#800000; font-weight:bold; '>byte</span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span> outPdfBuffer <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>Save<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Send the PDF as response to browser</span>
+
+        <span style='color:#696969; '>// Set response content type</span>
+        Response<span style='color:#808030; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Content-Type</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>application/pdf</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Instruct the browser to open the PDF file as an attachment or inline</span>
+        Response<span style='color:#808030; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Content-Disposition</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> String<span style='color:#808030; '>.</span>Format<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>attachment; filename=Image_Elements.pdf; size={0}</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> outPdfBuffer<span style='color:#808030; '>.</span>Length<span style='color:#808030; '>.</span>ToString<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Write the PDF document buffer to HTTP response</span>
+        Response<span style='color:#808030; '>.</span>BinaryWrite<span style='color:#808030; '>(</span>outPdfBuffer<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// End the HTTP response and stop the current page processing</span>
+        Response<span style='color:#808030; '>.</span>End<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+    <span style='color:#800000; font-weight:bold; '>finally</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// Close the PDF document</span>
+        pdfDocument<span style='color:#808030; '>.</span>Close<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+<span style='color:#800080; '>}</span>
+</pre>
+</span>

@@ -1,0 +1,130 @@
+﻿<html><body style='font-size:11px; color:#000000; background:#ffffff; '><pre>
+<span style='color:#800000; font-weight:bold; '>Private</span> <span style='color:#800000; font-weight:bold; '>Sub</span> convertToPdfButton_Click<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>ByVal</span> sender <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Object</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>ByVal</span> e <span style='color:#800000; font-weight:bold; '>As</span> EventArgs<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>Handles</span> convertToPdfButton<span style='color:#008c00; '>.</span>Click
+    <span style='color:#696969; '>' Create a HTML to PDF converter object with default settings</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> htmlToPdfConverter <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> HtmlToPdfConverter<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Set license key received after purchase to use the converter in licensed mode</span>
+    <span style='color:#696969; '>' Leave it not set to use the converter in demo mode</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"4W9+bn19bn5ue2B+bn1/YH98YHd3d3c="</span>
+
+    <span style='color:#696969; '>' Set an adddional delay in seconds to wait for JavaScript or AJAX calls after page load completed</span>
+    <span style='color:#696969; '>' Set this property to 0 if you don't need to wait for such asynchcronous operations to finish</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>ConversionDelay <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2</span>
+
+    Cursor <span style='color:#808030; '>=</span> Cursors<span style='color:#008c00; '>.</span>WaitCursor
+
+    <span style='color:#696969; '>' Convert HTML to PDF using the settings above</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> outPdfFile <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"DemoAppFiles\Output\HTML_to_PDF\File_Links_and_Attachments.pdf"</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> pdfDocument <span style='color:#800000; font-weight:bold; '>As</span> Document <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Nothing</span>
+    <span style='color:#800000; font-weight:bold; '>Try</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> htmlWithLinksAndAttachMarkers <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> htmlStringTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> baseUrl <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> baseUrlTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span>
+
+        <span style='color:#696969; '>' Convert a HTML string with markers for file links and attachments to a PDF document object</span>
+        pdfDocument <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>ConvertHtmlToPdfDocumentObject<span style='color:#808030; '>(</span>htmlWithLinksAndAttachMarkers<span style='color:#808030; '>,</span> baseUrl<span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Display the attachments panel when the PDF document is opened in a PDF viewer</span>
+        pdfDocument<span style='color:#008c00; '>.</span>ViewerPreferences<span style='color:#008c00; '>.</span>PageMode <span style='color:#808030; '>=</span> ViewerPageMode<span style='color:#008c00; '>.</span>UseAttachments
+
+        <span style='color:#696969; '>' Create File Links</span>
+
+        <span style='color:#696969; '>' Make the HTML element with 'file_link_text' mapping ID a link to an external file</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> fileLinkTextMapping <span style='color:#800000; font-weight:bold; '>As</span> HtmlElementMapping <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>HtmlElementsMappingOptions<span style='color:#008c00; '>.</span>HtmlElementsMappingResult<span style='color:#008c00; '>.</span>GetElementByMappingId<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"file_link_text"</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> fileLinkTextMapping IsNot <span style='color:#800000; font-weight:bold; '>Nothing</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> fileLinkTextPage <span style='color:#800000; font-weight:bold; '>As</span> PdfPage <span style='color:#808030; '>=</span> fileLinkTextMapping<span style='color:#008c00; '>.</span>PdfRectangles<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>.</span>PdfPage
+            <span style='color:#800000; font-weight:bold; '>Dim</span> fileLinkTextRectangle <span style='color:#800000; font-weight:bold; '>As</span> RectangleF <span style='color:#808030; '>=</span> fileLinkTextMapping<span style='color:#008c00; '>.</span>PdfRectangles<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>.</span>Rectangle
+
+            <span style='color:#800000; font-weight:bold; '>Dim</span> filePath <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"..\..\Input\Linked_Files\Linked_External_File.txt"</span>
+
+            <span style='color:#696969; '>' Create the file link</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> fileLinkTextElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> FileLinkElement<span style='color:#808030; '>(</span>fileLinkTextRectangle<span style='color:#808030; '>,</span> filePath<span style='color:#808030; '>)</span>
+            fileLinkTextPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>fileLinkTextElement<span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+        <span style='color:#696969; '>' Make the HTML element with 'file_link_img' ID a link to an external file</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> fileLinkImgMapping <span style='color:#800000; font-weight:bold; '>As</span> HtmlElementMapping <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>HtmlElementsMappingOptions<span style='color:#008c00; '>.</span>HtmlElementsMappingResult<span style='color:#008c00; '>.</span>GetElementByMappingId<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"file_link_image"</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> fileLinkImgMapping IsNot <span style='color:#800000; font-weight:bold; '>Nothing</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> fileLinkImgPage <span style='color:#800000; font-weight:bold; '>As</span> PdfPage <span style='color:#808030; '>=</span> fileLinkImgMapping<span style='color:#008c00; '>.</span>PdfRectangles<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>.</span>PdfPage
+            <span style='color:#800000; font-weight:bold; '>Dim</span> fileLinkImgRectangle <span style='color:#800000; font-weight:bold; '>As</span> RectangleF <span style='color:#808030; '>=</span> fileLinkImgMapping<span style='color:#008c00; '>.</span>PdfRectangles<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>.</span>Rectangle
+
+            <span style='color:#800000; font-weight:bold; '>Dim</span> filePath <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"..\..\Input\Linked_Files\Linked_External_File.txt"</span>
+
+            <span style='color:#696969; '>' Create the file link</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> fileLinkImgElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> FileLinkElement<span style='color:#808030; '>(</span>fileLinkImgRectangle<span style='color:#808030; '>,</span> filePath<span style='color:#808030; '>)</span>
+            fileLinkImgPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>fileLinkImgElement<span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+        <span style='color:#696969; '>' Create File Attachments</span>
+
+        <span style='color:#696969; '>' Create an attachment from a file without icon</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> fileAttachmentPath <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"DemoAppFiles\Input\Attach_Files\Attachment_File.txt"</span>
+        pdfDocument<span style='color:#008c00; '>.</span>AddFileAttachment<span style='color:#808030; '>(</span>fileAttachmentPath<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"Attachment from File"</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Create an attachment from a stream without icon</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> fileStreamAttachmentPath <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"DemoAppFiles\Input\Attach_Files\Attachment_Stream.txt"</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> attachmentStream <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> <span style='color:#800000; font-weight:bold; '>System</span><span style='color:#008c00; '>.</span>IO<span style='color:#008c00; '>.</span>FileStream<span style='color:#808030; '>(</span>fileStreamAttachmentPath<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>System</span><span style='color:#008c00; '>.</span>IO<span style='color:#008c00; '>.</span>FileMode<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Open</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>System</span><span style='color:#008c00; '>.</span>IO<span style='color:#008c00; '>.</span>FileAccess<span style='color:#008c00; '>.</span>Read<span style='color:#808030; '>)</span>
+        pdfDocument<span style='color:#008c00; '>.</span>AddFileAttachment<span style='color:#808030; '>(</span>attachmentStream<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"Attachment_Stream.txt"</span><span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"Attachment from Stream"</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Create an attachment from file with paperclip icon in PDF</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> attachFromFileIconMapping <span style='color:#800000; font-weight:bold; '>As</span> HtmlElementMapping <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>HtmlElementsMappingOptions<span style='color:#008c00; '>.</span>HtmlElementsMappingResult<span style='color:#008c00; '>.</span>GetElementByMappingId<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"attach_from_file_icon"</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> attachFromFileIconMapping IsNot <span style='color:#800000; font-weight:bold; '>Nothing</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> attachFromFilePage <span style='color:#800000; font-weight:bold; '>As</span> PdfPage <span style='color:#808030; '>=</span> attachFromFileIconMapping<span style='color:#008c00; '>.</span>PdfRectangles<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>.</span>PdfPage
+            <span style='color:#800000; font-weight:bold; '>Dim</span> attachFromFileIconRectangle <span style='color:#800000; font-weight:bold; '>As</span> RectangleF <span style='color:#808030; '>=</span> attachFromFileIconMapping<span style='color:#008c00; '>.</span>PdfRectangles<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>.</span>Rectangle
+
+            <span style='color:#800000; font-weight:bold; '>Dim</span> fileAttachmentWithIconPath <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"DemoAppFiles\Input\Attach_Files\Attachment_File_Icon.txt"</span>
+
+            <span style='color:#696969; '>' Create the attachment from file</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> attachFromFileElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> FileAttachmentElement<span style='color:#808030; '>(</span>attachFromFileIconRectangle<span style='color:#808030; '>,</span> fileAttachmentWithIconPath<span style='color:#808030; '>)</span>
+            attachFromFileElement<span style='color:#008c00; '>.</span>IconType <span style='color:#808030; '>=</span> FileAttachmentIcon<span style='color:#008c00; '>.</span>Paperclip
+            attachFromFileElement<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"Attachment from File with Paperclip Icon"</span>
+            attachFromFileElement<span style='color:#008c00; '>.</span>IconColor <span style='color:#808030; '>=</span> Color<span style='color:#008c00; '>.</span>Blue
+            attachFromFilePage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>attachFromFileElement<span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+        <span style='color:#696969; '>' Create an attachment from stream with pushpin icon in PDF</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> attachmentStreamWithIcon <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>System</span><span style='color:#008c00; '>.</span>IO<span style='color:#008c00; '>.</span>FileStream <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Nothing</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> attachFromStreamIconMapping <span style='color:#800000; font-weight:bold; '>As</span> HtmlElementMapping <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>HtmlElementsMappingOptions<span style='color:#008c00; '>.</span>HtmlElementsMappingResult<span style='color:#008c00; '>.</span>GetElementByMappingId<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"attach_from_stream_icon"</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> attachFromStreamIconMapping IsNot <span style='color:#800000; font-weight:bold; '>Nothing</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> attachFromStreamPage <span style='color:#800000; font-weight:bold; '>As</span> PdfPage <span style='color:#808030; '>=</span> attachFromStreamIconMapping<span style='color:#008c00; '>.</span>PdfRectangles<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>.</span>PdfPage
+            <span style='color:#800000; font-weight:bold; '>Dim</span> attachFromStreamIconRectangle <span style='color:#800000; font-weight:bold; '>As</span> RectangleF <span style='color:#808030; '>=</span> attachFromStreamIconMapping<span style='color:#008c00; '>.</span>PdfRectangles<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>.</span>Rectangle
+
+            <span style='color:#800000; font-weight:bold; '>Dim</span> fileStreamAttachmentWithIconPath <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"DemoAppFiles\Input\Attach_Files\Attachment_Stream_Icon.txt"</span>
+
+            attachmentStreamWithIcon <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> <span style='color:#800000; font-weight:bold; '>System</span><span style='color:#008c00; '>.</span>IO<span style='color:#008c00; '>.</span>FileStream<span style='color:#808030; '>(</span>fileStreamAttachmentWithIconPath<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>System</span><span style='color:#008c00; '>.</span>IO<span style='color:#008c00; '>.</span>FileMode<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Open</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>System</span><span style='color:#008c00; '>.</span>IO<span style='color:#008c00; '>.</span>FileAccess<span style='color:#008c00; '>.</span>Read<span style='color:#808030; '>)</span>
+
+            <span style='color:#696969; '>' Create the attachment from stream</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> attachFromStreamElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> FileAttachmentElement<span style='color:#808030; '>(</span>attachFromStreamIconRectangle<span style='color:#808030; '>,</span> attachmentStreamWithIcon<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"Attachment_Stream_Icon.txt"</span><span style='color:#808030; '>)</span>
+            attachFromStreamElement<span style='color:#008c00; '>.</span>IconType <span style='color:#808030; '>=</span> FileAttachmentIcon<span style='color:#008c00; '>.</span>PushPin
+            attachFromStreamElement<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"Attachment from Stream with Pushpin Icon"</span>
+            attachFromStreamElement<span style='color:#008c00; '>.</span>IconColor <span style='color:#808030; '>=</span> Color<span style='color:#008c00; '>.</span>Green
+            attachFromStreamPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>attachFromStreamElement<span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+        <span style='color:#696969; '>' Save the PDF document in a memory buffer</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> outPdfBuffer<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Byte</span> <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span>Save<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Write the memory buffer in a PDF file</span>
+        <span style='color:#800000; font-weight:bold; '>System</span><span style='color:#008c00; '>.</span>IO<span style='color:#008c00; '>.</span>File<span style='color:#008c00; '>.</span>WriteAllBytes<span style='color:#808030; '>(</span>outPdfFile<span style='color:#808030; '>,</span> outPdfBuffer<span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>Catch</span> ex <span style='color:#800000; font-weight:bold; '>As</span> Exception
+        <span style='color:#696969; '>' The HTML to PDF conversion failed</span>
+        MessageBox<span style='color:#008c00; '>.</span>Show<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>String</span><span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Format</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"HTML to PDF Error. {0}"</span><span style='color:#808030; '>,</span> ex<span style='color:#008c00; '>.</span>Message<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>Return</span>
+    <span style='color:#800000; font-weight:bold; '>Finally</span>
+        <span style='color:#696969; '>' Close the PDF document</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> pdfDocument IsNot <span style='color:#800000; font-weight:bold; '>Nothing</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            pdfDocument<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Close</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+        Cursor <span style='color:#808030; '>=</span> Cursors<span style='color:#008c00; '>.</span>Arrow
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Try</span>
+
+    <span style='color:#696969; '>' Open the created PDF document in default PDF viewer</span>
+    <span style='color:#800000; font-weight:bold; '>Try</span>
+        Process<span style='color:#008c00; '>.</span>Start<span style='color:#808030; '>(</span>outPdfFile<span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>Catch</span> ex <span style='color:#800000; font-weight:bold; '>As</span> Exception
+        MessageBox<span style='color:#008c00; '>.</span>Show<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>String</span><span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Format</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Cannot open created PDF file '{0}'. {1}"</span><span style='color:#808030; '>,</span> outPdfFile<span style='color:#808030; '>,</span> ex<span style='color:#008c00; '>.</span>Message<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Try</span>
+<span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Sub</span>
+</pre>
+</body>
+</html>

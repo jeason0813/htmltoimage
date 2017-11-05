@@ -1,0 +1,39 @@
+﻿<span style='font-size:11px; color:#000000; background:#ffffff; '><pre>
+<span style='color:#800000; font-weight:bold; '>protected</span> <span style='color:#800000; font-weight:bold; '>void</span> convertToPdfButton_Click<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>object</span> sender<span style='color:#808030; '>,</span> EventArgs e<span style='color:#808030; '>)</span>
+<span style='color:#800080; '>{</span>
+    <span style='color:#696969; '>// Create a HTML to PDF converter object with default settings</span>
+    HtmlToPdfConverter htmlToPdfConverter <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> HtmlToPdfConverter<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Set license key received after purchase to use the converter in licensed mode</span>
+    <span style='color:#696969; '>// Leave it not set to use the converter in demo mode</span>
+    htmlToPdfConverter<span style='color:#808030; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>4W9+bn19bn5ue2B+bn1/YH98YHd3d3c=</span><span style='color:#800000; '>"</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Set an adddional delay in seconds to wait for JavaScript or AJAX calls after page load completed</span>
+    <span style='color:#696969; '>// Set this property to 0 if you don't need to wait for such asynchcronous operations to finish</span>
+    htmlToPdfConverter<span style='color:#808030; '>.</span>ConversionDelay <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Select the HTML elements to bookmark by setting a list of CSS selectors</span>
+    htmlToPdfConverter<span style='color:#808030; '>.</span>PdfBookmarkOptions<span style='color:#808030; '>.</span>HtmlElementSelectors <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> <span style='color:#800000; font-weight:bold; '>string</span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span> <span style='color:#800080; '>{</span> htmlElementsSelectorTextBox<span style='color:#808030; '>.</span>Text <span style='color:#800080; '>}</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Display the bookmarks panel in PDF viewer when the generated PDF is opened</span>
+    htmlToPdfConverter<span style='color:#808030; '>.</span>PdfViewerPreferences<span style='color:#808030; '>.</span>PageMode <span style='color:#808030; '>=</span> ViewerPageMode<span style='color:#808030; '>.</span>UseOutlines<span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Convert the HTML page to a PDF document in a memory buffer</span>
+    <span style='color:#800000; font-weight:bold; '>byte</span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span> outPdfBuffer <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#808030; '>.</span>ConvertUrl<span style='color:#808030; '>(</span>urlTextBox<span style='color:#808030; '>.</span>Text<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Send the PDF as response to browser</span>
+
+    <span style='color:#696969; '>// Set response content type</span>
+    Response<span style='color:#808030; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Content-Type</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>application/pdf</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Instruct the browser to open the PDF file as an attachment or inline</span>
+    Response<span style='color:#808030; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Content-Disposition</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> String<span style='color:#808030; '>.</span>Format<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>attachment; filename=Select_in_API_Elements_to_Bookmark.pdf; size={0}</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> outPdfBuffer<span style='color:#808030; '>.</span>Length<span style='color:#808030; '>.</span>ToString<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Write the PDF document buffer to HTTP response</span>
+    Response<span style='color:#808030; '>.</span>BinaryWrite<span style='color:#808030; '>(</span>outPdfBuffer<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// End the HTTP response and stop the current page processing</span>
+    Response<span style='color:#808030; '>.</span>End<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+<span style='color:#800080; '>}</span>
+</pre>
+</span>

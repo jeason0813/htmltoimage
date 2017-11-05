@@ -1,0 +1,152 @@
+﻿<html><body style='font-size:11px; color:#000000; background:#ffffff; '><pre>
+<span style='color:#696969; '>// Define the PDF Document object as a class member to make it accessible in the headerHtml_NavigationCompletedEvent handler</span>
+<span style='color:#696969; '>// where the header height will be automatically adjusted</span>
+<span style='color:#800000; font-weight:bold; '>private</span> Document pdfDocument<span style='color:#800080; '>;</span>
+
+<span style='color:#696969; '>// Indicates if a line should be drawn at the botom of the header</span>
+<span style='color:#800000; font-weight:bold; '>private</span> <span style='color:#800000; font-weight:bold; '>bool</span> drawHeaderLine <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>true</span><span style='color:#800080; '>;</span>
+
+<span style='color:#800000; font-weight:bold; '>private</span> <span style='color:#800000; font-weight:bold; '>void</span> createPdfButton_Click<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>object</span> sender<span style='color:#808030; '>,</span> EventArgs e<span style='color:#808030; '>)</span>
+<span style='color:#800080; '>{</span>
+    <span style='color:#696969; '>// Create a PDF document</span>
+    pdfDocument <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> Document<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Set license key received after purchase to use the converter in licensed mode</span>
+    <span style='color:#696969; '>// Leave it not set to use the converter in demo mode</span>
+    pdfDocument<span style='color:#808030; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>4W9+bn19bn5ue2B+bn1/YH98YHd3d3c=</span><span style='color:#800000; '>"</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Add a PDF page to PDF document</span>
+    PdfPage pdfPage <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>AddPage<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    Cursor <span style='color:#808030; '>=</span> Cursors<span style='color:#808030; '>.</span>WaitCursor<span style='color:#800080; '>;</span>
+
+    <span style='color:#800000; font-weight:bold; '>string</span> headerHtmlUrl <span style='color:#808030; '>=</span> System<span style='color:#808030; '>.</span>IO<span style='color:#808030; '>.</span>Path<span style='color:#808030; '>.</span>Combine<span style='color:#808030; '>(</span>Application<span style='color:#808030; '>.</span>StartupPath<span style='color:#808030; '>,</span> @<span style='color:#800000; '>"</span><span style='color:#0000e6; '>DemoAppFiles\Input\HTML_Files\Header_HTML.html</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800000; font-weight:bold; '>string</span> outPdfFile <span style='color:#808030; '>=</span> @<span style='color:#800000; '>"</span><span style='color:#0000e6; '>DemoAppFiles\Output\PDF_Creator\Auto_Resize_Header_Footer.pdf</span><span style='color:#800000; '>"</span><span style='color:#800080; '>;</span>
+    <span style='color:#800000; font-weight:bold; '>try</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// Add the header to PDF document</span>
+        <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>autoResizeHeaderRadioButton<span style='color:#808030; '>.</span>Checked<span style='color:#808030; '>)</span>
+        <span style='color:#800080; '>{</span>
+            <span style='color:#696969; '>// Create the document header with a default height</span>
+            <span style='color:#696969; '>// It will be automatically resized in headerHtml_NavigationCompletedEvent handler</span>
+            pdfDocument<span style='color:#808030; '>.</span>AddHeaderTemplate<span style='color:#808030; '>(</span><span style='color:#008c00; '>50</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+            <span style='color:#696969; '>// Create a HTML element to be added in header</span>
+            HtmlToPdfElement headerHtml <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> HtmlToPdfElement<span style='color:#808030; '>(</span>headerHtmlUrl<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+            <span style='color:#696969; '>// Install a handler where to create the document header based on HTML element height</span>
+            headerHtml<span style='color:#808030; '>.</span>NavigationCompletedEvent <span style='color:#808030; '>+</span><span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> NavigationCompletedDelegate<span style='color:#808030; '>(</span>headerHtml_NavigationCompletedEvent<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+            <span style='color:#696969; '>// Add the HTML element to header</span>
+            <span style='color:#696969; '>// When the element is rendered in header by converter, the headerHtml_NavigationCompletedEvent handler </span>
+            <span style='color:#696969; '>// will be invoked and the header height will be automatically calculated</span>
+            pdfDocument<span style='color:#808030; '>.</span>Header<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>headerHtml<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+            <span style='color:#696969; '>// Uninstall the handler</span>
+            headerHtml<span style='color:#808030; '>.</span>NavigationCompletedEvent <span style='color:#808030; '>+</span><span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> NavigationCompletedDelegate<span style='color:#808030; '>(</span>headerHtml_NavigationCompletedEvent<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        <span style='color:#800080; '>}</span>
+        <span style='color:#800000; font-weight:bold; '>else</span>
+        <span style='color:#800080; '>{</span>
+            <span style='color:#696969; '>// Create the document header with a fixed height</span>
+            pdfDocument<span style='color:#808030; '>.</span>AddHeaderTemplate<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>float</span><span style='color:#808030; '>.</span>Parse<span style='color:#808030; '>(</span>headerHeightTextBox<span style='color:#808030; '>.</span>Text<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+            <span style='color:#696969; '>// Create a HTML to PDF element to be added in header</span>
+            HtmlToPdfElement headerHtml <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> HtmlToPdfElement<span style='color:#808030; '>(</span>headerHtmlUrl<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+            <span style='color:#696969; '>// Set the HTML element to fit the container height</span>
+            headerHtml<span style='color:#808030; '>.</span>FitHeight <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>true</span><span style='color:#800080; '>;</span>
+
+            <span style='color:#696969; '>// Add HTML element to fit the fixed header height</span>
+            pdfDocument<span style='color:#808030; '>.</span>Header<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>headerHtml<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#800080; '>}</span>
+
+        <span style='color:#696969; '>// Draw a line at the header bottom</span>
+        <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>drawHeaderLine<span style='color:#808030; '>)</span>
+        <span style='color:#800080; '>{</span>
+            <span style='color:#800000; font-weight:bold; '>float</span> headerWidth <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>Header<span style='color:#808030; '>.</span>Width<span style='color:#800080; '>;</span>
+            <span style='color:#800000; font-weight:bold; '>float</span> headerHeight <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>Header<span style='color:#808030; '>.</span>Height<span style='color:#800080; '>;</span>
+
+            <span style='color:#696969; '>// Create a line element for the bottom of the header</span>
+            LineElement headerLine <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> LineElement<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> headerHeight <span style='color:#808030; '>-</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>,</span> headerWidth<span style='color:#808030; '>,</span> headerHeight <span style='color:#808030; '>-</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+            <span style='color:#696969; '>// Set line color</span>
+            headerLine<span style='color:#808030; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#808030; '>.</span>Gray<span style='color:#800080; '>;</span>
+
+            <span style='color:#696969; '>// Add line element to the bottom of the header</span>
+            pdfDocument<span style='color:#808030; '>.</span>Header<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>headerLine<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        <span style='color:#800080; '>}</span>
+
+        <span style='color:#696969; '>// Create a HTML to PDF element to add to document</span>
+        HtmlToPdfElement htmlToPdfElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> HtmlToPdfElement<span style='color:#808030; '>(</span>urlTextBox<span style='color:#808030; '>.</span>Text<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Optionally set a delay before conversion to allow asynchonous scripts to finish</span>
+        htmlToPdfElement<span style='color:#808030; '>.</span>ConversionDelay <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add the HTML to PDF element to document</span>
+        pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>htmlToPdfElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Save the PDF document in a memory buffer</span>
+        <span style='color:#800000; font-weight:bold; '>byte</span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span> outPdfBuffer <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>Save<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Write the memory buffer in a PDF file</span>
+        System<span style='color:#808030; '>.</span>IO<span style='color:#808030; '>.</span>File<span style='color:#808030; '>.</span>WriteAllBytes<span style='color:#808030; '>(</span>outPdfFile<span style='color:#808030; '>,</span> outPdfBuffer<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+    <span style='color:#800000; font-weight:bold; '>catch</span> <span style='color:#808030; '>(</span>Exception ex<span style='color:#808030; '>)</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// The PDF creation failed</span>
+        MessageBox<span style='color:#808030; '>.</span>Show<span style='color:#808030; '>(</span>String<span style='color:#808030; '>.</span>Format<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Create PDF Document Error. {0}</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> ex<span style='color:#808030; '>.</span>Message<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+    <span style='color:#800000; font-weight:bold; '>finally</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// Close the PDF document</span>
+        pdfDocument<span style='color:#808030; '>.</span>Close<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        Cursor <span style='color:#808030; '>=</span> Cursors<span style='color:#808030; '>.</span>Arrow<span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+
+    <span style='color:#696969; '>// Open the created PDF document in default PDF viewer</span>
+    <span style='color:#800000; font-weight:bold; '>try</span>
+    <span style='color:#800080; '>{</span>
+        System<span style='color:#808030; '>.</span>Diagnostics<span style='color:#808030; '>.</span>Process<span style='color:#808030; '>.</span>Start<span style='color:#808030; '>(</span>outPdfFile<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+    <span style='color:#800000; font-weight:bold; '>catch</span> <span style='color:#808030; '>(</span>Exception ex<span style='color:#808030; '>)</span>
+    <span style='color:#800080; '>{</span>
+        MessageBox<span style='color:#808030; '>.</span>Show<span style='color:#808030; '>(</span>String<span style='color:#808030; '>.</span>Format<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Cannot open created PDF file '{0}'. {1}</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> outPdfFile<span style='color:#808030; '>,</span> ex<span style='color:#808030; '>.</span>Message<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+<span style='color:#800080; '>}</span>
+
+<span style='color:#696969; '>/// &lt;summary></span>
+<span style='color:#696969; '>/// This handler is called after the navigation to header HTML completed. The document header is resized in this event handler</span>
+<span style='color:#696969; '>/// &lt;/summary></span>
+<span style='color:#696969; '>/// &lt;param name="eventParams">The event parameter containing the HTML content size in pixels and points&lt;/param></span>
+<span style='color:#800000; font-weight:bold; '>void</span> headerHtml_NavigationCompletedEvent<span style='color:#808030; '>(</span>NavigationCompletedParams eventParams<span style='color:#808030; '>)</span>
+<span style='color:#800080; '>{</span>
+    <span style='color:#696969; '>// Get the header HTML width and height from event parameters</span>
+    <span style='color:#800000; font-weight:bold; '>float</span> headerHtmlWidth <span style='color:#808030; '>=</span> eventParams<span style='color:#808030; '>.</span>HtmlContentWidthPt<span style='color:#800080; '>;</span>
+    <span style='color:#800000; font-weight:bold; '>float</span> headerHtmlHeight <span style='color:#808030; '>=</span> eventParams<span style='color:#808030; '>.</span>HtmlContentHeightPt<span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Get the header width</span>
+    <span style='color:#800000; font-weight:bold; '>float</span> headerWidth <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>Header<span style='color:#808030; '>.</span>Width<span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Calculate a resize factor to fit the header width</span>
+    <span style='color:#800000; font-weight:bold; '>float</span> resizeFactor <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1</span><span style='color:#800080; '>;</span>
+    <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>headerHtmlWidth <span style='color:#808030; '>></span> headerWidth<span style='color:#808030; '>)</span>
+        resizeFactor <span style='color:#808030; '>=</span> headerWidth <span style='color:#808030; '>/</span> headerHtmlWidth<span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Calculate the header height to preserve the HTML aspect ratio</span>
+    <span style='color:#800000; font-weight:bold; '>float</span> headerHeight <span style='color:#808030; '>=</span> headerHtmlHeight <span style='color:#808030; '>*</span> resizeFactor<span style='color:#800080; '>;</span>
+
+    <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>!</span><span style='color:#808030; '>(</span>headerHeight <span style='color:#808030; '>&lt;</span> pdfDocument<span style='color:#808030; '>.</span>Pages<span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>PageSize<span style='color:#808030; '>.</span>Height <span style='color:#808030; '>-</span> pdfDocument<span style='color:#808030; '>.</span>Pages<span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Margins<span style='color:#808030; '>.</span>Top <span style='color:#808030; '>-</span>
+                pdfDocument<span style='color:#808030; '>.</span>Pages<span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Margins<span style='color:#808030; '>.</span>Bottom<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#800000; font-weight:bold; '>throw</span> <span style='color:#800000; font-weight:bold; '>new</span> Exception<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>The header height cannot be bigger than PDF page height</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+
+    <span style='color:#696969; '>// Set the calculated header height</span>
+    pdfDocument<span style='color:#808030; '>.</span>Header<span style='color:#808030; '>.</span>Height <span style='color:#808030; '>=</span> headerHeight<span style='color:#800080; '>;</span>
+<span style='color:#800080; '>}</span>
+</pre>
+</body>
+</html>

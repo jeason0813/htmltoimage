@@ -1,0 +1,68 @@
+﻿<span style='font-size:11px; color:#000000; background:#ffffff; '><pre>
+<span style='color:#800000; font-weight:bold; '>protected</span> <span style='color:#800000; font-weight:bold; '>void</span> convertToPdfButton_Click<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>object</span> sender<span style='color:#808030; '>,</span> EventArgs e<span style='color:#808030; '>)</span>
+<span style='color:#800080; '>{</span>
+    <span style='color:#696969; '>// Create a PDF document</span>
+    Document pdfDocument <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> Document<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Set license key received after purchase to use the converter in licensed mode</span>
+    <span style='color:#696969; '>// Leave it not set to use the converter in demo mode</span>
+    pdfDocument<span style='color:#808030; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>4W9+bn19bn5ue2B+bn1/YH98YHd3d3c=</span><span style='color:#800000; '>"</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Add a page to PDF document</span>
+    PdfPage pdfPage <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>AddPage<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#800000; font-weight:bold; '>try</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#800000; font-weight:bold; '>string</span> htmlWithDigitalSignatureMarker <span style='color:#808030; '>=</span> htmlStringTextBox<span style='color:#808030; '>.</span>Text<span style='color:#800080; '>;</span>
+        <span style='color:#800000; font-weight:bold; '>string</span> baseUrl <span style='color:#808030; '>=</span> baseUrlTextBox<span style='color:#808030; '>.</span>Text<span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add a HTML string with a marker for digital signature to PDF document</span>
+        HtmlToPdfElement htmlToPdfElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> HtmlToPdfElement<span style='color:#808030; '>(</span>htmlWithDigitalSignatureMarker<span style='color:#808030; '>,</span> baseUrl<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>htmlToPdfElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Make the HTML element with 'digital_signature_element' mapping ID a link to digital signature properties</span>
+        HtmlElementMapping digitalSignatureMapping <span style='color:#808030; '>=</span> htmlToPdfElement<span style='color:#808030; '>.</span>HtmlElementsMappingOptions<span style='color:#808030; '>.</span>HtmlElementsMappingResult<span style='color:#808030; '>.</span>GetElementByMappingId<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>digital_signature_element</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>digitalSignatureMapping <span style='color:#808030; '>!</span><span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>null</span><span style='color:#808030; '>)</span>
+        <span style='color:#800080; '>{</span>
+            PdfPage digitalSignaturePage <span style='color:#808030; '>=</span> digitalSignatureMapping<span style='color:#808030; '>.</span>PdfRectangles<span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>PdfPage<span style='color:#800080; '>;</span>
+            RectangleF digitalSignatureRectangle <span style='color:#808030; '>=</span> digitalSignatureMapping<span style='color:#808030; '>.</span>PdfRectangles<span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#808030; '>.</span>Rectangle<span style='color:#800080; '>;</span>
+                    
+            <span style='color:#800000; font-weight:bold; '>string</span> certificateFilePath <span style='color:#808030; '>=</span> Server<span style='color:#808030; '>.</span>MapPath<span style='color:#808030; '>(</span>@<span style='color:#800000; '>"</span><span style='color:#0000e6; '>~/DemoAppFiles/Input/Certificates/evopdf.pfx</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+            <span style='color:#696969; '>// Get the certificate from password protected PFX file</span>
+            DigitalCertificatesCollection certificates <span style='color:#808030; '>=</span> DigitalCertificatesStore<span style='color:#808030; '>.</span>GetCertificates<span style='color:#808030; '>(</span>certificateFilePath<span style='color:#808030; '>,</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>evopdf</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+            DigitalCertificate certificate <span style='color:#808030; '>=</span> certificates<span style='color:#808030; '>[</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>]</span><span style='color:#800080; '>;</span>
+
+            <span style='color:#696969; '>// Create the digital signature</span>
+            DigitalSignatureElement signature <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> DigitalSignatureElement<span style='color:#808030; '>(</span>digitalSignatureRectangle<span style='color:#808030; '>,</span> certificate<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+            signature<span style='color:#808030; '>.</span>Reason <span style='color:#808030; '>=</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>Protect the document from unwanted changes</span><span style='color:#800000; '>"</span><span style='color:#800080; '>;</span>
+            signature<span style='color:#808030; '>.</span>ContactInfo <span style='color:#808030; '>=</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>The contact email is support@evopdf.com</span><span style='color:#800000; '>"</span><span style='color:#800080; '>;</span>
+            signature<span style='color:#808030; '>.</span>Location <span style='color:#808030; '>=</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>Development server</span><span style='color:#800000; '>"</span><span style='color:#800080; '>;</span>
+            digitalSignaturePage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>signature<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        <span style='color:#800080; '>}</span>
+
+        <span style='color:#696969; '>// Save the PDF document in a memory buffer</span>
+        <span style='color:#800000; font-weight:bold; '>byte</span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span> outPdfBuffer <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>Save<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Send the PDF as response to browser</span>
+
+        <span style='color:#696969; '>// Set response content type</span>
+        Response<span style='color:#808030; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Content-Type</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>application/pdf</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Instruct the browser to open the PDF file as an attachment or inline</span>
+        Response<span style='color:#808030; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Content-Disposition</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> String<span style='color:#808030; '>.</span>Format<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>attachment; filename=Digital_Signatures.pdf; size={0}</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> outPdfBuffer<span style='color:#808030; '>.</span>Length<span style='color:#808030; '>.</span>ToString<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Write the PDF document buffer to HTTP response</span>
+        Response<span style='color:#808030; '>.</span>BinaryWrite<span style='color:#808030; '>(</span>outPdfBuffer<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// End the HTTP response and stop the current page processing</span>
+        Response<span style='color:#808030; '>.</span>End<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+    <span style='color:#800000; font-weight:bold; '>finally</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// Close the PDF document</span>
+        pdfDocument<span style='color:#808030; '>.</span>Close<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+<span style='color:#800080; '>}</span>
+</pre>
+</span>

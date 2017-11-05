@@ -1,0 +1,71 @@
+﻿<span style='font-size:11px; color:#000000; background:#ffffff; '><pre>
+<span style='color:#800000; font-weight:bold; '>Protected</span> <span style='color:#800000; font-weight:bold; '>Sub</span> convertToPdfButton_Click<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>ByVal</span> sender <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Object</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>ByVal</span> e <span style='color:#800000; font-weight:bold; '>As</span> EventArgs<span style='color:#808030; '>)</span>
+    <span style='color:#696969; '>' Create a HTML to PDF converter object with default settings</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> htmlToPdfConverter <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> HtmlToPdfConverter<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Set license key received after purchase to use the converter in licensed mode</span>
+    <span style='color:#696969; '>' Leave it not set to use the converter in demo mode</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"4W9+bn19bn5ue2B+bn1/YH98YHd3d3c="</span>
+
+    <span style='color:#696969; '>' Set an adddional delay in seconds to wait for JavaScript or AJAX calls after page load completed</span>
+    <span style='color:#696969; '>' Set this property to 0 if you don't need to wait for such asynchcronous operations to finish</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>ConversionDelay <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2</span>
+
+    <span style='color:#800000; font-weight:bold; '>Dim</span> pdfDocument <span style='color:#800000; font-weight:bold; '>As</span> Document <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Nothing</span>
+    <span style='color:#800000; font-weight:bold; '>Try</span>
+        <span style='color:#696969; '>' Convert a HTML page to a PDF document object</span>
+        pdfDocument <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>ConvertUrlToPdfDocumentObject<span style='color:#808030; '>(</span>urlTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#800000; font-weight:bold; '>Dim</span> goToPageNumber <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Integer</span> <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Integer</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>pageNumberTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> goToPageNumber <span style='color:#808030; '>></span> pdfDocument<span style='color:#008c00; '>.</span>Pages<span style='color:#008c00; '>.</span>Count <span style='color:#800000; font-weight:bold; '>Then</span>
+            <span style='color:#800000; font-weight:bold; '>Return</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+        <span style='color:#696969; '>' Get destination PDF page</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> goToPage <span style='color:#800000; font-weight:bold; '>As</span> PdfPage <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span>Pages<span style='color:#808030; '>(</span>goToPageNumber <span style='color:#808030; '>-</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Get the destination point in PDF page</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> goToX <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Single</span> <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Single</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>xLocationTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> goToY <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Single</span> <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Single</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>yLocationTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#800000; font-weight:bold; '>Dim</span> goToLocation <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> PointF<span style='color:#808030; '>(</span>goToX<span style='color:#808030; '>,</span> goToY<span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Get the destination view mode</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> viewMode <span style='color:#800000; font-weight:bold; '>As</span> DestinationViewMode <span style='color:#808030; '>=</span> SelectedViewMode<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Create the destination in PDF document</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> goToDestination <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> ExplicitDestination<span style='color:#808030; '>(</span>goToPage<span style='color:#808030; '>,</span> goToLocation<span style='color:#808030; '>,</span> viewMode<span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Set the zoom level when the destination is displayed</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> viewMode <span style='color:#808030; '>=</span> DestinationViewMode<span style='color:#008c00; '>.</span>XYZ <span style='color:#800000; font-weight:bold; '>Then</span>
+            goToDestination<span style='color:#008c00; '>.</span>ZoomPercentage <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Integer</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>zoomLevelTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+        <span style='color:#696969; '>' Set the document Go To open action</span>
+        pdfDocument<span style='color:#008c00; '>.</span>OpenAction<span style='color:#008c00; '>.</span>Action <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> PdfActionGoTo<span style='color:#808030; '>(</span>goToDestination<span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Save the PDF document in a memory buffer</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> outPdfBuffer<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Byte</span> <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span>Save<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Send the PDF as response to browser</span>
+
+        <span style='color:#696969; '>' Set response content type</span>
+        Response<span style='color:#008c00; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Content-Type"</span><span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"application/pdf"</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Instruct the browser to open the PDF file as an attachment or inline</span>
+        Response<span style='color:#008c00; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Content-Disposition"</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>String</span><span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Format</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"attachment; filename=Go_To_Page_Open_Action.pdf; size={0}"</span><span style='color:#808030; '>,</span> outPdfBuffer<span style='color:#008c00; '>.</span>Length<span style='color:#008c00; '>.</span>ToString<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Write the PDF document buffer to HTTP response</span>
+        Response<span style='color:#008c00; '>.</span>BinaryWrite<span style='color:#808030; '>(</span>outPdfBuffer<span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' End the HTTP response and stop the current page processing</span>
+        Response<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>End</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>Finally</span>
+        <span style='color:#696969; '>' Close the PDF document</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> pdfDocument IsNot <span style='color:#800000; font-weight:bold; '>Nothing</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            pdfDocument<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Close</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Try</span>
+<span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Sub</span>
+</pre>
+</span>

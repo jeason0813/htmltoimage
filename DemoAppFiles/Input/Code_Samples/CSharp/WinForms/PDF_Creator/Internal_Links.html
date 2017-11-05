@@ -1,0 +1,123 @@
+﻿<html><body style='font-size:11px; color:#000000; background:#ffffff; '><pre>
+<span style='color:#800000; font-weight:bold; '>private</span> <span style='color:#800000; font-weight:bold; '>void</span> createPdfButton_Click<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>object</span> sender<span style='color:#808030; '>,</span> EventArgs e<span style='color:#808030; '>)</span>
+<span style='color:#800080; '>{</span>
+    <span style='color:#696969; '>// Create a PDF document</span>
+    Document pdfDocument <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> Document<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Set license key received after purchase to use the converter in licensed mode</span>
+    <span style='color:#696969; '>// Leave it not set to use the converter in demo mode</span>
+    pdfDocument<span style='color:#808030; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>4W9+bn19bn5ue2B+bn1/YH98YHd3d3c=</span><span style='color:#800000; '>"</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Add a page to PDF document</span>
+    PdfPage pdfPage <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>AddPage<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Add second page to PDF document</span>
+    PdfPage secondPdfPage <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>AddPage<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Add third page to PDF document</span>
+    PdfPage thirdPdfPage <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>AddPage<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    Cursor <span style='color:#808030; '>=</span> Cursors<span style='color:#808030; '>.</span>WaitCursor<span style='color:#800080; '>;</span>
+    <span style='color:#800000; font-weight:bold; '>string</span> outPdfFile <span style='color:#808030; '>=</span> @<span style='color:#800000; '>"</span><span style='color:#0000e6; '>DemoAppFiles\Output\PDF_Creator\Internal_Links.pdf</span><span style='color:#800000; '>"</span><span style='color:#800080; '>;</span>
+    <span style='color:#800000; font-weight:bold; '>try</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// The titles font used to mark various sections of the PDF document</span>
+        PdfFont titleFont <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>AddFont<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>new</span> Font<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Times New Roman</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span> FontStyle<span style='color:#808030; '>.</span>Bold<span style='color:#808030; '>,</span> GraphicsUnit<span style='color:#808030; '>.</span>Point<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        PdfFont subtitleFont <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>AddFont<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>new</span> Font<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Times New Roman</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>8</span><span style='color:#808030; '>,</span> FontStyle<span style='color:#808030; '>.</span>Regular<span style='color:#808030; '>,</span> GraphicsUnit<span style='color:#808030; '>.</span>Point<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// The links text font</span>
+        PdfFont linkTextFont <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>AddFont<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>new</span> Font<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Times New Roman</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>8</span><span style='color:#808030; '>,</span> FontStyle<span style='color:#808030; '>.</span>Bold<span style='color:#808030; '>,</span> GraphicsUnit<span style='color:#808030; '>.</span>Point<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        linkTextFont<span style='color:#808030; '>.</span>IsUnderline <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>true</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#800000; font-weight:bold; '>float</span> xLocation <span style='color:#808030; '>=</span> <span style='color:#008c00; '>5</span><span style='color:#800080; '>;</span>
+        <span style='color:#800000; font-weight:bold; '>float</span> yLocation <span style='color:#808030; '>=</span> <span style='color:#008c00; '>5</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add document title</span>
+        TextElement titleTextElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>Create Internal Links in PDF Document</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> titleFont<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        AddElementResult addElementResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>titleTextElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        yLocation <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>15</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add a text in second page</span>
+        TextElement secondPageTextElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> TextElement<span style='color:#808030; '>(</span><span style='color:#008c00; '>5</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>5</span><span style='color:#808030; '>,</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>This text is the target of an internal text link</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> subtitleFont<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        secondPdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>secondPageTextElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add a text in third page</span>
+        TextElement thirdPageTextElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> TextElement<span style='color:#808030; '>(</span><span style='color:#008c00; '>5</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>5</span><span style='color:#808030; '>,</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>This text is the target of an internal image link</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> subtitleFont<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        thirdPdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>thirdPageTextElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Make a text in PDF an internal link to the second page of the PDF document</span>
+
+        <span style='color:#696969; '>// Add the text element</span>
+        <span style='color:#800000; font-weight:bold; '>string</span> text <span style='color:#808030; '>=</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>Click this text to go to the second page of this document!</span><span style='color:#800000; '>"</span><span style='color:#800080; '>;</span>
+        <span style='color:#800000; font-weight:bold; '>float</span> textWidth <span style='color:#808030; '>=</span> linkTextFont<span style='color:#808030; '>.</span>GetTextWidth<span style='color:#808030; '>(</span>text<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        TextElement linkTextElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> text<span style='color:#808030; '>,</span> linkTextFont<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        linkTextElement<span style='color:#808030; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#808030; '>.</span>Navy<span style='color:#800080; '>;</span>
+        addElementResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>linkTextElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Make the text element an internal link to the second page of this document</span>
+        RectangleF linkRectangle <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> RectangleF<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> textWidth<span style='color:#808030; '>,</span> addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Height<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        <span style='color:#696969; '>// Create the destination in second page</span>
+        ExplicitDestination secondPageDestination <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> ExplicitDestination<span style='color:#808030; '>(</span>secondPdfPage<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>new</span> PointF<span style='color:#808030; '>(</span><span style='color:#008c00; '>5</span><span style='color:#808030; '>,</span><span style='color:#008c00; '>5</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        <span style='color:#696969; '>// Create the internal link from text element to second page</span>
+        InternalLinkElement internalLink <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> InternalLinkElement<span style='color:#808030; '>(</span>linkRectangle<span style='color:#808030; '>,</span> secondPageDestination<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add the internal link to PDF document</span>
+        pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>internalLink<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        yLocation <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Make an image in PDF an internal link to the third page of the PDF document</span>
+
+        TextElement subtitleTextElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>Click the image below to go to the third page of this document:</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> subtitleFont<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        addElementResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>subtitleTextElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        yLocation <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#808030; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>5</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add the image element</span>
+        ImageElement linkImageElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> ImageElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#008c00; '>120</span><span style='color:#808030; '>,</span> @<span style='color:#800000; '>"</span><span style='color:#0000e6; '>DemoAppFiles\Input\Images\logo.jpg</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        addElementResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>linkImageElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Make the image element an internal link to the third page of this document</span>
+        linkRectangle <span style='color:#808030; '>=</span> addElementResult<span style='color:#808030; '>.</span>EndPageBounds<span style='color:#800080; '>;</span>
+        <span style='color:#696969; '>// Create the destination in third page</span>
+        ExplicitDestination thirdPageDestination <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> ExplicitDestination<span style='color:#808030; '>(</span>thirdPdfPage<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>new</span> PointF<span style='color:#808030; '>(</span><span style='color:#008c00; '>5</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>5</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        <span style='color:#696969; '>// Create the internal link from image element to third page</span>
+        internalLink <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> InternalLinkElement<span style='color:#808030; '>(</span>linkRectangle<span style='color:#808030; '>,</span> thirdPageDestination<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Add the internal link to PDF document</span>
+        pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>internalLink<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Save the PDF document in a memory buffer</span>
+        <span style='color:#800000; font-weight:bold; '>byte</span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span> outPdfBuffer <span style='color:#808030; '>=</span> pdfDocument<span style='color:#808030; '>.</span>Save<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Write the memory buffer in a PDF file</span>
+        System<span style='color:#808030; '>.</span>IO<span style='color:#808030; '>.</span>File<span style='color:#808030; '>.</span>WriteAllBytes<span style='color:#808030; '>(</span>outPdfFile<span style='color:#808030; '>,</span> outPdfBuffer<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+    <span style='color:#800000; font-weight:bold; '>catch</span> <span style='color:#808030; '>(</span>Exception ex<span style='color:#808030; '>)</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// The PDF creation failed</span>
+        MessageBox<span style='color:#808030; '>.</span>Show<span style='color:#808030; '>(</span>String<span style='color:#808030; '>.</span>Format<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Create PDF Document Error. {0}</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> ex<span style='color:#808030; '>.</span>Message<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+    <span style='color:#800000; font-weight:bold; '>finally</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// Close the PDF document</span>
+        pdfDocument<span style='color:#808030; '>.</span>Close<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        Cursor <span style='color:#808030; '>=</span> Cursors<span style='color:#808030; '>.</span>Arrow<span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+
+    <span style='color:#696969; '>// Open the created PDF document in default PDF viewer</span>
+    <span style='color:#800000; font-weight:bold; '>try</span>
+    <span style='color:#800080; '>{</span>
+        System<span style='color:#808030; '>.</span>Diagnostics<span style='color:#808030; '>.</span>Process<span style='color:#808030; '>.</span>Start<span style='color:#808030; '>(</span>outPdfFile<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+    <span style='color:#800000; font-weight:bold; '>catch</span> <span style='color:#808030; '>(</span>Exception ex<span style='color:#808030; '>)</span>
+    <span style='color:#800080; '>{</span>
+        MessageBox<span style='color:#808030; '>.</span>Show<span style='color:#808030; '>(</span>String<span style='color:#808030; '>.</span>Format<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Cannot open created PDF file '{0}'. {1}</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> outPdfFile<span style='color:#808030; '>,</span> ex<span style='color:#808030; '>.</span>Message<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+<span style='color:#800080; '>}</span>
+</pre>
+</body>
+</html>

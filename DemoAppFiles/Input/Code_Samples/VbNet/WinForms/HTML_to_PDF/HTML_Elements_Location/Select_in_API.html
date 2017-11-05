@@ -1,0 +1,93 @@
+﻿<html><body style='font-size:11px; color:#000000; background:#ffffff; '><pre>
+<span style='color:#800000; font-weight:bold; '>Private</span> <span style='color:#800000; font-weight:bold; '>Sub</span> convertToPdfButton_Click<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>ByVal</span> sender <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Object</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>ByVal</span> e <span style='color:#800000; font-weight:bold; '>As</span> EventArgs<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>Handles</span> convertToPdfButton<span style='color:#008c00; '>.</span>Click
+    <span style='color:#696969; '>' Create a HTML to PDF converter object with default settings</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> htmlToPdfConverter <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> HtmlToPdfConverter<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Set license key received after purchase to use the converter in licensed mode</span>
+    <span style='color:#696969; '>' Leave it not set to use the converter in demo mode</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"4W9+bn19bn5ue2B+bn1/YH98YHd3d3c="</span>
+
+    <span style='color:#696969; '>' Set an adddional delay in seconds to wait for JavaScript or AJAX calls after page load completed</span>
+    <span style='color:#696969; '>' Set this property to 0 if you don't need to wait for such asynchcronous operations to finish</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>ConversionDelay <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2</span>
+
+    <span style='color:#696969; '>' Select the HTML elements for which to retrieve location and other information from HTML document</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>HtmlElementsMappingOptions<span style='color:#008c00; '>.</span>HtmlElementSelectors <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> <span style='color:#800000; font-weight:bold; '>String</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> {htmlElementsSelectorTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span>}
+
+    Cursor <span style='color:#808030; '>=</span> Cursors<span style='color:#008c00; '>.</span>WaitCursor
+
+    <span style='color:#696969; '>' Convert HTML to PDF using the settings above</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> outPdfFile <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"DemoAppFiles\Output\HTML_to_PDF\Select_in_API_HTML_Elements_to_Retrieve.pdf"</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> pdfDocument <span style='color:#800000; font-weight:bold; '>As</span> Document <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Nothing</span>
+    <span style='color:#800000; font-weight:bold; '>Try</span>
+        <span style='color:#696969; '>' Convert HTML page to a PDF document object which can be further modified to highlight the selected elements</span>
+        pdfDocument <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>ConvertUrlToPdfDocumentObject<span style='color:#808030; '>(</span>urlTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Highlight the selected elements in PDF with colored rectangles</span>
+        <span style='color:#800000; font-weight:bold; '>For</span> <span style='color:#800000; font-weight:bold; '>Each</span> htmlElementInfo <span style='color:#800000; font-weight:bold; '>As</span> HtmlElementMapping <span style='color:#800000; font-weight:bold; '>In</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>HtmlElementsMappingOptions<span style='color:#008c00; '>.</span>HtmlElementsMappingResult
+            <span style='color:#696969; '>' Get other information about HTML element</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> htmlElementTagName <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> htmlElementInfo<span style='color:#008c00; '>.</span>HtmlElementTagName
+            <span style='color:#800000; font-weight:bold; '>Dim</span> htmlElementID <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> htmlElementInfo<span style='color:#008c00; '>.</span>HtmlElementId
+
+            <span style='color:#696969; '>' Hightlight the HTML element in PDF</span>
+
+            <span style='color:#696969; '>' A HTML element can span over many PDF pages and therefore the mapping of the HTML element in PDF document consists </span>
+            <span style='color:#696969; '>' in a list of rectangles, one rectangle for each PDF page where this element was rendered</span>
+            <span style='color:#800000; font-weight:bold; '>For</span> <span style='color:#800000; font-weight:bold; '>Each</span> htmlElementLocationInPdf <span style='color:#800000; font-weight:bold; '>As</span> HtmlElementPdfRectangle <span style='color:#800000; font-weight:bold; '>In</span> htmlElementInfo<span style='color:#008c00; '>.</span>PdfRectangles
+                <span style='color:#696969; '>' Get the HTML element location in PDF page</span>
+                <span style='color:#800000; font-weight:bold; '>Dim</span> htmlElementPdfPage <span style='color:#800000; font-weight:bold; '>As</span> PdfPage <span style='color:#808030; '>=</span> htmlElementLocationInPdf<span style='color:#008c00; '>.</span>PdfPage
+                <span style='color:#800000; font-weight:bold; '>Dim</span> htmlElementRectangleInPdfPage <span style='color:#800000; font-weight:bold; '>As</span> RectangleF <span style='color:#808030; '>=</span> htmlElementLocationInPdf<span style='color:#008c00; '>.</span>Rectangle
+
+                <span style='color:#696969; '>' Highlight the HTML element element with a colored rectangle in PDF</span>
+                <span style='color:#800000; font-weight:bold; '>Dim</span> highlightRectangle <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> RectangleElement<span style='color:#808030; '>(</span>htmlElementRectangleInPdfPage<span style='color:#008c00; '>.</span>X<span style='color:#808030; '>,</span> htmlElementRectangleInPdfPage<span style='color:#008c00; '>.</span>Y<span style='color:#808030; '>,</span> htmlElementRectangleInPdfPage<span style='color:#008c00; '>.</span>Width<span style='color:#808030; '>,</span> htmlElementRectangleInPdfPage<span style='color:#008c00; '>.</span>Height<span style='color:#808030; '>)</span>
+
+                <span style='color:#800000; font-weight:bold; '>If</span> htmlElementTagName<span style='color:#008c00; '>.</span>ToLower<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"h1"</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+                    highlightRectangle<span style='color:#008c00; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#008c00; '>.</span>Blue
+                <span style='color:#800000; font-weight:bold; '>ElseIf</span> htmlElementTagName<span style='color:#008c00; '>.</span>ToLower<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"h2"</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+                    highlightRectangle<span style='color:#008c00; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#008c00; '>.</span>Green
+                <span style='color:#800000; font-weight:bold; '>ElseIf</span> htmlElementTagName<span style='color:#008c00; '>.</span>ToLower<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"h3"</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+                    highlightRectangle<span style='color:#008c00; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#008c00; '>.</span>Red
+                <span style='color:#800000; font-weight:bold; '>ElseIf</span> htmlElementTagName<span style='color:#008c00; '>.</span>ToLower<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"h4"</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+                    highlightRectangle<span style='color:#008c00; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#008c00; '>.</span>Yellow
+                <span style='color:#800000; font-weight:bold; '>ElseIf</span> htmlElementTagName<span style='color:#008c00; '>.</span>ToLower<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"h5"</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+                    highlightRectangle<span style='color:#008c00; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#008c00; '>.</span>Indigo
+                <span style='color:#800000; font-weight:bold; '>ElseIf</span> htmlElementTagName<span style='color:#008c00; '>.</span>ToLower<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"h6"</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+                    highlightRectangle<span style='color:#008c00; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#008c00; '>.</span>Orange
+                <span style='color:#800000; font-weight:bold; '>Else</span>
+                    highlightRectangle<span style='color:#008c00; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#008c00; '>.</span>Navy
+                <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+                highlightRectangle<span style='color:#008c00; '>.</span>LineStyle<span style='color:#008c00; '>.</span>LineDashStyle <span style='color:#808030; '>=</span> LineDashStyle<span style='color:#008c00; '>.</span>Solid
+
+                htmlElementPdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>highlightRectangle<span style='color:#808030; '>)</span>
+            <span style='color:#800000; font-weight:bold; '>Next</span> htmlElementLocationInPdf
+        <span style='color:#800000; font-weight:bold; '>Next</span> htmlElementInfo
+
+        <span style='color:#696969; '>' Save the PDF document in a memory buffer</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> outPdfBuffer<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Byte</span> <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span>Save<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Write the memory buffer in a PDF file</span>
+        <span style='color:#800000; font-weight:bold; '>System</span><span style='color:#008c00; '>.</span>IO<span style='color:#008c00; '>.</span>File<span style='color:#008c00; '>.</span>WriteAllBytes<span style='color:#808030; '>(</span>outPdfFile<span style='color:#808030; '>,</span> outPdfBuffer<span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>Catch</span> ex <span style='color:#800000; font-weight:bold; '>As</span> Exception
+        <span style='color:#696969; '>' The HTML to PDF conversion failed</span>
+        MessageBox<span style='color:#008c00; '>.</span>Show<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>String</span><span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Format</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"HTML to PDF Error. {0}"</span><span style='color:#808030; '>,</span> ex<span style='color:#008c00; '>.</span>Message<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>Return</span>
+    <span style='color:#800000; font-weight:bold; '>Finally</span>
+        <span style='color:#696969; '>' Close the PDF document</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> pdfDocument IsNot <span style='color:#800000; font-weight:bold; '>Nothing</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            pdfDocument<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Close</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+        Cursor <span style='color:#808030; '>=</span> Cursors<span style='color:#008c00; '>.</span>Arrow
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Try</span>
+
+    <span style='color:#696969; '>' Open the created PDF document in default PDF viewer</span>
+    <span style='color:#800000; font-weight:bold; '>Try</span>
+        Process<span style='color:#008c00; '>.</span>Start<span style='color:#808030; '>(</span>outPdfFile<span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>Catch</span> ex <span style='color:#800000; font-weight:bold; '>As</span> Exception
+        MessageBox<span style='color:#008c00; '>.</span>Show<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>String</span><span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Format</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Cannot open created PDF file '{0}'. {1}"</span><span style='color:#808030; '>,</span> outPdfFile<span style='color:#808030; '>,</span> ex<span style='color:#008c00; '>.</span>Message<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Try</span>
+<span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Sub</span>
+</pre>
+</body>
+</html>

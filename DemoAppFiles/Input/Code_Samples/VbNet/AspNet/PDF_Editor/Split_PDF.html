@@ -1,0 +1,71 @@
+﻿<span style='font-size:11px; color:#000000; background:#ffffff; '><pre>
+<span style='color:#800000; font-weight:bold; '>Protected</span> <span style='color:#800000; font-weight:bold; '>Sub</span> splitPdfButton_Click<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>ByVal</span> sender <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Object</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>ByVal</span> e <span style='color:#800000; font-weight:bold; '>As</span> EventArgs<span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> pdfDocumentToSplit <span style='color:#800000; font-weight:bold; '>As</span> Document <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Nothing</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> splitResultDocument1 <span style='color:#800000; font-weight:bold; '>As</span> Document <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Nothing</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> splitResultDocument2 <span style='color:#800000; font-weight:bold; '>As</span> Document <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Nothing</span>
+    <span style='color:#800000; font-weight:bold; '>Try</span>
+        <span style='color:#696969; '>' Load the PDF document to split</span>
+        <span style='color:#696969; '>' The document must remain opened until the PDF documents resulted after split are saved</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> pdfFileToSplitPath <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> Server<span style='color:#008c00; '>.</span>MapPath<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"~/DemoAppFiles/Input/PDF_Files/PDF_Document.pdf"</span><span style='color:#808030; '>)</span>
+        pdfDocumentToSplit <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> Document<span style='color:#808030; '>(</span>pdfFileToSplitPath<span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Get the page count of the document to split</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> pageCount <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Integer</span> <span style='color:#808030; '>=</span> pdfDocumentToSplit<span style='color:#008c00; '>.</span>Pages<span style='color:#008c00; '>.</span>Count
+
+        <span style='color:#696969; '>' Check if the document has the minimum required number of page</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> pageCount <span style='color:#808030; '>&lt;</span> <span style='color:#008c00; '>2</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            <span style='color:#800000; font-weight:bold; '>Return</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+        <span style='color:#696969; '>' Create the first PDF document resulted after split</span>
+        splitResultDocument1 <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> Document<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+        <span style='color:#696969; '>' Set license key received after purchase</span>
+        splitResultDocument1<span style='color:#008c00; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"4W9+bn19bn5ue2B+bn1/YH98YHd3d3c="</span>
+        <span style='color:#696969; '>' Copy pages from loaded document into split result document</span>
+        splitResultDocument1<span style='color:#008c00; '>.</span>AppendDocument<span style='color:#808030; '>(</span>pdfDocumentToSplit<span style='color:#808030; '>,</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> pageCount \ <span style='color:#008c00; '>2</span><span style='color:#808030; '>)</span>
+        <span style='color:#696969; '>' Save the first PDF document document resulted after split in a memory buffer</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> outPdfBuffer1<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Byte</span> <span style='color:#808030; '>=</span> splitResultDocument1<span style='color:#008c00; '>.</span>Save<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Create the second PDF document resulted after split  </span>
+        splitResultDocument2 <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> Document<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+        <span style='color:#696969; '>' Set license key received after purchase</span>
+        splitResultDocument2<span style='color:#008c00; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"4W9+bn19bn5ue2B+bn1/YH98YHd3d3c="</span>
+        <span style='color:#696969; '>' Copy pages from loaded document into split result document</span>
+        splitResultDocument2<span style='color:#008c00; '>.</span>AppendDocument<span style='color:#808030; '>(</span>pdfDocumentToSplit<span style='color:#808030; '>,</span> pageCount \ <span style='color:#008c00; '>2</span><span style='color:#808030; '>,</span> pageCount <span style='color:#808030; '>-</span> pageCount \ <span style='color:#008c00; '>2</span><span style='color:#808030; '>)</span>
+        <span style='color:#696969; '>' Save the second PDF document document resulted after split in a memory buffer</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> outPdfBuffer2<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Byte</span> <span style='color:#808030; '>=</span> splitResultDocument2<span style='color:#008c00; '>.</span>Save<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Send the PDF as response to browser</span>
+
+        <span style='color:#696969; '>' Set response content type</span>
+        Response<span style='color:#008c00; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Content-Type"</span><span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"application/pdf"</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Instruct the browser to open the PDF file as an attachment or inline</span>
+        Response<span style='color:#008c00; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Content-Disposition"</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>String</span><span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Format</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"attachment; filename=Split_PDF_1.pdf.pdf; size={0}"</span><span style='color:#808030; '>,</span> outPdfBuffer1<span style='color:#008c00; '>.</span>Length<span style='color:#008c00; '>.</span>ToString<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Write the PDF document buffer to HTTP response</span>
+        Response<span style='color:#008c00; '>.</span>BinaryWrite<span style='color:#808030; '>(</span>outPdfBuffer1<span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' End the HTTP response and stop the current page processing</span>
+        Response<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>End</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>Finally</span>
+        <span style='color:#696969; '>' Close all the PDF documents after the PDF documents resulted after split were already saved</span>
+
+        <span style='color:#696969; '>' Close the first split result document</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> splitResultDocument1 IsNot <span style='color:#800000; font-weight:bold; '>Nothing</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            splitResultDocument1<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Close</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+        <span style='color:#696969; '>' Close the second split result document</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> splitResultDocument2 IsNot <span style='color:#800000; font-weight:bold; '>Nothing</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            splitResultDocument2<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Close</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+        <span style='color:#696969; '>' Close the document to split</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> pdfDocumentToSplit IsNot <span style='color:#800000; font-weight:bold; '>Nothing</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            pdfDocumentToSplit<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Close</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Try</span>
+<span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Sub</span>
+</pre>
+</span>

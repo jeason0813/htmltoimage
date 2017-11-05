@@ -1,0 +1,69 @@
+﻿<html><body style='font-size:11px; color:#000000; background:#ffffff; '><pre>
+<span style='color:#800000; font-weight:bold; '>Private</span> <span style='color:#800000; font-weight:bold; '>Sub</span> convertToSvgButton_Click<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>ByVal</span> sender <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Object</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>ByVal</span> e <span style='color:#800000; font-weight:bold; '>As</span> EventArgs<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>Handles</span> convertToSvgButton<span style='color:#008c00; '>.</span>Click
+    <span style='color:#696969; '>' Create a HTML to SVG converter object with default settings</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> htmlToSvgConverter <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> HtmlToSvgConverter<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Set license key received after purchase to use the converter in licensed mode</span>
+    <span style='color:#696969; '>' Leave it not set to use the converter in demo mode</span>
+    htmlToSvgConverter<span style='color:#008c00; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"4W9+bn19bn5ue2B+bn1/YH98YHd3d3c="</span>
+
+    <span style='color:#696969; '>' Set HTML Viewer width in pixels which is the equivalent in converter of the browser window width</span>
+    htmlToSvgConverter<span style='color:#008c00; '>.</span>HtmlViewerWidth <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Integer</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>htmlViewerWidthTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Set HTML viewer height in pixels to convert the top part of a HTML page </span>
+    <span style='color:#696969; '>' Leave it not set to convert the entire HTML</span>
+    <span style='color:#800000; font-weight:bold; '>If</span> htmlViewerHeightTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#008c00; '>.</span>Length <span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+        htmlToSvgConverter<span style='color:#008c00; '>.</span>HtmlViewerHeight <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Integer</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>htmlViewerHeightTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+    <span style='color:#696969; '>' Set the maximum time in seconds to wait for HTML page to be loaded </span>
+    <span style='color:#696969; '>' Leave it not set for a default 60 seconds maximum wait time</span>
+    htmlToSvgConverter<span style='color:#008c00; '>.</span>NavigationTimeout <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Integer</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>navigationTimeoutTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Set an adddional delay in seconds to wait for JavaScript or AJAX calls after page load completed</span>
+    <span style='color:#696969; '>' Set this property to 0 if you don't need to wait for such asynchcronous operations to finish</span>
+    <span style='color:#800000; font-weight:bold; '>If</span> conversionDelayTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#008c00; '>.</span>Length <span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+        htmlToSvgConverter<span style='color:#008c00; '>.</span>ConversionDelay <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Integer</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>conversionDelayTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+    Cursor <span style='color:#808030; '>=</span> Cursors<span style='color:#008c00; '>.</span>WaitCursor
+
+    <span style='color:#696969; '>' Convert HTML to SVG using the settings above</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> outSvgFile <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"DemoAppFiles\Output\HTML_to_Image\HTML_to_SVG.svg"</span>
+    <span style='color:#800000; font-weight:bold; '>Try</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> convertUrlRadioButton<span style='color:#008c00; '>.</span>Checked <span style='color:#800000; font-weight:bold; '>Then</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> url <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> urlTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span>
+
+            <span style='color:#696969; '>' Convert the HTML page given by an URL to a SVG document in a memory buffer</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> outSvgBuffer<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Byte</span> <span style='color:#808030; '>=</span> htmlToSvgConverter<span style='color:#008c00; '>.</span>ConvertUrl<span style='color:#808030; '>(</span>url<span style='color:#808030; '>)</span>
+
+            <span style='color:#696969; '>' Write the memory buffer in a SVG file</span>
+            <span style='color:#800000; font-weight:bold; '>System</span><span style='color:#008c00; '>.</span>IO<span style='color:#008c00; '>.</span>File<span style='color:#008c00; '>.</span>WriteAllBytes<span style='color:#808030; '>(</span>outSvgFile<span style='color:#808030; '>,</span> outSvgBuffer<span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>Else</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> htmlString <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> htmlStringTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> baseUrl <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> baseUrlTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span>
+
+            <span style='color:#696969; '>' Convert a HTML string with a base URL to a SVG document in a memory buffer</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> outSvgBuffer<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Byte</span> <span style='color:#808030; '>=</span> htmlToSvgConverter<span style='color:#008c00; '>.</span>ConvertHtml<span style='color:#808030; '>(</span>htmlString<span style='color:#808030; '>,</span> baseUrl<span style='color:#808030; '>)</span>
+
+            <span style='color:#696969; '>' Write the memory buffer in a SVG file</span>
+            <span style='color:#800000; font-weight:bold; '>System</span><span style='color:#008c00; '>.</span>IO<span style='color:#008c00; '>.</span>File<span style='color:#008c00; '>.</span>WriteAllBytes<span style='color:#808030; '>(</span>outSvgFile<span style='color:#808030; '>,</span> outSvgBuffer<span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+    <span style='color:#800000; font-weight:bold; '>Catch</span> ex <span style='color:#800000; font-weight:bold; '>As</span> Exception
+        <span style='color:#696969; '>' The HTML to SVG conversion failed</span>
+        MessageBox<span style='color:#008c00; '>.</span>Show<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>String</span><span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Format</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"HTML to SVG Error. {0}"</span><span style='color:#808030; '>,</span> ex<span style='color:#008c00; '>.</span>Message<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>Return</span>
+    <span style='color:#800000; font-weight:bold; '>Finally</span>
+        Cursor <span style='color:#808030; '>=</span> Cursors<span style='color:#008c00; '>.</span>Arrow
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Try</span>
+
+    <span style='color:#696969; '>' Open the created SVG file in the default SVG viewer</span>
+    <span style='color:#800000; font-weight:bold; '>Try</span>
+        Process<span style='color:#008c00; '>.</span>Start<span style='color:#808030; '>(</span>outSvgFile<span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>Catch</span> ex <span style='color:#800000; font-weight:bold; '>As</span> Exception
+        MessageBox<span style='color:#008c00; '>.</span>Show<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>String</span><span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Format</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Cannot open created SVG file '{0}'. {1}"</span><span style='color:#808030; '>,</span> outSvgFile<span style='color:#808030; '>,</span> ex<span style='color:#008c00; '>.</span>Message<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Try</span>
+<span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Sub</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,89 @@
+﻿<span style='font-size:11px; color:#000000; background:#ffffff; '><pre>
+<span style='color:#800000; font-weight:bold; '>protected</span> <span style='color:#800000; font-weight:bold; '>void</span> convertToPdfButton_Click<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>object</span> sender<span style='color:#808030; '>,</span> EventArgs e<span style='color:#808030; '>)</span>
+<span style='color:#800080; '>{</span>
+    <span style='color:#696969; '>// Create a HTML to PDF converter object with default settings</span>
+    HtmlToPdfConverter htmlToPdfConverter <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> HtmlToPdfConverter<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Set license key received after purchase to use the converter in licensed mode</span>
+    <span style='color:#696969; '>// Leave it not set to use the converter in demo mode</span>
+    htmlToPdfConverter<span style='color:#808030; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>4W9+bn19bn5ue2B+bn1/YH98YHd3d3c=</span><span style='color:#800000; '>"</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Set an adddional delay in seconds to wait for JavaScript or AJAX calls after page load completed</span>
+    <span style='color:#696969; '>// Set this property to 0 if you don't need to wait for such asynchcronous operations to finish</span>
+    htmlToPdfConverter<span style='color:#808030; '>.</span>ConversionDelay <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Set a handler for BeforeRenderPdfPageEvent where to set the background image in each PDF page before main content is rendered</span>
+    htmlToPdfConverter<span style='color:#808030; '>.</span>BeforeRenderPdfPageEvent <span style='color:#808030; '>+</span><span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> BeforeRenderPdfPageDelegate<span style='color:#808030; '>(</span>htmlToPdfConverter_BeforeRenderPdfPageEvent<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#800000; font-weight:bold; '>try</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// The buffer to receive the generated PDF document</span>
+        <span style='color:#800000; font-weight:bold; '>byte</span><span style='color:#808030; '>[</span><span style='color:#808030; '>]</span> outPdfBuffer <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>null</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span>convertUrlRadioButton<span style='color:#808030; '>.</span>Checked<span style='color:#808030; '>)</span>
+        <span style='color:#800080; '>{</span>
+            <span style='color:#800000; font-weight:bold; '>string</span> url <span style='color:#808030; '>=</span> urlTextBox<span style='color:#808030; '>.</span>Text<span style='color:#800080; '>;</span>
+
+            <span style='color:#696969; '>// Convert the HTML page given by an URL to a PDF document in a memory buffer</span>
+            outPdfBuffer <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#808030; '>.</span>ConvertUrl<span style='color:#808030; '>(</span>url<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        <span style='color:#800080; '>}</span>
+        <span style='color:#800000; font-weight:bold; '>else</span>
+        <span style='color:#800080; '>{</span>
+            <span style='color:#800000; font-weight:bold; '>string</span> htmlString <span style='color:#808030; '>=</span> htmlStringTextBox<span style='color:#808030; '>.</span>Text<span style='color:#800080; '>;</span>
+            <span style='color:#800000; font-weight:bold; '>string</span> baseUrl <span style='color:#808030; '>=</span> baseUrlTextBox<span style='color:#808030; '>.</span>Text<span style='color:#800080; '>;</span>
+
+            <span style='color:#696969; '>// Convert a HTML string with a base URL to a PDF document in a memory buffer</span>
+            outPdfBuffer <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#808030; '>.</span>ConvertHtml<span style='color:#808030; '>(</span>htmlString<span style='color:#808030; '>,</span> baseUrl<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+        <span style='color:#800080; '>}</span>
+
+        <span style='color:#696969; '>// Send the PDF as response to browser</span>
+
+        <span style='color:#696969; '>// Set response content type</span>
+        Response<span style='color:#808030; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Content-Type</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> <span style='color:#800000; '>"</span><span style='color:#0000e6; '>application/pdf</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Instruct the browser to open the PDF file as an attachment or inline</span>
+        Response<span style='color:#808030; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>Content-Disposition</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> String<span style='color:#808030; '>.</span>Format<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>attachment; filename=Add_Elements_in_Background.pdf; size={0}</span><span style='color:#800000; '>"</span><span style='color:#808030; '>,</span> outPdfBuffer<span style='color:#808030; '>.</span>Length<span style='color:#808030; '>.</span>ToString<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// Write the PDF document buffer to HTTP response</span>
+        Response<span style='color:#808030; '>.</span>BinaryWrite<span style='color:#808030; '>(</span>outPdfBuffer<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+        <span style='color:#696969; '>// End the HTTP response and stop the current page processing</span>
+        Response<span style='color:#808030; '>.</span>End<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+    <span style='color:#800000; font-weight:bold; '>finally</span>
+    <span style='color:#800080; '>{</span>
+        <span style='color:#696969; '>// Uninstall the handler</span>
+        htmlToPdfConverter<span style='color:#808030; '>.</span>BeforeRenderPdfPageEvent <span style='color:#808030; '>-</span><span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> BeforeRenderPdfPageDelegate<span style='color:#808030; '>(</span>htmlToPdfConverter_BeforeRenderPdfPageEvent<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    <span style='color:#800080; '>}</span>
+<span style='color:#800080; '>}</span>
+
+<span style='color:#696969; '>/// &lt;summary></span>
+<span style='color:#696969; '>/// The BeforeRenderPdfPageEvent event handler where a background image is set in each PDF page</span>
+<span style='color:#696969; '>/// before the main content is rendered</span>
+<span style='color:#696969; '>/// &lt;/summary></span>
+<span style='color:#696969; '>/// &lt;param name="eventParams">The event parameter containing the PDF page being rendered&lt;/param></span>
+<span style='color:#800000; font-weight:bold; '>void</span> htmlToPdfConverter_BeforeRenderPdfPageEvent<span style='color:#808030; '>(</span>BeforeRenderPdfPageParams eventParams<span style='color:#808030; '>)</span>
+<span style='color:#800080; '>{</span>
+    <span style='color:#800000; font-weight:bold; '>if</span> <span style='color:#808030; '>(</span><span style='color:#808030; '>!</span>addBackgroundImageCheckBox<span style='color:#808030; '>.</span>Checked<span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>return</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Get the PDF page being rendered</span>
+    PdfPage pdfPage <span style='color:#808030; '>=</span> eventParams<span style='color:#808030; '>.</span>Page<span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Get the PDF page drawable area width and height</span>
+    <span style='color:#800000; font-weight:bold; '>float</span> pdfPageWidth <span style='color:#808030; '>=</span> pdfPage<span style='color:#808030; '>.</span>ClientRectangle<span style='color:#808030; '>.</span>Width<span style='color:#800080; '>;</span>
+    <span style='color:#800000; font-weight:bold; '>float</span> pdfPageHeight <span style='color:#808030; '>=</span> pdfPage<span style='color:#808030; '>.</span>ClientRectangle<span style='color:#808030; '>.</span>Height<span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// The image to be added as background</span>
+    <span style='color:#800000; font-weight:bold; '>string</span> backgroundImagePath <span style='color:#808030; '>=</span> Server<span style='color:#808030; '>.</span>MapPath<span style='color:#808030; '>(</span><span style='color:#800000; '>"</span><span style='color:#0000e6; '>~/DemoAppFiles/Input/Images/background.jpg</span><span style='color:#800000; '>"</span><span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// The image element to add in background</span>
+    ImageElement backgroundImageElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>new</span> ImageElement<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> pdfPageWidth<span style='color:#808030; '>,</span> pdfPageHeight<span style='color:#808030; '>,</span> backgroundImagePath<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+    backgroundImageElement<span style='color:#808030; '>.</span>KeepAspectRatio <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>true</span><span style='color:#800080; '>;</span>
+    backgroundImageElement<span style='color:#808030; '>.</span>EnlargeEnabled <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>true</span><span style='color:#800080; '>;</span>
+
+    <span style='color:#696969; '>// Add the background image element to PDF page before the main content is rendered</span>
+    pdfPage<span style='color:#808030; '>.</span>AddElement<span style='color:#808030; '>(</span>backgroundImageElement<span style='color:#808030; '>)</span><span style='color:#800080; '>;</span>
+<span style='color:#800080; '>}</span>
+</pre>
+</span>

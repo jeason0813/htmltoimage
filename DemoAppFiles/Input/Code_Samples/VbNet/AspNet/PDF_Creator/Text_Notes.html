@@ -1,0 +1,191 @@
+﻿<span style='font-size:11px; color:#000000; background:#ffffff; '><pre>
+<span style='color:#800000; font-weight:bold; '>Protected</span> <span style='color:#800000; font-weight:bold; '>Sub</span> createPdfButton_Click<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>ByVal</span> sender <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Object</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>ByVal</span> e <span style='color:#800000; font-weight:bold; '>As</span> EventArgs<span style='color:#808030; '>)</span>
+    <span style='color:#696969; '>' Create a PDF document</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> pdfDocument <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> Document<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Set license key received after purchase to use the converter in licensed mode</span>
+    <span style='color:#696969; '>' Leave it not set to use the converter in demo mode</span>
+    pdfDocument<span style='color:#008c00; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"4W9+bn19bn5ue2B+bn1/YH98YHd3d3c="</span>
+
+    <span style='color:#696969; '>' Add a page to PDF document</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> pdfPage <span style='color:#800000; font-weight:bold; '>As</span> PdfPage <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span>AddPage<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#800000; font-weight:bold; '>Try</span>
+        <span style='color:#696969; '>' The titles font used to mark various sections of the PDF document</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> titleFont <span style='color:#800000; font-weight:bold; '>As</span> PdfFont <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span>AddFont<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>New</span> Font<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Times New Roman"</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span> FontStyle<span style='color:#008c00; '>.</span>Bold<span style='color:#808030; '>,</span> GraphicsUnit<span style='color:#008c00; '>.</span>Point<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> subtitleFont <span style='color:#800000; font-weight:bold; '>As</span> PdfFont <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span>AddFont<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>New</span> Font<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Times New Roman"</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>8</span><span style='color:#808030; '>,</span> FontStyle<span style='color:#008c00; '>.</span>Regular<span style='color:#808030; '>,</span> GraphicsUnit<span style='color:#008c00; '>.</span>Point<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#800000; font-weight:bold; '>Dim</span> xLocation <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Single</span> <span style='color:#808030; '>=</span> <span style='color:#008c00; '>5</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> yLocation <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Single</span> <span style='color:#808030; '>=</span> <span style='color:#008c00; '>5</span>
+
+        <span style='color:#696969; '>' Add document title</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> titleTextElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"Add Text Notes to a PDF Document"</span><span style='color:#808030; '>,</span> titleFont<span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> addElementResult <span style='color:#800000; font-weight:bold; '>As</span> AddElementResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>titleTextElement<span style='color:#808030; '>)</span>
+
+        yLocation <span style='color:#808030; '>=</span> addElementResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>15</span>
+
+        <span style='color:#696969; '>' Add the text element</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> <span style='color:#800000; font-weight:bold; '>text</span> <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"Click the next icon to open the the text note:"</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> textWidth <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Single</span> <span style='color:#808030; '>=</span> subtitleFont<span style='color:#008c00; '>.</span>GetTextWidth<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>text</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> textElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>text</span><span style='color:#808030; '>,</span> subtitleFont<span style='color:#808030; '>)</span>
+        addElementResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>textElement<span style='color:#808030; '>)</span>
+
+        <span style='color:#800000; font-weight:bold; '>Dim</span> textNoteRectangle <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> RectangleF<span style='color:#808030; '>(</span>xLocation <span style='color:#808030; '>+</span> textWidth <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Create the text note</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> textNoteElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextNoteElement<span style='color:#808030; '>(</span>textNoteRectangle<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"This is an initially closed text note"</span><span style='color:#808030; '>)</span>
+        textNoteElement<span style='color:#008c00; '>.</span>NoteIcon <span style='color:#808030; '>=</span> TextNoteIcon<span style='color:#008c00; '>.</span>Note
+        textNoteElement<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Open</span> <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>False</span>
+        pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>textNoteElement<span style='color:#808030; '>)</span>
+
+        yLocation <span style='color:#808030; '>=</span> addElementResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span>
+
+        <span style='color:#696969; '>' Add the text element</span>
+        <span style='color:#800000; font-weight:bold; '>text</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"This is an already opened text note:"</span>
+        textWidth <span style='color:#808030; '>=</span> subtitleFont<span style='color:#008c00; '>.</span>GetTextWidth<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>text</span><span style='color:#808030; '>)</span>
+        textElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>text</span><span style='color:#808030; '>,</span> subtitleFont<span style='color:#808030; '>)</span>
+        addElementResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>textElement<span style='color:#808030; '>)</span>
+
+        textNoteRectangle <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> RectangleF<span style='color:#808030; '>(</span>xLocation <span style='color:#808030; '>+</span> textWidth <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Create the text note</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> textNoteOpenedElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextNoteElement<span style='color:#808030; '>(</span>textNoteRectangle<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"This is an initially opened text note"</span><span style='color:#808030; '>)</span>
+        textNoteOpenedElement<span style='color:#008c00; '>.</span>NoteIcon <span style='color:#808030; '>=</span> TextNoteIcon<span style='color:#008c00; '>.</span>Note
+        textNoteOpenedElement<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Open</span> <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>True</span>
+        pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>textNoteOpenedElement<span style='color:#808030; '>)</span>
+
+        yLocation <span style='color:#808030; '>=</span> addElementResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span>
+
+        <span style='color:#696969; '>' Add the text element</span>
+        <span style='color:#800000; font-weight:bold; '>text</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"Click the next icon to open the the help note:"</span>
+        textWidth <span style='color:#808030; '>=</span> subtitleFont<span style='color:#008c00; '>.</span>GetTextWidth<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>text</span><span style='color:#808030; '>)</span>
+        textElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>text</span><span style='color:#808030; '>,</span> subtitleFont<span style='color:#808030; '>)</span>
+        addElementResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>textElement<span style='color:#808030; '>)</span>
+
+        textNoteRectangle <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> RectangleF<span style='color:#808030; '>(</span>xLocation <span style='color:#808030; '>+</span> textWidth <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Create the text note</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> helpNoteElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextNoteElement<span style='color:#808030; '>(</span>textNoteRectangle<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"This is an initially closed help note"</span><span style='color:#808030; '>)</span>
+        helpNoteElement<span style='color:#008c00; '>.</span>NoteIcon <span style='color:#808030; '>=</span> TextNoteIcon<span style='color:#008c00; '>.</span>Help
+        helpNoteElement<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Open</span> <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>False</span>
+        pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>helpNoteElement<span style='color:#808030; '>)</span>
+
+        yLocation <span style='color:#808030; '>=</span> addElementResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span>
+
+        <span style='color:#696969; '>' Add the text element</span>
+        <span style='color:#800000; font-weight:bold; '>text</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"This is an already opened help note:"</span>
+        textWidth <span style='color:#808030; '>=</span> subtitleFont<span style='color:#008c00; '>.</span>GetTextWidth<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>text</span><span style='color:#808030; '>)</span>
+        textElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>text</span><span style='color:#808030; '>,</span> subtitleFont<span style='color:#808030; '>)</span>
+        addElementResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>textElement<span style='color:#808030; '>)</span>
+
+        textNoteRectangle <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> RectangleF<span style='color:#808030; '>(</span>xLocation <span style='color:#808030; '>+</span> textWidth <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Create the text note</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> helpNoteOpenedElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextNoteElement<span style='color:#808030; '>(</span>textNoteRectangle<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"This is an initially opened help note"</span><span style='color:#808030; '>)</span>
+        helpNoteOpenedElement<span style='color:#008c00; '>.</span>NoteIcon <span style='color:#808030; '>=</span> TextNoteIcon<span style='color:#008c00; '>.</span>Help
+        helpNoteOpenedElement<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Open</span> <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>True</span>
+        pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>helpNoteOpenedElement<span style='color:#808030; '>)</span>
+
+        yLocation <span style='color:#808030; '>=</span> addElementResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span>
+
+        <span style='color:#696969; '>' Add the text element</span>
+        <span style='color:#800000; font-weight:bold; '>text</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"Click the next icon to open the comment:"</span>
+        textWidth <span style='color:#808030; '>=</span> subtitleFont<span style='color:#008c00; '>.</span>GetTextWidth<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>text</span><span style='color:#808030; '>)</span>
+        textElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>text</span><span style='color:#808030; '>,</span> subtitleFont<span style='color:#808030; '>)</span>
+        addElementResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>textElement<span style='color:#808030; '>)</span>
+
+        textNoteRectangle <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> RectangleF<span style='color:#808030; '>(</span>xLocation <span style='color:#808030; '>+</span> textWidth <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Create the text note</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> commentNoteElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextNoteElement<span style='color:#808030; '>(</span>textNoteRectangle<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"This is an initially closed comment note"</span><span style='color:#808030; '>)</span>
+        commentNoteElement<span style='color:#008c00; '>.</span>NoteIcon <span style='color:#808030; '>=</span> TextNoteIcon<span style='color:#008c00; '>.</span>Comment
+        commentNoteElement<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Open</span> <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>False</span>
+        pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>commentNoteElement<span style='color:#808030; '>)</span>
+
+        yLocation <span style='color:#808030; '>=</span> addElementResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span>
+
+        <span style='color:#696969; '>' Add the text element</span>
+        <span style='color:#800000; font-weight:bold; '>text</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"This is an already opened comment:"</span>
+        textWidth <span style='color:#808030; '>=</span> subtitleFont<span style='color:#008c00; '>.</span>GetTextWidth<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>text</span><span style='color:#808030; '>)</span>
+        textElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>text</span><span style='color:#808030; '>,</span> subtitleFont<span style='color:#808030; '>)</span>
+        addElementResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>textElement<span style='color:#808030; '>)</span>
+
+        textNoteRectangle <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> RectangleF<span style='color:#808030; '>(</span>xLocation <span style='color:#808030; '>+</span> textWidth <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Create the text note</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> commentNoteOpenedElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextNoteElement<span style='color:#808030; '>(</span>textNoteRectangle<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"This is an initially opened comment note"</span><span style='color:#808030; '>)</span>
+        commentNoteOpenedElement<span style='color:#008c00; '>.</span>NoteIcon <span style='color:#808030; '>=</span> TextNoteIcon<span style='color:#008c00; '>.</span>Comment
+        commentNoteOpenedElement<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Open</span> <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>True</span>
+        pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>commentNoteOpenedElement<span style='color:#808030; '>)</span>
+
+        yLocation <span style='color:#808030; '>=</span> addElementResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span>
+
+        <span style='color:#696969; '>' Add the text element</span>
+        <span style='color:#800000; font-weight:bold; '>text</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"Click the next icon to open the paragraph note: "</span>
+        textWidth <span style='color:#808030; '>=</span> subtitleFont<span style='color:#008c00; '>.</span>GetTextWidth<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>text</span><span style='color:#808030; '>)</span>
+        textElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>text</span><span style='color:#808030; '>,</span> subtitleFont<span style='color:#808030; '>)</span>
+        addElementResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>textElement<span style='color:#808030; '>)</span>
+
+        textNoteRectangle <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> RectangleF<span style='color:#808030; '>(</span>xLocation <span style='color:#808030; '>+</span> textWidth <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Create the text note</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> paragraphNoteElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextNoteElement<span style='color:#808030; '>(</span>textNoteRectangle<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"This is an initially closed paragraph note"</span><span style='color:#808030; '>)</span>
+        paragraphNoteElement<span style='color:#008c00; '>.</span>NoteIcon <span style='color:#808030; '>=</span> TextNoteIcon<span style='color:#008c00; '>.</span>Paragraph
+        paragraphNoteElement<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Open</span> <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>False</span>
+        pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>paragraphNoteElement<span style='color:#808030; '>)</span>
+
+        yLocation <span style='color:#808030; '>=</span> addElementResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span>
+
+        <span style='color:#696969; '>' Add the text element</span>
+        <span style='color:#800000; font-weight:bold; '>text</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"Click the next icon to open the new paragraph note:"</span>
+        textWidth <span style='color:#808030; '>=</span> subtitleFont<span style='color:#008c00; '>.</span>GetTextWidth<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>text</span><span style='color:#808030; '>)</span>
+        textElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>text</span><span style='color:#808030; '>,</span> subtitleFont<span style='color:#808030; '>)</span>
+        addElementResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>textElement<span style='color:#808030; '>)</span>
+
+        textNoteRectangle <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> RectangleF<span style='color:#808030; '>(</span>xLocation <span style='color:#808030; '>+</span> textWidth <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Create the text note</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> newParagraphNoteElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextNoteElement<span style='color:#808030; '>(</span>textNoteRectangle<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"This is an initially closed new paragraph note"</span><span style='color:#808030; '>)</span>
+        newParagraphNoteElement<span style='color:#008c00; '>.</span>NoteIcon <span style='color:#808030; '>=</span> TextNoteIcon<span style='color:#008c00; '>.</span>NewParagraph
+        newParagraphNoteElement<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Open</span> <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>False</span>
+        pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>newParagraphNoteElement<span style='color:#808030; '>)</span>
+
+        yLocation <span style='color:#808030; '>=</span> addElementResult<span style='color:#008c00; '>.</span>EndPageBounds<span style='color:#008c00; '>.</span>Bottom <span style='color:#808030; '>+</span> <span style='color:#008c00; '>10</span>
+
+        <span style='color:#696969; '>' Add the text element</span>
+        <span style='color:#800000; font-weight:bold; '>text</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"Click the next icon to open the key note:"</span>
+        textWidth <span style='color:#808030; '>=</span> subtitleFont<span style='color:#008c00; '>.</span>GetTextWidth<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>text</span><span style='color:#808030; '>)</span>
+        textElement <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span>xLocation<span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>text</span><span style='color:#808030; '>,</span> subtitleFont<span style='color:#808030; '>)</span>
+        addElementResult <span style='color:#808030; '>=</span> pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>textElement<span style='color:#808030; '>)</span>
+
+        textNoteRectangle <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> RectangleF<span style='color:#808030; '>(</span>xLocation <span style='color:#808030; '>+</span> textWidth <span style='color:#808030; '>+</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>,</span> yLocation<span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Create the text note</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> keyNoteElement <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextNoteElement<span style='color:#808030; '>(</span>textNoteRectangle<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"This is an initially closed key note"</span><span style='color:#808030; '>)</span>
+        keyNoteElement<span style='color:#008c00; '>.</span>NoteIcon <span style='color:#808030; '>=</span> TextNoteIcon<span style='color:#008c00; '>.</span>Key
+        keyNoteElement<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Open</span> <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>False</span>
+        pdfPage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>keyNoteElement<span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Save the PDF document in a memory buffer</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> outPdfBuffer<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Byte</span> <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span>Save<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Send the PDF as response to browser</span>
+
+        <span style='color:#696969; '>' Set response content type</span>
+        Response<span style='color:#008c00; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Content-Type"</span><span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"application/pdf"</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Instruct the browser to open the PDF file as an attachment or inline</span>
+        Response<span style='color:#008c00; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Content-Disposition"</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>String</span><span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Format</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"attachment; filename=Text_Notes.pdf; size={0}"</span><span style='color:#808030; '>,</span> outPdfBuffer<span style='color:#008c00; '>.</span>Length<span style='color:#008c00; '>.</span>ToString<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Write the PDF document buffer to HTTP response</span>
+        Response<span style='color:#008c00; '>.</span>BinaryWrite<span style='color:#808030; '>(</span>outPdfBuffer<span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' End the HTTP response and stop the current page processing</span>
+        Response<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>End</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>Finally</span>
+        <span style='color:#696969; '>' Close the PDF document</span>
+        pdfDocument<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Close</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Try</span>
+<span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Sub</span>
+</pre>
+</span>

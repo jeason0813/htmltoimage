@@ -1,0 +1,82 @@
+﻿<span style='font-size:11px; color:#000000; background:#ffffff; '><pre>
+<span style='color:#800000; font-weight:bold; '>Protected</span> <span style='color:#800000; font-weight:bold; '>Sub</span> fillPdfButton_Click<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>ByVal</span> sender <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Object</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>ByVal</span> e <span style='color:#800000; font-weight:bold; '>As</span> EventArgs<span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> pdfDocument <span style='color:#800000; font-weight:bold; '>As</span> Document <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Nothing</span>
+    <span style='color:#800000; font-weight:bold; '>Try</span>
+        <span style='color:#696969; '>' Load the PDF document with a form to fill</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> pdfFileWithForm <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> Server<span style='color:#008c00; '>.</span>MapPath<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"~/DemoAppFiles/Input/PDF_Files/Fill_PDF_Forms.pdf"</span><span style='color:#808030; '>)</span>
+        pdfDocument <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>New</span> Document<span style='color:#808030; '>(</span>pdfFileWithForm<span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Set license key received after purchase to use the converter in licensed mode</span>
+        <span style='color:#696969; '>' Leave it not set to use the converter in demo mode</span>
+        pdfDocument<span style='color:#008c00; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"4W9+bn19bn5ue2B+bn1/YH98YHd3d3c="</span>
+
+        <span style='color:#696969; '>' Get the First Name text box field by name from PDF form fields collection and fill a text value</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> firstNameTextBoxField <span style='color:#800000; font-weight:bold; '>As</span> PdfFormField <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Form</span><span style='color:#008c00; '>.</span>Fields<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"firstName"</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> firstNameTextBoxField IsNot <span style='color:#800000; font-weight:bold; '>Nothing</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            firstNameTextBoxField<span style='color:#008c00; '>.</span>Value <span style='color:#808030; '>=</span> firstNameTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+        <span style='color:#696969; '>' Get the Last Name text box field by name from PDF form fields collection and fill a text value</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> lastNameTextBoxField <span style='color:#800000; font-weight:bold; '>As</span> PdfFormField <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Form</span><span style='color:#008c00; '>.</span>Fields<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"lastName"</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> lastNameTextBoxField IsNot <span style='color:#800000; font-weight:bold; '>Nothing</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            lastNameTextBoxField<span style='color:#008c00; '>.</span>Value <span style='color:#808030; '>=</span> lastNameTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+        <span style='color:#696969; '>' Get the Password text box field by name from PDF form fields collection and fill a text value</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> passwordTextBoxField <span style='color:#800000; font-weight:bold; '>As</span> PdfFormField <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Form</span><span style='color:#008c00; '>.</span>Fields<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"password"</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> passwordTextBoxField IsNot <span style='color:#800000; font-weight:bold; '>Nothing</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            passwordTextBoxField<span style='color:#008c00; '>.</span>Value <span style='color:#808030; '>=</span> passwordTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+        <span style='color:#696969; '>' Get the Gender radio buttons group field by name from form fields collection and set the selected value</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> genderRadioGroupField <span style='color:#800000; font-weight:bold; '>As</span> PdfFormField <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Form</span><span style='color:#008c00; '>.</span>Fields<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"gender"</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> genderRadioGroupField IsNot <span style='color:#800000; font-weight:bold; '>Nothing</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            genderRadioGroupField<span style='color:#008c00; '>.</span>Value <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>If</span><span style='color:#808030; '>(</span>maleRadioButton<span style='color:#008c00; '>.</span>Checked<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"male"</span><span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"female"</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+        <span style='color:#696969; '>' Get the 'I have a car' check box field by name from form fields collection and set the checked status</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> haveCarCheckBoxField <span style='color:#800000; font-weight:bold; '>As</span> PdfFormField <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Form</span><span style='color:#008c00; '>.</span>Fields<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"haveCar"</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> haveCarCheckBoxField IsNot <span style='color:#800000; font-weight:bold; '>Nothing</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            haveCarCheckBoxField<span style='color:#008c00; '>.</span>Value <span style='color:#808030; '>=</span> haveCarCheckBox<span style='color:#008c00; '>.</span>Checked
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+        <span style='color:#696969; '>' Get the 'Vehicle Type' combo box field by name from form fields collection and set the selected value</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> vehicleTypeComboBoxField <span style='color:#800000; font-weight:bold; '>As</span> PdfFormField <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Form</span><span style='color:#008c00; '>.</span>Fields<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"vehicleType"</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> vehicleTypeComboBoxField IsNot <span style='color:#800000; font-weight:bold; '>Nothing</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            vehicleTypeComboBoxField<span style='color:#008c00; '>.</span>Value <span style='color:#808030; '>=</span> carTypeComboBox<span style='color:#008c00; '>.</span>SelectedValue
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+        <span style='color:#696969; '>' Get the Comments multi line text box field by name from PDF form fields collection and fill a text value</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> commentsTextBoxField <span style='color:#800000; font-weight:bold; '>As</span> PdfFormField <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Form</span><span style='color:#008c00; '>.</span>Fields<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"comments"</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> commentsTextBoxField IsNot <span style='color:#800000; font-weight:bold; '>Nothing</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            commentsTextBoxField<span style='color:#008c00; '>.</span>Value <span style='color:#808030; '>=</span> commentsTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+        <span style='color:#696969; '>' Flatten PDF form fields if this was requested</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> flattenPdfFormCheckBox<span style='color:#008c00; '>.</span>Checked <span style='color:#800000; font-weight:bold; '>Then</span>
+            pdfDocument<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Form</span><span style='color:#008c00; '>.</span>FlattenFields<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+        <span style='color:#696969; '>' Save the PDF document in a memory buffer</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> outPdfBuffer<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Byte</span> <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span>Save<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Set response content type</span>
+        Response<span style='color:#008c00; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Content-Type"</span><span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"application/pdf"</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Instruct the browser to open the PDF file as an attachment or inline</span>
+        Response<span style='color:#008c00; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Content-Disposition"</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>String</span><span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Format</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"attachment; filename=Filled_PDF_Form.pdf.pdf; size={0}"</span><span style='color:#808030; '>,</span> outPdfBuffer<span style='color:#008c00; '>.</span>Length<span style='color:#008c00; '>.</span>ToString<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Write the PDF document buffer to HTTP response</span>
+        Response<span style='color:#008c00; '>.</span>BinaryWrite<span style='color:#808030; '>(</span>outPdfBuffer<span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' End the HTTP response and stop the current page processing</span>
+        Response<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>End</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>Finally</span>
+        <span style='color:#696969; '>' Close the document to stamp</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> pdfDocument IsNot <span style='color:#800000; font-weight:bold; '>Nothing</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            pdfDocument<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Close</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Try</span>
+<span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Sub</span>
+</pre>
+</span>

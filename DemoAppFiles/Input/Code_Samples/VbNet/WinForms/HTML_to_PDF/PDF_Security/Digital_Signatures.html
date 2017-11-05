@@ -1,0 +1,72 @@
+﻿<html><body style='font-size:11px; color:#000000; background:#ffffff; '><pre>
+<span style='color:#800000; font-weight:bold; '>Private</span> <span style='color:#800000; font-weight:bold; '>Sub</span> convertToPdfButton_Click<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>ByVal</span> sender <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Object</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>ByVal</span> e <span style='color:#800000; font-weight:bold; '>As</span> EventArgs<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>Handles</span> convertToPdfButton<span style='color:#008c00; '>.</span>Click
+    <span style='color:#696969; '>' Create a HTML to PDF converter object with default settings</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> htmlToPdfConverter <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> HtmlToPdfConverter<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Set license key received after purchase to use the converter in licensed mode</span>
+    <span style='color:#696969; '>' Leave it not set to use the converter in demo mode</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"4W9+bn19bn5ue2B+bn1/YH98YHd3d3c="</span>
+
+    <span style='color:#696969; '>' Set an adddional delay in seconds to wait for JavaScript or AJAX calls after page load completed</span>
+    <span style='color:#696969; '>' Set this property to 0 if you don't need to wait for such asynchcronous operations to finish</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>ConversionDelay <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2</span>
+
+    Cursor <span style='color:#808030; '>=</span> Cursors<span style='color:#008c00; '>.</span>WaitCursor
+
+    <span style='color:#800000; font-weight:bold; '>Dim</span> outPdfFile <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"DemoAppFiles\Output\HTML_to_PDF\Digital_Signatures.pdf"</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> pdfDocument <span style='color:#800000; font-weight:bold; '>As</span> Document <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Nothing</span>
+    <span style='color:#800000; font-weight:bold; '>Try</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> htmlWithDigitalSignatureMarker <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> htmlStringTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> baseUrl <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> baseUrlTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span>
+
+        <span style='color:#696969; '>' Convert a HTML string with a marker for digital signature to a PDF document object</span>
+        pdfDocument <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>ConvertHtmlToPdfDocumentObject<span style='color:#808030; '>(</span>htmlWithDigitalSignatureMarker<span style='color:#808030; '>,</span> baseUrl<span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Make the HTML element with 'digital_signature_element' mapping ID a link to digital signature properties</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> digitalSignatureMapping <span style='color:#800000; font-weight:bold; '>As</span> HtmlElementMapping <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>HtmlElementsMappingOptions<span style='color:#008c00; '>.</span>HtmlElementsMappingResult<span style='color:#008c00; '>.</span>GetElementByMappingId<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"digital_signature_element"</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> digitalSignatureMapping IsNot <span style='color:#800000; font-weight:bold; '>Nothing</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> digitalSignaturePage <span style='color:#800000; font-weight:bold; '>As</span> PdfPage <span style='color:#808030; '>=</span> digitalSignatureMapping<span style='color:#008c00; '>.</span>PdfRectangles<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>.</span>PdfPage
+            <span style='color:#800000; font-weight:bold; '>Dim</span> digitalSignatureRectangle <span style='color:#800000; font-weight:bold; '>As</span> RectangleF <span style='color:#808030; '>=</span> digitalSignatureMapping<span style='color:#008c00; '>.</span>PdfRectangles<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span><span style='color:#808030; '>.</span>Rectangle
+
+            <span style='color:#800000; font-weight:bold; '>Dim</span> certificateFilePath <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"DemoAppFiles\Input\Certificates\evopdf.pfx"</span>
+
+            <span style='color:#696969; '>' Get the certificate from password protected PFX file</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> certificates <span style='color:#800000; font-weight:bold; '>As</span> DigitalCertificatesCollection <span style='color:#808030; '>=</span> DigitalCertificatesStore<span style='color:#008c00; '>.</span>GetCertificates<span style='color:#808030; '>(</span>certificateFilePath<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"evopdf"</span><span style='color:#808030; '>)</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> certificate <span style='color:#800000; font-weight:bold; '>As</span> DigitalCertificate <span style='color:#808030; '>=</span> certificates<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span>
+
+            <span style='color:#696969; '>' Create the digital signature</span>
+            <span style='color:#800000; font-weight:bold; '>Dim</span> signature <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> DigitalSignatureElement<span style='color:#808030; '>(</span>digitalSignatureRectangle<span style='color:#808030; '>,</span> certificate<span style='color:#808030; '>)</span>
+            signature<span style='color:#008c00; '>.</span>Reason <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"Protect the document from unwanted changes"</span>
+            signature<span style='color:#008c00; '>.</span>ContactInfo <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"The contact email is support@evopdf.com"</span>
+            signature<span style='color:#008c00; '>.</span>Location <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"Development server"</span>
+            digitalSignaturePage<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>signature<span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+        <span style='color:#696969; '>' Save the PDF document in a memory buffer</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> outPdfBuffer<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Byte</span> <span style='color:#808030; '>=</span> pdfDocument<span style='color:#008c00; '>.</span>Save<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Write the memory buffer in a PDF file</span>
+        <span style='color:#800000; font-weight:bold; '>System</span><span style='color:#008c00; '>.</span>IO<span style='color:#008c00; '>.</span>File<span style='color:#008c00; '>.</span>WriteAllBytes<span style='color:#808030; '>(</span>outPdfFile<span style='color:#808030; '>,</span> outPdfBuffer<span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>Catch</span> ex <span style='color:#800000; font-weight:bold; '>As</span> Exception
+        <span style='color:#696969; '>' The HTML to PDF conversion failed</span>
+        MessageBox<span style='color:#008c00; '>.</span>Show<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>String</span><span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Format</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"HTML to PDF Error. {0}"</span><span style='color:#808030; '>,</span> ex<span style='color:#008c00; '>.</span>Message<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>Return</span>
+    <span style='color:#800000; font-weight:bold; '>Finally</span>
+        <span style='color:#696969; '>' Close the PDF document</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> pdfDocument IsNot <span style='color:#800000; font-weight:bold; '>Nothing</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            pdfDocument<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Close</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+        Cursor <span style='color:#808030; '>=</span> Cursors<span style='color:#008c00; '>.</span>Arrow
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Try</span>
+
+    <span style='color:#696969; '>' Open the created PDF document in default PDF viewer</span>
+    <span style='color:#800000; font-weight:bold; '>Try</span>
+        Process<span style='color:#008c00; '>.</span>Start<span style='color:#808030; '>(</span>outPdfFile<span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>Catch</span> ex <span style='color:#800000; font-weight:bold; '>As</span> Exception
+        MessageBox<span style='color:#008c00; '>.</span>Show<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>String</span><span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Format</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Cannot open created PDF file '{0}'. {1}"</span><span style='color:#808030; '>,</span> outPdfFile<span style='color:#808030; '>,</span> ex<span style='color:#008c00; '>.</span>Message<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Try</span>
+<span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Sub</span>
+</pre>
+</body>
+</html>

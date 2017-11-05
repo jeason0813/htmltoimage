@@ -1,0 +1,203 @@
+﻿<html><body style='font-size:11px; color:#000000; background:#ffffff; '><pre>
+<span style='color:#800000; font-weight:bold; '>Private</span> <span style='color:#800000; font-weight:bold; '>Sub</span> convertToPdfButton_Click<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>ByVal</span> sender <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Object</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>ByVal</span> e <span style='color:#800000; font-weight:bold; '>As</span> EventArgs<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>Handles</span> convertToPdfButton<span style='color:#008c00; '>.</span>Click
+    <span style='color:#696969; '>' Create a HTML to PDF converter object with default settings</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> htmlToPdfConverter <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> HtmlToPdfConverter<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Set license key received after purchase to use the converter in licensed mode</span>
+    <span style='color:#696969; '>' Leave it not set to use the converter in demo mode</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"4W9+bn19bn5ue2B+bn1/YH98YHd3d3c="</span>
+
+    <span style='color:#696969; '>' Set an adddional delay in seconds to wait for JavaScript or AJAX calls after page load completed</span>
+    <span style='color:#696969; '>' Set this property to 0 if you don't need to wait for such asynchcronous operations to finish</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>ConversionDelay <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2</span>
+
+    <span style='color:#696969; '>' Install a handler where you can set header and footer visibility or create a custom header and footer in each page</span>
+    <span style='color:#800000; font-weight:bold; '>AddHandler</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>PrepareRenderPdfPageEvent<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>AddressOf</span> htmlToPdfConverter_PrepareRenderPdfPageEvent
+
+    <span style='color:#696969; '>' Add Header</span>
+
+    <span style='color:#696969; '>' Enable header in the generated PDF document</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>ShowHeader <span style='color:#808030; '>=</span> addHeaderCheckBox<span style='color:#008c00; '>.</span>Checked
+
+    <span style='color:#696969; '>' Optionally add a space between header and the page body</span>
+    <span style='color:#696969; '>' The spacing for first page and the subsequent pages can be set independently</span>
+    <span style='color:#696969; '>' Leave this option not set for no spacing</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>Y <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Single</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>firstPageSpacingTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>TopSpacing <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Single</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>headerSpacingTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Draw header elements</span>
+    <span style='color:#800000; font-weight:bold; '>If</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>ShowHeader <span style='color:#800000; font-weight:bold; '>Then</span>
+        DrawHeader<span style='color:#808030; '>(</span>htmlToPdfConverter<span style='color:#808030; '>,</span> drawHeaderLineCheckBox<span style='color:#008c00; '>.</span>Checked<span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+    <span style='color:#696969; '>' Add Footer</span>
+
+    <span style='color:#696969; '>' Enable footer in the generated PDF document</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>ShowFooter <span style='color:#808030; '>=</span> addFooterCheckBox<span style='color:#008c00; '>.</span>Checked
+
+    <span style='color:#696969; '>' Optionally add a space between footer and the page body</span>
+    <span style='color:#696969; '>' Leave this option not set for no spacing</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>BottomSpacing <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Single</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>footerSpacingTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Draw footer elements</span>
+    <span style='color:#800000; font-weight:bold; '>If</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>ShowFooter <span style='color:#800000; font-weight:bold; '>Then</span>
+        DrawFooter<span style='color:#808030; '>(</span>htmlToPdfConverter<span style='color:#808030; '>,</span> addPageNumbersInFooterCheckBox<span style='color:#008c00; '>.</span>Checked<span style='color:#808030; '>,</span> drawFooterLineCheckBox<span style='color:#008c00; '>.</span>Checked<span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+    Cursor <span style='color:#808030; '>=</span> Cursors<span style='color:#008c00; '>.</span>WaitCursor
+
+    <span style='color:#800000; font-weight:bold; '>Dim</span> outPdfFile <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"DemoAppFiles\Output\HTML_to_PDF\HTML_in_Header_Footer.pdf"</span>
+    <span style='color:#800000; font-weight:bold; '>Try</span>
+        <span style='color:#696969; '>' Convert the HTML page to a PDF document in a memory buffer</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> outPdfBuffer<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Byte</span> <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>ConvertUrl<span style='color:#808030; '>(</span>urlTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Write the memory buffer in a PDF file</span>
+        <span style='color:#800000; font-weight:bold; '>System</span><span style='color:#008c00; '>.</span>IO<span style='color:#008c00; '>.</span>File<span style='color:#008c00; '>.</span>WriteAllBytes<span style='color:#808030; '>(</span>outPdfFile<span style='color:#808030; '>,</span> outPdfBuffer<span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>Catch</span> ex <span style='color:#800000; font-weight:bold; '>As</span> Exception
+        <span style='color:#696969; '>' The HTML to PDF conversion failed</span>
+        MessageBox<span style='color:#008c00; '>.</span>Show<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>String</span><span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Format</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"HTML to PDF Error. {0}"</span><span style='color:#808030; '>,</span> ex<span style='color:#008c00; '>.</span>Message<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+        <span style='color:#800000; font-weight:bold; '>Return</span>
+    <span style='color:#800000; font-weight:bold; '>Finally</span>
+        <span style='color:#696969; '>' uninstall handler</span>
+        <span style='color:#800000; font-weight:bold; '>RemoveHandler</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>PrepareRenderPdfPageEvent<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>AddressOf</span> htmlToPdfConverter_PrepareRenderPdfPageEvent
+
+        Cursor <span style='color:#808030; '>=</span> Cursors<span style='color:#008c00; '>.</span>Arrow
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Try</span>
+
+    <span style='color:#696969; '>' Open the created PDF document in default PDF viewer</span>
+    <span style='color:#800000; font-weight:bold; '>Try</span>
+        Process<span style='color:#008c00; '>.</span>Start<span style='color:#808030; '>(</span>outPdfFile<span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>Catch</span> ex <span style='color:#800000; font-weight:bold; '>As</span> Exception
+        MessageBox<span style='color:#008c00; '>.</span>Show<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>String</span><span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Format</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Cannot open created PDF file '{0}'. {1}"</span><span style='color:#808030; '>,</span> outPdfFile<span style='color:#808030; '>,</span> ex<span style='color:#008c00; '>.</span>Message<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Try</span>
+<span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Sub</span>
+
+<span style='color:#696969; '>''' &lt;summary></span>
+<span style='color:#696969; '>''' The handler for HtmlToPdfConverter.PrepareRenderPdfPageEvent event where you can set the visibility of header and footer</span>
+<span style='color:#696969; '>''' in each page or you can add a custom header or footer in a page</span>
+<span style='color:#696969; '>''' &lt;/summary></span>
+<span style='color:#696969; '>''' &lt;param name="eventParams">The event parameter containin the PDF page to customize before rendering&lt;/param></span>
+<span style='color:#800000; font-weight:bold; '>Private</span> <span style='color:#800000; font-weight:bold; '>Sub</span> htmlToPdfConverter_PrepareRenderPdfPageEvent<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>ByVal</span> eventParams <span style='color:#800000; font-weight:bold; '>As</span> PrepareRenderPdfPageParams<span style='color:#808030; '>)</span>
+    <span style='color:#696969; '>' Set the header visibility in first, odd and even pages</span>
+    <span style='color:#800000; font-weight:bold; '>If</span> addHeaderCheckBox<span style='color:#008c00; '>.</span>Checked <span style='color:#800000; font-weight:bold; '>Then</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> eventParams<span style='color:#008c00; '>.</span>PageNumber <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            eventParams<span style='color:#008c00; '>.</span>Page<span style='color:#008c00; '>.</span>ShowHeader <span style='color:#808030; '>=</span> showHeaderInFirstPageCheckBox<span style='color:#008c00; '>.</span>Checked
+        <span style='color:#800000; font-weight:bold; '>ElseIf</span> <span style='color:#808030; '>(</span>eventParams<span style='color:#008c00; '>.</span>PageNumber <span style='color:#800000; font-weight:bold; '>Mod</span> <span style='color:#008c00; '>2</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span> AndAlso <span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>Not</span> showHeaderInEvenPagesCheckBox<span style='color:#008c00; '>.</span>Checked<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            eventParams<span style='color:#008c00; '>.</span>Page<span style='color:#008c00; '>.</span>ShowHeader <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>False</span>
+        <span style='color:#800000; font-weight:bold; '>ElseIf</span> <span style='color:#808030; '>(</span>eventParams<span style='color:#008c00; '>.</span>PageNumber <span style='color:#800000; font-weight:bold; '>Mod</span> <span style='color:#008c00; '>2</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1</span> AndAlso <span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>Not</span> showHeaderInOddPagesCheckBox<span style='color:#008c00; '>.</span>Checked<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            eventParams<span style='color:#008c00; '>.</span>Page<span style='color:#008c00; '>.</span>ShowHeader <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>False</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+    <span style='color:#696969; '>' Set the footer visibility in first, odd and even pages</span>
+    <span style='color:#800000; font-weight:bold; '>If</span> addFooterCheckBox<span style='color:#008c00; '>.</span>Checked <span style='color:#800000; font-weight:bold; '>Then</span>
+        <span style='color:#800000; font-weight:bold; '>If</span> eventParams<span style='color:#008c00; '>.</span>PageNumber <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            eventParams<span style='color:#008c00; '>.</span>Page<span style='color:#008c00; '>.</span>ShowFooter <span style='color:#808030; '>=</span> showFooterInFirstPageCheckBox<span style='color:#008c00; '>.</span>Checked
+        <span style='color:#800000; font-weight:bold; '>ElseIf</span> <span style='color:#808030; '>(</span>eventParams<span style='color:#008c00; '>.</span>PageNumber <span style='color:#800000; font-weight:bold; '>Mod</span> <span style='color:#008c00; '>2</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>=</span> <span style='color:#008c00; '>0</span> AndAlso <span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>Not</span> showFooterInEvenPagesCheckBox<span style='color:#008c00; '>.</span>Checked<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            eventParams<span style='color:#008c00; '>.</span>Page<span style='color:#008c00; '>.</span>ShowFooter <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>False</span>
+        <span style='color:#800000; font-weight:bold; '>ElseIf</span> <span style='color:#808030; '>(</span>eventParams<span style='color:#008c00; '>.</span>PageNumber <span style='color:#800000; font-weight:bold; '>Mod</span> <span style='color:#008c00; '>2</span><span style='color:#808030; '>)</span> <span style='color:#808030; '>=</span> <span style='color:#008c00; '>1</span> AndAlso <span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>Not</span> showFooterInOddPagesCheckBox<span style='color:#008c00; '>.</span>Checked<span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+            eventParams<span style='color:#008c00; '>.</span>Page<span style='color:#008c00; '>.</span>ShowFooter <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>False</span>
+        <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+<span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Sub</span>
+
+<span style='color:#696969; '>''' &lt;summary></span>
+<span style='color:#696969; '>''' Draw the header elements</span>
+<span style='color:#696969; '>''' &lt;/summary></span>
+<span style='color:#696969; '>''' &lt;param name="htmlToPdfConverter">The HTML to PDF Converter object&lt;/param></span>
+<span style='color:#696969; '>''' &lt;param name="drawHeaderLine">A flag indicating if a line should be drawn at the bottom of the header&lt;/param></span>
+<span style='color:#800000; font-weight:bold; '>Private</span> <span style='color:#800000; font-weight:bold; '>Sub</span> DrawHeader<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>ByVal</span> htmlToPdfConverter <span style='color:#800000; font-weight:bold; '>As</span> HtmlToPdfConverter<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>ByVal</span> drawHeaderLine <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Boolean</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> headerHtmlUrl <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>System</span><span style='color:#008c00; '>.</span>IO<span style='color:#008c00; '>.</span>Path<span style='color:#008c00; '>.</span>Combine<span style='color:#808030; '>(</span>Application<span style='color:#008c00; '>.</span>StartupPath<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"DemoAppFiles\Input\HTML_Files\Header_HTML.html"</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Set the header height in points</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfHeaderOptions<span style='color:#008c00; '>.</span>HeaderHeight <span style='color:#808030; '>=</span> <span style='color:#008c00; '>60</span>
+
+    <span style='color:#696969; '>' Set header background color</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfHeaderOptions<span style='color:#008c00; '>.</span>HeaderBackColor <span style='color:#808030; '>=</span> Color<span style='color:#008c00; '>.</span>White
+
+    <span style='color:#696969; '>' Create a HTML element to be added in header</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> headerHtml <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> HtmlToPdfElement<span style='color:#808030; '>(</span>headerHtmlUrl<span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Set the HTML element to fit the container height</span>
+    headerHtml<span style='color:#008c00; '>.</span>FitHeight <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>True</span>
+
+    <span style='color:#696969; '>' Add HTML element to header</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfHeaderOptions<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>headerHtml<span style='color:#808030; '>)</span>
+
+    <span style='color:#800000; font-weight:bold; '>If</span> drawHeaderLine <span style='color:#800000; font-weight:bold; '>Then</span>
+        <span style='color:#696969; '>' Calculate the header width based on PDF page size and margins</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> headerWidth <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Single</span> <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>PdfPageSize<span style='color:#008c00; '>.</span>Width <span style='color:#808030; '>-</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>LeftMargin <span style='color:#808030; '>-</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>RightMargin
+
+        <span style='color:#696969; '>' Calculate header height</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> headerHeight <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Single</span> <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfHeaderOptions<span style='color:#008c00; '>.</span>HeaderHeight
+
+        <span style='color:#696969; '>' Create a line element for the bottom of the header</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> headerLine <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> LineElement<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> headerHeight <span style='color:#808030; '>-</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>,</span> headerWidth<span style='color:#808030; '>,</span> headerHeight <span style='color:#808030; '>-</span> <span style='color:#008c00; '>1</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Set line color</span>
+        headerLine<span style='color:#008c00; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#008c00; '>.</span>Gray
+
+        <span style='color:#696969; '>' Add line element to the bottom of the header</span>
+        htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfHeaderOptions<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>headerLine<span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+<span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Sub</span>
+
+<span style='color:#696969; '>''' &lt;summary></span>
+<span style='color:#696969; '>''' Draw the footer elements</span>
+<span style='color:#696969; '>''' &lt;/summary></span>
+<span style='color:#696969; '>''' &lt;param name="htmlToPdfConverter">The HTML to PDF Converter object&lt;/param></span>
+<span style='color:#696969; '>''' &lt;param name="addPageNumbers">A flag indicating if the page numbering is present in footer&lt;/param></span>
+<span style='color:#696969; '>''' &lt;param name="drawFooterLine">A flag indicating if a line should be drawn at the top of the footer&lt;/param></span>
+<span style='color:#800000; font-weight:bold; '>Private</span> <span style='color:#800000; font-weight:bold; '>Sub</span> DrawFooter<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>ByVal</span> htmlToPdfConverter <span style='color:#800000; font-weight:bold; '>As</span> HtmlToPdfConverter<span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>ByVal</span> addPageNumbers <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Boolean</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>ByVal</span> drawFooterLine <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Boolean</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> footerHtmlUrl <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>System</span><span style='color:#008c00; '>.</span>IO<span style='color:#008c00; '>.</span>Path<span style='color:#008c00; '>.</span>Combine<span style='color:#808030; '>(</span>Application<span style='color:#008c00; '>.</span>StartupPath<span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"DemoAppFiles\Input\HTML_Files\Footer_HTML.html"</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Set the footer height in points</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfFooterOptions<span style='color:#008c00; '>.</span>FooterHeight <span style='color:#808030; '>=</span> <span style='color:#008c00; '>60</span>
+
+    <span style='color:#696969; '>' Set footer background color</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfFooterOptions<span style='color:#008c00; '>.</span>FooterBackColor <span style='color:#808030; '>=</span> Color<span style='color:#008c00; '>.</span>WhiteSmoke
+
+    <span style='color:#696969; '>' Create a HTML element to be added in footer</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> footerHtml <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> HtmlToPdfElement<span style='color:#808030; '>(</span>footerHtmlUrl<span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Set the HTML element to fit the container height</span>
+    footerHtml<span style='color:#008c00; '>.</span>FitHeight <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>True</span>
+
+    <span style='color:#696969; '>' Add HTML element to footer</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfFooterOptions<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>footerHtml<span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Add page numbering</span>
+    <span style='color:#800000; font-weight:bold; '>If</span> addPageNumbers <span style='color:#800000; font-weight:bold; '>Then</span>
+        <span style='color:#696969; '>' Create a text element with page numbering place holders &amp;p; and &amp; P;</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> footerText <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> TextElement<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>30</span><span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"Page &amp;p; of &amp;P;  "</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>New</span> Font<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>New</span> FontFamily<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Times New Roman"</span><span style='color:#808030; '>)</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>10</span><span style='color:#808030; '>,</span> GraphicsUnit<span style='color:#008c00; '>.</span>Point<span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Align the text at the right of the footer</span>
+        footerText<span style='color:#008c00; '>.</span>TextAlign <span style='color:#808030; '>=</span> HorizontalTextAlign<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Right</span>
+
+        <span style='color:#696969; '>' Set page numbering text color</span>
+        footerText<span style='color:#008c00; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#008c00; '>.</span>Navy
+
+        <span style='color:#696969; '>' Embed the text element font in PDF</span>
+        footerText<span style='color:#008c00; '>.</span>EmbedSysFont <span style='color:#808030; '>=</span> <span style='color:#0f4d75; '>True</span>
+
+        <span style='color:#696969; '>' Add the text element to footer</span>
+        htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfFooterOptions<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>footerText<span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+    <span style='color:#800000; font-weight:bold; '>If</span> drawFooterLine <span style='color:#800000; font-weight:bold; '>Then</span>
+        <span style='color:#696969; '>' Calculate the footer width based on PDF page size and margins</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> footerWidth <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Single</span> <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>PdfPageSize<span style='color:#008c00; '>.</span>Width <span style='color:#808030; '>-</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>LeftMargin <span style='color:#808030; '>-</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>RightMargin
+
+        <span style='color:#696969; '>' Create a line element for the top of the footer</span>
+        <span style='color:#800000; font-weight:bold; '>Dim</span> footerLine <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> LineElement<span style='color:#808030; '>(</span><span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>,</span> footerWidth<span style='color:#808030; '>,</span> <span style='color:#008c00; '>0</span><span style='color:#808030; '>)</span>
+
+        <span style='color:#696969; '>' Set line color</span>
+        footerLine<span style='color:#008c00; '>.</span>ForeColor <span style='color:#808030; '>=</span> Color<span style='color:#008c00; '>.</span>Gray
+
+        <span style='color:#696969; '>' Add line element to the bottom of the footer</span>
+        htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfFooterOptions<span style='color:#008c00; '>.</span>AddElement<span style='color:#808030; '>(</span>footerLine<span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+<span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Sub</span>
+</pre>
+</body>
+</html>

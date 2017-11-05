@@ -1,0 +1,119 @@
+<span style='font-size:11px; color:#000000; background:#ffffff; '><pre>
+<span style='color:#800000; font-weight:bold; '>Protected</span> <span style='color:#800000; font-weight:bold; '>Sub</span> convertToPdfButton_Click<span style='color:#808030; '>(</span><span style='color:#800000; font-weight:bold; '>ByVal</span> sender <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Object</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>ByVal</span> e <span style='color:#800000; font-weight:bold; '>As</span> EventArgs<span style='color:#808030; '>)</span>
+    <span style='color:#696969; '>' Create a HTML to PDF converter object with default settings</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> htmlToPdfConverter <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>New</span> HtmlToPdfConverter<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Set license key received after purchase to use the converter in licensed mode</span>
+    <span style='color:#696969; '>' Leave it not set to use the converter in demo mode</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>LicenseKey <span style='color:#808030; '>=</span> <span style='color:#0000e6; '>"4W9+bn19bn5ue2B+bn1/YH98YHd3d3c="</span>
+
+    <span style='color:#696969; '>' Set an adddional delay in seconds to wait for JavaScript or AJAX calls after page load completed</span>
+    <span style='color:#696969; '>' Set this property to 0 if you don't need to wait for such asynchcronous operations to finish</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>ConversionDelay <span style='color:#808030; '>=</span> <span style='color:#008c00; '>2</span>
+
+    <span style='color:#696969; '>' Html Viewer Options</span>
+
+    <span style='color:#696969; '>' Set HTML Viewer width in pixels which is the equivalent in converter of the browser window width</span>
+    <span style='color:#696969; '>' This is a preferred width of the browser but the actual HTML content width can be larger in case the HTML page </span>
+    <span style='color:#696969; '>' cannot be entirely displayed in the given viewer width</span>
+    <span style='color:#696969; '>' This property gives the size of the HTML content which can be further scaled to fit the PDF page based on selected options</span>
+    <span style='color:#696969; '>' The HTML content size is in pixels and the PDF page size is in points (1 point = 1/72 inches)</span>
+    <span style='color:#696969; '>' The converter is using a 96 DPI resolution to transform pixels to points with the following formula: Points = Pixels/96 * 72            </span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>HtmlViewerWidth <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Integer</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>htmlViewerWidthTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Set HTML viewer height in pixels to convert the top part of a HTML page </span>
+    <span style='color:#696969; '>' Leave it not set to convert the entire HTML</span>
+    <span style='color:#800000; font-weight:bold; '>If</span> htmlViewerHeightTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#008c00; '>.</span>Length <span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+        htmlToPdfConverter<span style='color:#008c00; '>.</span>HtmlViewerHeight <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Integer</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>htmlViewerHeightTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+    <span style='color:#696969; '>' Set the HTML content clipping option to force the HTML content width to be exactly HtmlViewerWidth pixels</span>
+    <span style='color:#696969; '>' If this option is false then the actual HTML content width can be larger than HtmlViewerWidth pixels in case the HTML page </span>
+    <span style='color:#696969; '>' cannot be entirely displayed in the given viewer width</span>
+    <span style='color:#696969; '>' By default this option is false and the HTML content is not clipped</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>ClipHtmlView <span style='color:#808030; '>=</span> clipContentCheckBox<span style='color:#008c00; '>.</span>Checked
+
+    <span style='color:#696969; '>' PDF Page Options</span>
+
+    <span style='color:#696969; '>' Set PDF page size which can be a predefined size like A4 or a custom size in points </span>
+    <span style='color:#696969; '>' Leave it not set to have a default A4 PDF page</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>PdfPageSize <span style='color:#808030; '>=</span> SelectedPdfPageSize<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Set PDF page orientation to Portrait or Landscape</span>
+    <span style='color:#696969; '>' Leave it not set to have a default Portrait orientation for PDF page</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>PdfPageOrientation <span style='color:#808030; '>=</span> SelectedPdfPageOrientation<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Set PDF page margins in points or leave them not set to have a PDF page without margins</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>LeftMargin <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Single</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>leftMarginTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>RightMargin <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Single</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>rightMarginTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>TopMargin <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Single</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>topMarginTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>BottomMargin <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Single</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>bottomMarginTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' HTML Content Destination and Spacing Options</span>
+
+    <span style='color:#696969; '>' Set HTML content destination in PDF page</span>
+    <span style='color:#800000; font-weight:bold; '>If</span> xLocationTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#008c00; '>.</span>Length <span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+        htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>X <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Single</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>xLocationTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+    <span style='color:#800000; font-weight:bold; '>If</span> yLocationTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#008c00; '>.</span>Length <span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+        htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>Y <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Single</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>yLocationTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+    <span style='color:#800000; font-weight:bold; '>If</span> contentWidthTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#008c00; '>.</span>Length <span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+        htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>Width <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Single</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>contentWidthTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+    <span style='color:#800000; font-weight:bold; '>If</span> contentHeightTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#008c00; '>.</span>Length <span style='color:#808030; '>></span> <span style='color:#008c00; '>0</span> <span style='color:#800000; font-weight:bold; '>Then</span>
+        htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>Height <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Single</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>contentHeightTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+    <span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>If</span>
+
+    <span style='color:#696969; '>' Set HTML content top and bottom spacing or leave them not set to have no spacing for the HTML content</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>TopSpacing <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Single</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>topSpacingTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>BottomSpacing <span style='color:#808030; '>=</span> <span style='color:#800000; font-weight:bold; '>Single</span><span style='color:#008c00; '>.</span>Parse<span style='color:#808030; '>(</span>bottomSpacingTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Scaling Options</span>
+
+    <span style='color:#696969; '>' Use this option to fit the HTML content width in PDF page width</span>
+    <span style='color:#696969; '>' By default this property is true and the HTML content can be resized to fit the PDF page width</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>FitWidth <span style='color:#808030; '>=</span> fitWidthCheckBox<span style='color:#008c00; '>.</span>Checked
+
+    <span style='color:#696969; '>' Use this option to enable the HTML content stretching when its width is smaller than PDF page width</span>
+    <span style='color:#696969; '>' This property has effect only when FitWidth option is true</span>
+    <span style='color:#696969; '>' By default this property is false and the HTML content is not stretched</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>StretchToFit <span style='color:#808030; '>=</span> stretchCheckBox<span style='color:#008c00; '>.</span>Checked
+
+    <span style='color:#696969; '>' Use this option to automatically dimension the PDF page to display the HTML content unscaled</span>
+    <span style='color:#696969; '>' This property has effect only when the FitWidth property is false</span>
+    <span style='color:#696969; '>' By default this property is true and the PDF page is automatically dimensioned when FitWidth is false</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>AutoSizePdfPage <span style='color:#808030; '>=</span> autoSizeCheckBox<span style='color:#008c00; '>.</span>Checked
+
+    <span style='color:#696969; '>' Use this option to fit the HTML content height in PDF page height</span>
+    <span style='color:#696969; '>' If both FitWidth and FitHeight are true then the HTML content will resized if necessary to fit both width and height </span>
+    <span style='color:#696969; '>' preserving the aspect ratio at the same time</span>
+    <span style='color:#696969; '>' By default this property is false and the HTML content is not resized to fit the PDF page height</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>FitHeight <span style='color:#808030; '>=</span> fitHeightCheckBox<span style='color:#008c00; '>.</span>Checked
+
+    <span style='color:#696969; '>' Use this option to render the whole HTML content into a single PDF page</span>
+    <span style='color:#696969; '>' The PDF page size is limited to 14400 points</span>
+    <span style='color:#696969; '>' By default this property is false</span>
+    htmlToPdfConverter<span style='color:#008c00; '>.</span>PdfDocumentOptions<span style='color:#008c00; '>.</span>SinglePage <span style='color:#808030; '>=</span> singlePageCheckBox<span style='color:#008c00; '>.</span>Checked
+
+    <span style='color:#800000; font-weight:bold; '>Dim</span> url <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>String</span> <span style='color:#808030; '>=</span> urlTextBox<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Text</span>
+
+    <span style='color:#696969; '>' Convert the HTML page to a PDF document using the scaling options</span>
+    <span style='color:#800000; font-weight:bold; '>Dim</span> outPdfBuffer<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span> <span style='color:#800000; font-weight:bold; '>As</span> <span style='color:#800000; font-weight:bold; '>Byte</span> <span style='color:#808030; '>=</span> htmlToPdfConverter<span style='color:#008c00; '>.</span>ConvertUrl<span style='color:#808030; '>(</span>url<span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Send the PDF as response to browser</span>
+
+    <span style='color:#696969; '>' Set response content type</span>
+    Response<span style='color:#008c00; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Content-Type"</span><span style='color:#808030; '>,</span> <span style='color:#0000e6; '>"application/pdf"</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Instruct the browser to open the PDF file as an attachment or inline</span>
+    Response<span style='color:#008c00; '>.</span>AddHeader<span style='color:#808030; '>(</span><span style='color:#0000e6; '>"Content-Disposition"</span><span style='color:#808030; '>,</span> <span style='color:#800000; font-weight:bold; '>String</span><span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>Format</span><span style='color:#808030; '>(</span><span style='color:#0000e6; '>"attachment; filename=HTML_Content_Scaling.pdf; size={0}"</span><span style='color:#808030; '>,</span> outPdfBuffer<span style='color:#008c00; '>.</span>Length<span style='color:#008c00; '>.</span>ToString<span style='color:#808030; '>(</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span><span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' Write the PDF document buffer to HTTP response</span>
+    Response<span style='color:#008c00; '>.</span>BinaryWrite<span style='color:#808030; '>(</span>outPdfBuffer<span style='color:#808030; '>)</span>
+
+    <span style='color:#696969; '>' End the HTTP response and stop the current page processing</span>
+    Response<span style='color:#008c00; '>.</span><span style='color:#800000; font-weight:bold; '>End</span><span style='color:#808030; '>(</span><span style='color:#808030; '>)</span>
+<span style='color:#800000; font-weight:bold; '>End</span> <span style='color:#800000; font-weight:bold; '>Sub</span>
+</pre>
+</span>
